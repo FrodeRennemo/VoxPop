@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
@@ -30,15 +31,18 @@ public class MainActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
+    private TextView filterView;
+    private String filter = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        filterView = (TextView) findViewById(R.id.filter);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         moods = new ArrayList<String>();
-        String[] moodTable = {"yes!", "no!", "this", "is", "a", "cool", "app"};
+        String[] moodTable = {"Club", "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -86,6 +90,13 @@ public class MainActivity extends Activity {
     }
 
     public void selectMood(int position){
+        if(filter.equals("")){
+            filter += moods.get(position);
+        }
+        else {
+            filter += ", " + moods.get(position);
+        }
+        filterView.setText(filter);
         moods.remove(position);
         mAdapter.notifyDataSetChanged();
     }
@@ -133,6 +144,8 @@ public class MainActivity extends Activity {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             holder.mTextView.setText(mDataset.get(position));
+            Random r = new Random();
+            holder.mTextView.setTextSize(r.nextInt(50 - 10 + 1) + 10);
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
