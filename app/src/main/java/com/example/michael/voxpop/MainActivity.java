@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         filterView = (TextView) findViewById(R.id.filter);
-        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
+        mRecyclerView.setItemAnimator(new LandingAnimator());
         moods = new ArrayList<String>();
         String[] moodTable = {"Club", "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
         getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>" + getString(R.string.app_name) + "</font>"));
@@ -54,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         // use a linear layout manager
 
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(moods, getApplicationContext(), this);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }
         filterView.setText(filter);
         moods.remove(position);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemRemoved(position);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
