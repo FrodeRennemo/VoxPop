@@ -1,7 +1,9 @@
 package com.example.michael.voxpop;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -9,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +28,7 @@ import java.util.Random;
 
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<String> moods;
 
@@ -43,6 +46,7 @@ public class MainActivity extends Activity {
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         moods = new ArrayList<String>();
         String[] moodTable = {"Club", "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>" + getString(R.string.app_name) + "</font>"));
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -87,6 +91,11 @@ public class MainActivity extends Activity {
     public void clickSubmit(View v) {
         moods.add("hello");
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void goToResults(View v){
+        Intent i = new Intent(this, ResultActivity.class);
+        startActivity(i);
     }
 
     public void selectMood(int position){

@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         style="@style/Button"
         android:layout_alignParentEnd="true"
-        android:onClick="clickSubmit"/>
+        android:onClick="goToResults"/>
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
