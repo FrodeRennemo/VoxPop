@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
         android:layout_margin="10dp">
-        <LinearLayout
+        <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -29,10 +29,14 @@
                 android:id="@+id/info_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="40dp"
+                android:layout_alignLeft="@+id/imageView"
+                android:layout_alignBottom="@+id/imageView"
+                android:textSize="35dp"
                 android:padding="5dp"
-                android:text="Samfundet"/>
-        </LinearLayout>
+                android:text="Samfundet"
+                android:textColor="@color/white"
+                android:background="@color/app_accent_trans"/>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 </LinearLayout>

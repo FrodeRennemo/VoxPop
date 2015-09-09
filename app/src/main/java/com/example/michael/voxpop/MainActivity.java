@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             filter += ", " + moods.get(position);
         }
         filterView.setText(filter);
-        moods.remove(position);
+        moods.remove(position-1);
         mAdapter.notifyItemRemoved(position);
     }
 

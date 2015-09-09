@@ -15,9 +15,4 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="ActionBarStyle" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:background">@color/app_base</item>
-
-    </style>
-
 </resources>
