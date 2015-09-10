@@ -1,11 +1,7 @@
 package service;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
 /**
- * Created by andreaskalstad on 09/09/15.
+ * Created by Michael on 10.09.2015.
  */
 public class Model {
     private HTTPRequest req;

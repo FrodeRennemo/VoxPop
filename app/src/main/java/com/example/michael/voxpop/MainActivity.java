@@ -33,7 +33,7 @@ import service.HTTPRequest;
 import service.Location;
 import service.Model;
 
-public class MainActivity extends AppCompatActivity implements AsyncListener{
+public class MainActivity extends AppCompatActivity implements AsyncListener {
 
     public static ArrayList<String> moods;
 

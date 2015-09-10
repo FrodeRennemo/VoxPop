@@ -2,6 +2,7 @@ package com.example.michael.voxpop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -14,7 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,10 +35,12 @@ public class ResultActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    public Bitmap[] bitmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String[] places = {"Samfundet", "Lyche", "Edgar", "Diskoteket", "Brukbar", "Bar og bær"};
@@ -43,11 +51,12 @@ public class ResultActivity extends AppCompatActivity {
         }
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        mAdapter = new MyAdapter(dataSet, addressNames, getApplicationContext(), this);
+        mAdapter = new MyAdapter(dataSet, addressNames, bitmaps, getApplicationContext(), this);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new LandingAnimator());
+
     }
 
     @Override
@@ -88,6 +97,7 @@ public class ResultActivity extends AppCompatActivity {
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<String> mDataset;
         private ArrayList<String> addresses;
+        private Bitmap[] bitmaps;
         ResultActivity activity;
 
         // Provide a reference to the views for each data item
@@ -98,20 +108,23 @@ public class ResultActivity extends AppCompatActivity {
             public TextView mTextView;
             CardView container;
             public TextView mAddress;
+            ImageView img;
 
             public ViewHolder(View v) {
                 super(v);
                 mTextView = (TextView) v.findViewById(R.id.info_text);
                 container = (CardView) v.findViewById(R.id.card_view);
                 mAddress = (TextView) v.findViewById(R.id.address_text);
+                img = (ImageView) v.findViewById(R.id.imageView);
             }
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset, ArrayList<String> addresses, Context context, ResultActivity activity) {
+        public MyAdapter(ArrayList<String> myDataset, ArrayList<String> addresses, Bitmap[] bitmaps, Context context, ResultActivity activity) {
             mDataset = myDataset;
             this.activity = activity;
             this.addresses = addresses;
+            this.bitmaps = bitmaps;
         }
 
         // Create new views (invoked by the layout manager)
@@ -133,6 +146,7 @@ public class ResultActivity extends AppCompatActivity {
             // - replace the contents of the view with that element
             holder.mTextView.setText(mDataset.get(position));
             holder.mAddress.setText(addresses.get(position));
+            //holder.img.setImageBitmap(bitmaps[0]);
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
