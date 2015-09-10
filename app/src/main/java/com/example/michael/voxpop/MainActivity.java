@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setItemAnimator(new LandingAnimator());
         moods = new ArrayList<String>();
         String[] moodTable = {"Club", "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
-        getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>" + getString(R.string.app_name) + "</font>"));
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -106,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
             filter += ", " + moods.get(position);
         }
         filterView.setText(filter);
-        moods.remove(position-1);
-        mAdapter.notifyItemRemoved(position);
+        moods.remove(position);
+        mAdapter.notifyDataSetChanged();
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
