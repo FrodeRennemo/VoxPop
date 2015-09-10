@@ -28,8 +28,12 @@ import java.util.Random;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import service.AsyncListener;
+import service.HTTPRequest;
+import service.Location;
+import service.Model;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncListener{
 
     public static ArrayList<String> moods;
 
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private TextView filterView;
     private String filter = "";
+    private Model model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         filterView = (TextView) findViewById(R.id.filter);
         mRecyclerView.setItemAnimator(new LandingAnimator());
-        moods = new ArrayList<String>();
-        String[] moodTable = {"Club", "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
-        getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>" + getString(R.string.app_name) + "</font>"));
+
+        HTTPRequest req = new HTTPRequest();
+        req.setAsyncListener(this);
+        Model model = new Model(req);
+        model.httpGet();
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -57,13 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(moods, getApplicationContext(), this);
-        mRecyclerView.setAdapter(mAdapter);
-        for(int i=0; i<moodTable.length; i++){
-            moods.add(moodTable[i]);
-            mAdapter.notifyItemInserted(moods.size()-1);
-        }
     }
 
     @Override
@@ -108,6 +108,21 @@ public class MainActivity extends AppCompatActivity {
         filterView.setText(filter);
         moods.remove(position-1);
         mAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void asyncDone(ArrayList<Location> res) {
+        moods = new ArrayList<String>();
+        String[] moodTable = {res.get(0).getName(), "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>" + getString(R.string.app_name) + "</font>"));
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyAdapter(moods, getApplicationContext(), this);
+        mRecyclerView.setAdapter(mAdapter);
+        for(int i=0; i<moodTable.length; i++){
+            moods.add(moodTable[i]);
+            mAdapter.notifyItemInserted(moods.size()-1);
+        }
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
