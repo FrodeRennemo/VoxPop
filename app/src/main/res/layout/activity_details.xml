@@ -4,7 +4,7 @@
     tools:context="com.example.michael.voxpop.DetailsActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/detail_image"
         android:layout_width="fill_parent"
         android:layout_height="200dp"
         android:layout_alignParentLeft="true"
@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/imageView2"
+        android:layout_below="@id/detail_image"
         android:orientation="vertical"
         android:padding="10dp">
         <LinearLayout
@@ -109,5 +109,10 @@
                     android:id="@+id/contact_text" />
             </LinearLayout>
         </LinearLayout>
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/map"
+            tools:context="com.example.michael.voxpop.MapsActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
     </LinearLayout>
 </RelativeLayout>

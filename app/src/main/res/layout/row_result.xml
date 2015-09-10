@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/imageView"
                     android:layout_alignBottom="@+id/imageView"
-                    android:textSize="35dp"
+                    android:textSize="25dp"
                     android:padding="5dp"
                     android:text="Samfundet"
                     android:textColor="@color/white"
