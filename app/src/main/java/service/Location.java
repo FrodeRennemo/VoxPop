@@ -10,15 +10,16 @@ public class Location {
     private String email;
     private String opening_hours;
     private String age_limit;
-    private String features;
+    private String[] features;
 
-    public Location(String address, String name, String tlf, String email, String opening_hours, String age_limit) {
+    public Location(String address, String name, String tlf, String email, String opening_hours, String age_limit, String features) {
         this.address = address;
         this.name = name;
         this.age_limit = age_limit;
         this.email = email;
         this.tlf = tlf;
         this.opening_hours = opening_hours;
+        this.features = features.split(",");
     }
 
     public String getAddress() {
@@ -69,11 +70,11 @@ public class Location {
         this.age_limit = age_limit;
     }
 
-    public String getFeatures() {
+    public String[] getFeatures() {
         return features;
     }
 
-    public void setFeatures(String features) {
+    public void setFeatures(String[] features) {
         this.features = features;
     }
 }
