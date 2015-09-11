@@ -39,7 +39,7 @@
                     android:padding="5dp"
                     android:text="Samfundet"
                     android:textColor="@color/white"
-                    android:background="@color/app_accent_trans"/>
+                    android:background="@color/app_base_trans"/>
             </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"

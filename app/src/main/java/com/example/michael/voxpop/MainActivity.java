@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     public void asyncDone(ArrayList<Location> res) {
         moods = new ArrayList<String>();
         String[] moodTable = {res.get(0).getName(), "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
-        getSupportActionBar().setTitle(Html.fromHtml("<font color='#ffffff'>" + getString(R.string.app_name) + "</font>"));
 
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(moods, getApplicationContext(), this);
