@@ -88,13 +88,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         return super.onOptionsItemSelected(item);
     }
 
-    public void clickSubmit(View v) {
-        moods.add("hello");
-        mAdapter.notifyDataSetChanged();
-    }
-
     public void goToResults(View v){
         Intent i = new Intent(this, ResultActivity.class);
+        
         startActivity(i);
     }
 
@@ -113,15 +109,17 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     @Override
     public void asyncDone(ArrayList<Location> res) {
         moods = new ArrayList<String>();
-        String[] moodTable = {res.get(0).getName(), "Cocktails", "Special beers", "Chill", "Sportsbar", "Lounge", "Rave/DJ"};
+        for(int i=0; i<res.size(); i++){
+            for(int j=0; j<res.get(i).getFeatures().length; j++){
+                if(!moods.contains(res.get(i).getFeatures()[j].toLowerCase())){
+                    moods.add(res.get(i).getFeatures()[j].toLowerCase());
+                }
+            }
+        }
 
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(moods, getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
-        for(int i=0; i<moodTable.length; i++){
-            moods.add(moodTable[i]);
-            mAdapter.notifyItemInserted(moods.size()-1);
-        }
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
