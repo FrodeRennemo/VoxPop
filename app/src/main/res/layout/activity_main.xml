@@ -39,7 +39,8 @@
         android:layout_alignParentBottom="true"
         android:layout_toStartOf="@+id/delete"
         android:background="@color/app_accent"
-        android:layout_below="@+id/my_recycler_view">
+        android:layout_below="@+id/my_recycler_view"
+        android:fillViewport="true">
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -48,10 +49,9 @@
             android:id="@+id/filter"
             android:layout_below="@+id/my_recycler_view"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/button"
             android:textColor="@color/white"
             android:layout_alignParentBottom="true"
-            android:gravity="center"/>
+            android:gravity="center_vertical"/>
     </HorizontalScrollView>
     <LinearLayout
         android:orientation="horizontal"
