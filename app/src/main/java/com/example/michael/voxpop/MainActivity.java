@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.AsyncListener;
@@ -42,7 +43,8 @@ import service.Model;
 
 public class MainActivity extends AppCompatActivity implements AsyncListener {
 
-    public static ArrayList<String> moods;
+    public static ArrayList<String> displayMoods;
+    public static ArrayList<String> allMoods;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private String filter = "";
     private Model model;
     private ArrayList<Location> locations;
+    private ArrayList<Mood> moodCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,39 +127,57 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
     public void selectMood(int position){
         if(filter.equals("")){
-            filter += moods.get(position);
+            filter += displayMoods.get(position);
         }
         else {
-            filter += ", " + moods.get(position);
+            filter += ", " + displayMoods.get(position);
         }
         filterView.setText(filter);
-        moods.remove(position);
+        displayMoods.remove(position);
         mAdapter.notifyDataSetChanged();
     }
 
     public void resetFilter(View v){
-        //Todo: Reset
+        filter = "";
+        filterView.setText(filter);
+        displayMoods.clear();
+        for(String s : allMoods){
+            displayMoods.add(s);
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void asyncDone(ArrayList<Location> res) {
         locations = res;
-        moods = new ArrayList<String>();
+        moodCount = new ArrayList<Mood>();
+        displayMoods = new ArrayList<String>();
+        allMoods = new ArrayList<String>();
         for(int i=0; i<res.size(); i++){
             for(int j=0; j<res.get(i).getFeatures().length; j++){
-                if(!moods.contains(res.get(i).getFeatures()[j].toLowerCase())){
-                    moods.add(res.get(i).getFeatures()[j].toLowerCase());
+                if(!displayMoods.contains(res.get(i).getFeatures()[j].toLowerCase())){
+                    displayMoods.add(res.get(i).getFeatures()[j].toLowerCase());
+                    moodCount.add(new Mood(res.get(i).getFeatures()[j]));
+                } else {
+                    for(int k=0; k<moodCount.size(); k++){
+                        if(res.get(i).getFeatures()[j].equalsIgnoreCase(moodCount.get(k).getName())){
+                            moodCount.get(k).increaseSize();
+                        }
+                    }
                 }
             }
         }
-
+        for(String s : displayMoods){
+            allMoods.add(s);
+        }
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(moods, getApplicationContext(), this);
+        mAdapter = new MyAdapter(displayMoods, moodCount, getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<String> mDataset;
+        private ArrayList<Mood> moodCount;
         MainActivity activity;
 
         // Provide a reference to the views for each data item
@@ -175,8 +196,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset, Context context, MainActivity activity) {
+        public MyAdapter(ArrayList<String> myDataset, ArrayList<Mood> moodCount, Context context, MainActivity activity) {
             mDataset = myDataset;
+            this.moodCount = moodCount;
             this.activity = activity;
         }
 
@@ -198,8 +220,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             holder.mTextView.setText(mDataset.get(position));
-            Random r = new Random();
-            holder.mTextView.setTextSize(r.nextInt(50 - 10 + 1) + 10);
+            holder.mTextView.setTextSize(moodCount.get(position).getSize());
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
