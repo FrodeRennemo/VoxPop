@@ -13,7 +13,6 @@ public class Model {
     public Model () {}
 
     public void httpGet() {
-        String test = "";
         try {
             req.execute();
         } catch (Exception e) {
