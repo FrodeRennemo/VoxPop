@@ -20,6 +20,10 @@ public class Location {
         this.tlf = tlf;
         this.opening_hours = opening_hours;
         this.features = features.split(",");
+        for(int i = 0; i<this.features.length; i++){
+            this.features[i] = this.features[i].trim();
+        }
+
     }
 
     public String getAddress() {
