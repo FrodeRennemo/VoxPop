@@ -11,7 +11,6 @@
         android:paddingTop="30dp">
 
     </android.support.v7.widget.RecyclerView>
-
     <Button
         android:layout_width="60dp"
         android:layout_height="wrap_content"
@@ -21,17 +20,26 @@
         style="@style/Button"
         android:layout_alignParentEnd="true"
         android:onClick="goToResults"/>
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:id="@+id/delete"
+        style="@style/Button"
+        android:onClick="resetFilter"
+        android:layout_alignBottom="@+id/button"
+        android:layout_toStartOf="@+id/button"
+        android:visibility="visible"/>
 
     <HorizontalScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/horizontalScrollView"
-        android:layout_below="@+id/my_recycler_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-
-        android:layout_toStartOf="@+id/button"
-        android:background="@color/app_accent">
+        android:layout_toStartOf="@+id/delete"
+        android:background="@color/app_accent"
+        android:layout_below="@+id/my_recycler_view">
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -57,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text=""
+        android:text="What do you want?"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

@@ -18,20 +18,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import service.Location;
 
 public class ResultActivity extends AppCompatActivity {
 
-    public ArrayList<String> dataSet = new ArrayList<>();
-    public ArrayList<String> addressNames = new ArrayList<>();
+    public ArrayList<Location> resultLocations;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -43,15 +47,12 @@ public class ResultActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String[] places = {"Samfundet", "Lyche", "Edgar", "Diskoteket", "Brukbar", "Bar og bær"};
-        String[] addresses = {"Gate 1, Trondheim", "Gate 2, Trondheim", "Gate 3, Trondheim", "Gate 4, Trondheim", "Gate 5, Trondheim", "Gate 6, Trondheim"};
-        for(int i=0; i<places.length; i++){
-            dataSet.add(places[i]);
-            addressNames.add(addresses[i]);
-        }
+        Intent i = getIntent();
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+        resultLocations = new Gson().fromJson(i.getStringExtra("results"), type);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        mAdapter = new MyAdapter(dataSet, addressNames, bitmaps, getApplicationContext(), this);
+        mAdapter = new MyAdapter(resultLocations, bitmaps, getApplicationContext(), this);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -89,14 +90,14 @@ public class ResultActivity extends AppCompatActivity {
 
     private void goToDetails(int position) {
         Intent i = new Intent(this, DetailsActivity.class);
-        i.putExtra("Title", dataSet.get(position));
-        i.putExtra("Address", addressNames.get(position));
+        Type type = new TypeToken<Location>(){}.getType();
+        String json = new Gson().toJson(resultLocations.get(position), type);
+        i.putExtra("selected", json);
         startActivity(i);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private ArrayList<String> mDataset;
-        private ArrayList<String> addresses;
+        private ArrayList<Location> mDataset;
         private Bitmap[] bitmaps;
         ResultActivity activity;
 
@@ -120,10 +121,9 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset, ArrayList<String> addresses, Bitmap[] bitmaps, Context context, ResultActivity activity) {
+        public MyAdapter(ArrayList<Location> myDataset, Bitmap[] bitmaps, Context context, ResultActivity activity) {
             mDataset = myDataset;
             this.activity = activity;
-            this.addresses = addresses;
             this.bitmaps = bitmaps;
         }
 
@@ -144,8 +144,8 @@ public class ResultActivity extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.mTextView.setText(mDataset.get(position));
-            holder.mAddress.setText(addresses.get(position));
+            holder.mTextView.setText(mDataset.get(position).getName());
+            holder.mAddress.setText(mDataset.get(position).getAddress());
             //holder.img.setImageBitmap(bitmaps[0]);
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
