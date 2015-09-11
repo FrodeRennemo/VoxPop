@@ -98,9 +98,9 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void setUpMap() {
-        LatLng diskon = new LatLng(63.4315,10.39942);
+        LatLng diskon = new LatLng(63.422499,10.3954279);
         mMap.addMarker(new MarkerOptions().position(diskon).title("DISKON KIS"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(diskon, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(diskon, 13));
         mMap.setMyLocationEnabled(true);
     }
 
