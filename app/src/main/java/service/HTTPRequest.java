@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.example.michael.voxpop.MainActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ public class HTTPRequest extends AsyncTask<String, Void, String> {
     private final String USER_AGENT = "Mozilla/5.0";
     private Model model;
     private AsyncListener asyncListener;
-    private ArrayList jsonArray;
+    private ArrayList<Location> jsonArray;
     private JSONParser jsonParser;
 
     public void setAsyncListener(AsyncListener asyncListener){
@@ -65,7 +66,7 @@ public class HTTPRequest extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String res) {
         Model model = new Model();
-        jsonArray = new ArrayList();
+        jsonArray = new ArrayList<Location>();
         jsonParser = new JSONParser();
         try {
             jsonArray = jsonParser.parse(res);
