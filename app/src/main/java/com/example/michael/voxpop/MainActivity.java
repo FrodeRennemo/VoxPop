@@ -23,7 +23,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private TextView filterView;
     private String filter = "";
     private Model model;
+    private ArrayList<Location> locations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +97,28 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     }
 
     public void goToResults(View v){
+        ArrayList<Location> results = new ArrayList<Location>();
+        String[] selected = filter.split(",");
+        for(Location l : locations){
+            String[] feats = l.getFeatures();
+            for(int i=0; i<feats.length; i++){
+                feats[i] = feats[i].trim().toLowerCase();
+            }
+            List<String> ar = Arrays.asList(feats);
+            boolean include = true;
+            for(String s : selected){
+                if(!ar.contains(s.trim().toLowerCase())){
+                    include = false;
+                }
+            }
+            if(include){
+                results.add(l);
+            }
+        }
         Intent i = new Intent(this, ResultActivity.class);
-        
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+        String json = new Gson().toJson(results, type);
+        i.putExtra("results", json);
         startActivity(i);
     }
 
@@ -106,8 +134,13 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         mAdapter.notifyDataSetChanged();
     }
 
+    public void resetFilter(View v){
+        //Todo: Reset
+    }
+
     @Override
     public void asyncDone(ArrayList<Location> res) {
+        locations = res;
         moods = new ArrayList<String>();
         for(int i=0; i<res.size(); i++){
             for(int j=0; j<res.get(i).getFeatures().length; j++){
