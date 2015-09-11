@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.AsyncListener;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private TextView filterView;
     private String filter = "";
     private Model model;
+    private ArrayList<Mood> moodCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,22 +110,31 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
     @Override
     public void asyncDone(ArrayList<Location> res) {
+        moodCount = new ArrayList<Mood>();
         moods = new ArrayList<String>();
         for(int i=0; i<res.size(); i++){
             for(int j=0; j<res.get(i).getFeatures().length; j++){
                 if(!moods.contains(res.get(i).getFeatures()[j].toLowerCase())){
                     moods.add(res.get(i).getFeatures()[j].toLowerCase());
+                    moodCount.add(new Mood(res.get(i).getFeatures()[j]));
+                } else {
+                    for(int k=0; k<moodCount.size(); k++){
+                        if(res.get(i).getFeatures()[j].equalsIgnoreCase(moodCount.get(k).getName())){
+                            moodCount.get(k).increaseSize();
+                        }
+                    }
                 }
             }
         }
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(moods, getApplicationContext(), this);
+        mAdapter = new MyAdapter(moods, moodCount, getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<String> mDataset;
+        private ArrayList<Mood> moodCount;
         MainActivity activity;
 
         // Provide a reference to the views for each data item
@@ -142,8 +153,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset, Context context, MainActivity activity) {
+        public MyAdapter(ArrayList<String> myDataset, ArrayList<Mood> moodCount, Context context, MainActivity activity) {
             mDataset = myDataset;
+            this.moodCount = moodCount;
             this.activity = activity;
         }
 
@@ -165,8 +177,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             holder.mTextView.setText(mDataset.get(position));
-            Random r = new Random();
-            holder.mTextView.setTextSize(r.nextInt(50 - 10 + 1) + 10);
+            holder.mTextView.setTextSize(moodCount.get(position).getSize());
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
