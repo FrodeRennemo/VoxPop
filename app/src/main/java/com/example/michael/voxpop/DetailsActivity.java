@@ -2,6 +2,7 @@ package com.example.michael.voxpop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -35,6 +36,8 @@ public class DetailsActivity extends AppCompatActivity {
     private GoogleMap mMap;
     double latitude;
     double longitude;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,12 +97,21 @@ public class DetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.take_photo) {
+            goToCamera();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void goToCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
     @Override
     public boolean onSupportNavigateUp(){
         finish();
