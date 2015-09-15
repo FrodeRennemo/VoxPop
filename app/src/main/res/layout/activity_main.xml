@@ -71,4 +71,13 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"/>
 
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_below="@+id/my_recycler_view"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignBottom="@+id/horizontalScrollView"
+        android:src="@drawable/camera"
+        android:onClick="goToCamera"/>
 </RelativeLayout>
