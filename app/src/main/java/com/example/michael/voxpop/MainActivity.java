@@ -97,11 +97,15 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.search) {
-            //TODO start search activity
+            Intent i = new Intent(this, SearchActivity.class);
+            Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+            String json = new Gson().toJson(locations, type);
+            i.putExtra("results", json);
+            startActivity(i);
             return true;
         }
         if (id == R.id.favorites) {
-            //TODO start favorite activity
+            startActivity(new Intent(this, FavoritesActivity.class));
             return true;
         }
 
