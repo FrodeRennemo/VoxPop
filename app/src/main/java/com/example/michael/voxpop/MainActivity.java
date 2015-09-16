@@ -96,9 +96,14 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
+        if (id == R.id.search) {
+            //TODO start search activity
+            return true;
+        }
+        if (id == R.id.favorites) {
+            //TODO start favorite activity
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
