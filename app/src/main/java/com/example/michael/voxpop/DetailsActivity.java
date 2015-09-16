@@ -106,10 +106,8 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     public void goToCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
+        Intent i = new Intent(this, CameraActivity.class);
+        startActivity(i);
     }
 
     @Override

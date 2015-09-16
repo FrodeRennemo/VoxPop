@@ -184,14 +184,6 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-        }
-    }
-
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<String> mDataset;
         private ArrayList<Mood> moodCount;
