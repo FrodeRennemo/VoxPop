@@ -24,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private TextView filterView;
+    private ProgressBar _progress;
+
     private String filter = "";
     private Model model;
     private ArrayList<Location> locations;
@@ -64,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         filterView = (TextView) findViewById(R.id.filter);
+        _progress = (ProgressBar) findViewById(R.id.progressBar);
+        _progress.setVisibility(View.VISIBLE);
+
         mRecyclerView.setItemAnimator(new LandingAnimator());
 
         HTTPRequest req = new HTTPRequest();
@@ -186,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(displayMoods, moodCount, getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
+        _progress.setVisibility(View.GONE);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {

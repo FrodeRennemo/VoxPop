@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.michael.voxpop.DetailsActivity">
     <item
+        android:id="@+id/add_favorite"
+        android:title="Take photo"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_star_border_white_24dp"/>
+    <item
         android:id="@+id/take_photo"
         android:title="Take photo"
         app:showAsAction="always"
