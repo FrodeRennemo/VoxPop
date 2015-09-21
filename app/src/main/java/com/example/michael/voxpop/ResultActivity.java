@@ -145,7 +145,16 @@ public class ResultActivity extends AppCompatActivity {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             holder.mTextView.setText(mDataset.get(position).getName());
-            holder.mAddress.setText(mDataset.get(position).getAddress());
+            String[] features = mDataset.get(position).getFeatures();
+            String featDisplay = "";
+            for(int i=0; i<features.length; i++){
+                if((i == 0 && features.length == 1) || i == features.length-1){
+                    featDisplay += features[i];
+                }else {
+                    featDisplay += features[i]+", ";
+                }
+            }
+            holder.mAddress.setText(featDisplay);
             //holder.img.setImageBitmap(bitmaps[0]);
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
