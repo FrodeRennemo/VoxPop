@@ -74,9 +74,11 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         _progress = (ProgressBar) findViewById(R.id.progressBar);
         _submitButton = (Button) findViewById(R.id.submit_button);
         _resetButton = (Button) findViewById(R.id.delete);
+        _filterArea = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
 
         _resetButton.setVisibility(View.GONE);
-
+        _submitButton.setVisibility(View.GONE);
+        _filterArea.setVisibility(View.GONE);
         _progress.setVisibility(View.VISIBLE);
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
@@ -160,19 +162,27 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         else {
             filter += ", " + displayMoods.get(position);
         }
+        _filterArea.setVisibility(View.VISIBLE);
+        _resetButton.setVisibility(View.VISIBLE);
+        _submitButton.setVisibility(View.VISIBLE);
         filterView.setText(filter);
         displayMoods.remove(position);
         mAdapter.notifyDataSetChanged();
     }
 
     public void resetFilter(View v){
+
         filter = "";
         filterView.setText(filter);
+        _filterArea.setVisibility(View.GONE);
+        _resetButton.setVisibility(View.GONE);
+        _submitButton.setVisibility(View.GONE);
         displayMoods.clear();
         for(String s : allMoods){
             displayMoods.add(s);
         }
         mAdapter.notifyDataSetChanged();
+        _resetButton.setVisibility(View.GONE);
     }
 
     @Override
