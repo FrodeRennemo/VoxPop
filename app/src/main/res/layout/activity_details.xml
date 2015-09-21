@@ -10,8 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/samfundet"/>
+        android:scaleType="centerCrop" />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -121,5 +120,14 @@
             tools:context="com.example.michael.voxpop.DetailsActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
     </LinearLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
 
 </RelativeLayout>
