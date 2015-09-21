@@ -7,28 +7,32 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/button"
+        android:layout_above="@+id/submit_button"
         android:paddingTop="30dp">
 
     </android.support.v7.widget.RecyclerView>
+
     <Button
-        android:layout_width="60dp"
+        android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/button"
+        android:text=""
+        android:drawableStart="@drawable/ic_label_outline_white_18dp"
+        android:textSize="10dp"
+        android:id="@+id/submit_button"
         android:layout_alignParentBottom="true"
         style="@style/Button"
         android:layout_alignParentEnd="true"
         android:onClick="goToResults"/>
     <Button
-        android:layout_width="50dp"
+        android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:text="Reset"
+        android:text=""
+        android:drawableStart="@drawable/ic_clear_white_18dp"
         android:id="@+id/delete"
         style="@style/Button"
         android:onClick="resetFilter"
-        android:layout_alignBottom="@+id/button"
-        android:layout_toStartOf="@+id/button"
+        android:layout_alignBottom="@+id/submit_button"
+        android:layout_toStartOf="@+id/submit_button"
         android:visibility="visible"/>
 
     <HorizontalScrollView
@@ -79,4 +83,5 @@
         android:layout_below="@+id/linearLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="54dp" />
+
 </RelativeLayout>

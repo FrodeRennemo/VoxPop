@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private RecyclerView.Adapter mAdapter;
     private TextView filterView;
     private ProgressBar _progress;
+    private Button _resetButton;
+    private Button _submitButton;
+    private HorizontalScrollView _filterArea;
 
     private String filter = "";
     private Model model;
@@ -68,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         filterView = (TextView) findViewById(R.id.filter);
         _progress = (ProgressBar) findViewById(R.id.progressBar);
+        _submitButton = (Button) findViewById(R.id.submit_button);
+        _resetButton = (Button) findViewById(R.id.delete);
+
+        _resetButton.setVisibility(View.GONE);
+
         _progress.setVisibility(View.VISIBLE);
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
