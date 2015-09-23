@@ -170,4 +170,10 @@ public class CameraActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCamera.release();
+    }
 }
