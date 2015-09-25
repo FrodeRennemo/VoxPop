@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
     TextView _open_text;
     TextView _contact_text;
     ImageView _img;
+    ProgressBar _progress;
     Location loc;
     private GoogleMap mMap;
     double latitude;
@@ -47,13 +49,16 @@ public class DetailsActivity extends AppCompatActivity {
         _age_text = (TextView) findViewById(R.id.age_text);
         _open_text = (TextView) findViewById(R.id.open_text);
         _contact_text = (TextView) findViewById(R.id.contact_text);
+        _progress = (ProgressBar) findViewById(R.id.progressBar);
+
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.loadImage("http://i.imgur.com/9l1A4OS.jpg", new SimpleImageLoadingListener() {
+        imageLoader.loadImage("http://www.visitnorway.com/ImageVaultFiles/id_14949/cf_13/Nidelven-Sven-Erik-Knoff.JPG", new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 _img.setImageBitmap(loadedImage);
+                _progress.setVisibility(View.GONE);
             }
         });
 
