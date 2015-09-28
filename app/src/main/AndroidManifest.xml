@@ -67,6 +67,10 @@
             android:name=".FavoritesActivity"
             android:label="@string/title_activity_favorites" >
         </activity>
+        <activity
+            android:name=".GPSFenceActivity"
+            android:label="@string/title_activity_GPS" >
+        </activity>
     </application>
 
 </manifest>
