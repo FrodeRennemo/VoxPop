@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import activitySupport.CameraPreview;
+import service.HTTPPost;
+import service.Model;
 
 public class CameraActivity extends AppCompatActivity {
     private static Camera mCamera;
@@ -32,11 +34,14 @@ public class CameraActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     public static int cameraId;
+    private Model model;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        HTTPPost post = new HTTPPost();
+        model = new Model(post);
 
         // Create an instance of Camera
         cameraId = findFrontFacingCamera();
@@ -93,28 +98,6 @@ public class CameraActivity extends AppCompatActivity {
         return c; // returns null if camera is unavailable
     }
 
-    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
-
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
-                return;
-            }
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-            } catch (FileNotFoundException e) {
-
-            } catch (IOException e) {
-
-            }
-        }
-    };
-
     /** Create a File for saving an image or video */
     private static File getOutputMediaFile(int type){
         // To be safe, you should check that the SDCard is mounted
@@ -170,6 +153,30 @@ public class CameraActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+        public static final String TAG = "";
+
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+            if (pictureFile == null){
+                Log.d(TAG, "Error creating media file, check storage permissions");
+                return;
+            }
+
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+                model.httpPost(data);
+            } catch (FileNotFoundException e) {
+                Log.d(TAG, "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d(TAG, "Error accessing file: " + e.getMessage());
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {
