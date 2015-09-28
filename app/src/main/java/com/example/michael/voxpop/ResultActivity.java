@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -100,6 +101,8 @@ public class ResultActivity extends AppCompatActivity {
         private ArrayList<Location> mDataset;
         private Bitmap[] bitmaps;
         ResultActivity activity;
+        ImageLoaderConfiguration config;
+        ImageLoader imageLoader;
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
@@ -109,6 +112,7 @@ public class ResultActivity extends AppCompatActivity {
             public TextView mTextView;
             CardView container;
             public TextView mAddress;
+            public ProgressBar _progress;
             ImageView img;
 
             public ViewHolder(View v) {
@@ -116,6 +120,7 @@ public class ResultActivity extends AppCompatActivity {
                 mTextView = (TextView) v.findViewById(R.id.info_text);
                 container = (CardView) v.findViewById(R.id.card_view);
                 mAddress = (TextView) v.findViewById(R.id.address_text);
+                _progress = (ProgressBar) v.findViewById(R.id.progressBar);
                 img = (ImageView) v.findViewById(R.id.imageView);
             }
         }
@@ -125,6 +130,9 @@ public class ResultActivity extends AppCompatActivity {
             mDataset = myDataset;
             this.activity = activity;
             this.bitmaps = bitmaps;
+            config = new ImageLoaderConfiguration.Builder(this.activity).build();
+            ImageLoader.getInstance().init(config);
+            imageLoader = ImageLoader.getInstance();
         }
 
         // Create new views (invoked by the layout manager)
@@ -144,6 +152,8 @@ public class ResultActivity extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
+            final ImageView currentImage = holder.img;
+            final ProgressBar _progress = holder._progress;
             holder.mTextView.setText(mDataset.get(position).getName());
             String[] features = mDataset.get(position).getFeatures();
             String featDisplay = "";
@@ -159,6 +169,13 @@ public class ResultActivity extends AppCompatActivity {
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
+            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/" + mDataset.get(position).getId() + "/profile_image", new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    currentImage.setImageBitmap(loadedImage);
+                    _progress.setVisibility(View.GONE);
+                }
+            });
 
         }
 

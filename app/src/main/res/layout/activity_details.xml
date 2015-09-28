@@ -2,19 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.michael.voxpop.DetailsActivity">
-
-    <ImageView
-        android:id="@+id/detail_image"
-        android:layout_width="fill_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop" />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/detail_image"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="fill_parent"
@@ -116,18 +106,9 @@
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/map"
+            android:layout_height="400dp" android:id="@+id/map"
             tools:context="com.example.michael.voxpop.DetailsActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
     </LinearLayout>
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
-
 </RelativeLayout>
+

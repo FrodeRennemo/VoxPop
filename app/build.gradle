@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.michael.voxpop"
-        minSdkVersion 19
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -40,4 +40,5 @@ dependencies {
         exclude module: 'org.apache.httpcomponents:httpclient'
     }
     compile files('/Users/andreaskalstad/VoxPop/libs/httpclient-4.2.6.jar')
+    compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar-abc:3.1.2'
 }
