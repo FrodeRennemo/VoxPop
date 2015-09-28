@@ -4,6 +4,7 @@ package service;
  * Created by andreaskalstad on 10/09/15.
  */
 public class Location {
+    private String _id;
     private String name;
     private String address;
     private String tlf;
@@ -12,7 +13,8 @@ public class Location {
     private String age_limit;
     private String[] features;
 
-    public Location(String address, String name, String tlf, String email, String opening_hours, String age_limit, String features) {
+    public Location(String newId, String address, String name, String tlf, String email, String opening_hours, String age_limit, String features) {
+        this._id = newId;
         this.address = address;
         this.name = name;
         this.age_limit = age_limit;
@@ -24,6 +26,9 @@ public class Location {
             this.features[i] = this.features[i].trim();
         }
 
+    }
+    public String getId() {
+        return _id;
     }
 
     public String getAddress() {
