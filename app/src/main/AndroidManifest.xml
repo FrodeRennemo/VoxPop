@@ -68,8 +68,8 @@
             android:label="@string/title_activity_favorites" >
         </activity>
         <activity
-            android:name=".FaderActivity"
-            android:label="@string/title_activity_fader" >
+            android:name=".GPSFenceActivity"
+            android:label="@string/title_activity_GPS" >
         </activity>
     </application>
 
