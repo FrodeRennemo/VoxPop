@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.michael.voxpop"
-        minSdkVersion 19
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -28,4 +28,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     compile 'com.google.android.gms:play-services:7.8.0'
     compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar-abc:3.1.2'
 }

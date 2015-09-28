@@ -1,16 +1,33 @@
+/*
+ * Copyright (C) 2013 Manuel Peinado
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.michael.voxpop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.manuelpeinado.fadingactionbar.extras.actionbarcompat.FadingActionBarHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -28,6 +46,7 @@ import java.lang.reflect.Type;
 import service.Location;
 
 public class DetailsActivity extends AppCompatActivity {
+
     TextView _address;
     TextView _age_text;
     TextView _open_text;
@@ -38,19 +57,25 @@ public class DetailsActivity extends AppCompatActivity {
     private GoogleMap mMap;
     double latitude;
     double longitude;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
-        _img = (ImageView) findViewById(R.id.detail_image);
+
+        FadingActionBarHelper helper = new FadingActionBarHelper()
+                .actionBarBackground(R.drawable.ab_background)
+                .headerLayout(R.layout.header)
+                .contentLayout(R.layout.activity_scrollview);
+        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        setContentView(helper.createView(this));
+        helper.initActionBar(this);
+
+        _img = (ImageView) findViewById(R.id.image_header);
         _address = (TextView) findViewById(R.id.address_text);
         _age_text = (TextView) findViewById(R.id.age_text);
         _open_text = (TextView) findViewById(R.id.open_text);
         _contact_text = (TextView) findViewById(R.id.contact_text);
         _progress = (ProgressBar) findViewById(R.id.progressBar);
-
 
         Intent i = getIntent();
         Type type = new TypeToken<Location>(){}.getType();
@@ -70,12 +95,11 @@ public class DetailsActivity extends AppCompatActivity {
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
         _open_text.setText(loc.getOpening_hours());
-        _contact_text.setText(loc.getTlf()+"\n"+loc.getEmail());
+        _contact_text.setText(loc.getTlf() + "\n" + loc.getEmail());
 
-
-        String[] latlong = loc.getAddress().split(",");
-//        latitude = Double.parseDouble(latlong[0].trim());
-//        longitude = Double.parseDouble(latlong[1].trim());
+        String[] latlong = loc.getLocation().split(",");
+        latitude = Double.parseDouble(latlong[0].trim());
+        longitude = Double.parseDouble(latlong[1].trim());
         getSupportActionBar().setTitle(loc.getName());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,7 +108,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_details, menu);
         return true;
     }
@@ -137,10 +160,9 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void setUpMap() {
-        /*LatLng diskon = new LatLng(latitude, longitude);
+        LatLng diskon = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(diskon).title(loc.getName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(diskon, 13));
-        mMap.setMyLocationEnabled(true);*/
+        mMap.setMyLocationEnabled(true);
     }
-
 }
