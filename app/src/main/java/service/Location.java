@@ -7,15 +7,17 @@ public class Location {
     private String _id;
     private String name;
     private String address;
+    private String location;
     private String tlf;
     private String email;
     private String opening_hours;
     private String age_limit;
     private String[] features;
 
-    public Location(String newId, String address, String name, String tlf, String email, String opening_hours, String age_limit, String features) {
+    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String features) {
         this._id = newId;
         this.address = address;
+        this.location = newLoc;
         this.name = name;
         this.age_limit = age_limit;
         this.email = email;
@@ -38,6 +40,8 @@ public class Location {
     public String getName() {
         return name;
     }
+
+    public String getLocation() {return location;}
 
     public void setAddress(String address) {
         this.address = address;
