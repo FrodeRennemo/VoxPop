@@ -1,48 +1,34 @@
 package com.example.michael.voxpop;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.AsyncListener;
-import service.HTTPRequest;
+import service.HTTPGet;
 import service.Location;
 import service.Model;
 
@@ -83,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
 
-        HTTPRequest req = new HTTPRequest();
+        HTTPGet req = new HTTPGet();
         req.setAsyncListener(this);
         Model model = new Model(req);
         model.httpGet();
@@ -122,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
             return true;
         }
         if (id == R.id.favorites) {
-            startActivity(new Intent(this, FavoritesActivity.class));
+            startActivity(new Intent(this, GPSFenceActivity.class));
             return true;
         }
 
