@@ -4,9 +4,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Base64;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,32 +37,42 @@ public class HTTPPost extends AsyncTask<byte[], Void, byte[]> {
         try {
 
             // HTTP GET request
-            String url = "\n" + "http://voxpop-app.herokuapp.com/nightclubs/55e30700f8360ee827846812/upload";
+            //String url = "http://voxpop-app.herokuapp.com/nightclubs/55e30700f8360ee827846812/upload";
+            String url = "http://78.91.49.108:3000/nightclubs/560960948e4e503a16117408/upload";
+            HttpClient httpclient = new DefaultHttpClient();
 
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            // optional default is GET
-            con.setRequestMethod("POST");
-
-            //add request header
-            con.setRequestProperty("User-Agent", USER_AGENT);
-
-            con.setDoOutput(true);
-
-            ObjectOutputStream out=new ObjectOutputStream(con.getOutputStream());
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-            Bitmap picture = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
+    /*        Bitmap picture = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
             picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
             BitmapDataObject bitmapDataObject = new BitmapDataObject();
             bitmapDataObject.serializedBitmap = stream.toByteArray();
-            bitmapDataObject.value  = "";//your string value
-            out.writeObject(bitmapDataObject);
-            out.flush();
-            out.close();
+            bitmapDataObject.value  = "file";//your string value
+            */
 
-            System.out.println(con.getResponseCode());
+            Bitmap picture = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            /*FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.txt");
+            fos.write(imageBytes);
+            fos.close();
+            File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.txt");
+            */
+
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            //builder.addTextBody("image", encodedImage);
+            builder.addTextBody("image", encodedImage);
+
+            HttpPost post = new HttpPost(url);
+            post.setEntity(builder.build());
+            HttpResponse response = httpclient.execute(post);
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            System.out.println(statusCode);
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
