@@ -51,20 +51,21 @@ public class DetailsActivity extends AppCompatActivity {
         _contact_text = (TextView) findViewById(R.id.contact_text);
         _progress = (ProgressBar) findViewById(R.id.progressBar);
 
+
+        Intent i = getIntent();
+        Type type = new TypeToken<Location>(){}.getType();
+        loc = new Gson().fromJson(i.getStringExtra("selected"), type);
+
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.loadImage("http://www.visitnorway.com/ImageVaultFiles/id_14949/cf_13/Nidelven-Sven-Erik-Knoff.JPG", new SimpleImageLoadingListener() {
+        imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/"+loc.getId()+"/profile_image", new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 _img.setImageBitmap(loadedImage);
                 _progress.setVisibility(View.GONE);
             }
         });
-
-        Intent i = getIntent();
-        Type type = new TypeToken<Location>(){}.getType();
-        loc = new Gson().fromJson(i.getStringExtra("selected"), type);
 
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
@@ -73,8 +74,8 @@ public class DetailsActivity extends AppCompatActivity {
 
 
         String[] latlong = loc.getAddress().split(",");
-        latitude = Double.parseDouble(latlong[0].trim());
-        longitude = Double.parseDouble(latlong[1].trim());
+//        latitude = Double.parseDouble(latlong[0].trim());
+//        longitude = Double.parseDouble(latlong[1].trim());
         getSupportActionBar().setTitle(loc.getName());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -136,10 +137,10 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void setUpMap() {
-        LatLng diskon = new LatLng(latitude, longitude);
+        /*LatLng diskon = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(diskon).title(loc.getName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(diskon, 13));
-        mMap.setMyLocationEnabled(true);
+        mMap.setMyLocationEnabled(true);*/
     }
 
 }
