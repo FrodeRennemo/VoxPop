@@ -28,7 +28,7 @@ import java.util.List;
 import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import service.AsyncListener;
-import service.HTTPRequest;
+import service.HTTPGet;
 import service.Location;
 import service.Model;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
 
-        HTTPRequest req = new HTTPRequest();
+        HTTPGet req = new HTTPGet();
         req.setAsyncListener(this);
         Model model = new Model(req);
         model.httpGet();
