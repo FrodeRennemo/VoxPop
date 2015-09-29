@@ -1,20 +1,18 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'C:\\Program Files (x86)\\nodejs\\\\node.exe',
-1 verbose cli   'C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'start' ]
-2 info using npm@1.4.28
-3 info using node@v0.10.36
-4 verbose node symlink C:\Program Files (x86)\nodejs\\node.exe
-5 error Error: ENOENT, open 'C:\Users\Michael\Documents\dev\VoxPop\package.json'
-6 error If you need help, you may report this *entire* log,
-6 error including the npm and node versions, at:
-6 error     <http://github.com/npm/npm/issues>
-7 error System Windows_NT 6.1.7601
-8 error command "C:\\Program Files (x86)\\nodejs\\\\node.exe" "C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
-9 error cwd C:\Users\Michael\Documents\dev\VoxPop
-10 error node -v v0.10.36
-11 error npm -v 1.4.28
-12 error path C:\Users\Michael\Documents\dev\VoxPop\package.json
-13 error code ENOENT
-14 error errno 34
-15 verbose exit [ 34, true ]
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'start' ]
+2 info using npm@2.11.3
+3 info using node@v0.12.7
+4 verbose stack Error: ENOENT, open '/Users/andreaskalstad/VoxPop/package.json'
+4 verbose stack     at Error (native)
+5 verbose cwd /Users/andreaskalstad/VoxPop
+6 error Darwin 14.5.0
+7 error argv "node" "/usr/local/bin/npm" "start"
+8 error node v0.12.7
+9 error npm  v2.11.3
+10 error path /Users/andreaskalstad/VoxPop/package.json
+11 error code ENOENT
+12 error errno -2
+13 error enoent ENOENT, open '/Users/andreaskalstad/VoxPop/package.json'
+13 error enoent This is most likely not a problem with npm itself
+13 error enoent and is related to npm not being able to find a file.
+14 verbose exit [ -2, true ]

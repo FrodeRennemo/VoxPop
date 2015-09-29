@@ -10,6 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -38,7 +39,7 @@ public class HTTPPost extends AsyncTask<byte[], Void, byte[]> {
 
             // HTTP GET request
             //String url = "http://voxpop-app.herokuapp.com/nightclubs/55e30700f8360ee827846812/upload";
-            String url = "http://78.91.49.108:3000/nightclubs/560960948e4e503a16117408/upload";
+            String url = "http://voxpop-app.herokuapp.com/nightclubs/56094cf75732010b0034caf9/upload";
             HttpClient httpclient = new DefaultHttpClient();
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -55,17 +56,17 @@ public class HTTPPost extends AsyncTask<byte[], Void, byte[]> {
             picture.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
             String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            /*FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.txt");
+            FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.txt");
             fos.write(imageBytes);
             fos.close();
             File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.txt");
-            */
+
 
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
             //builder.addTextBody("image", encodedImage);
-            builder.addTextBody("image", encodedImage);
+            builder.addBinaryBody("file", test, ContentType.TEXT_PLAIN, "file");
 
             HttpPost post = new HttpPost(url);
             post.setEntity(builder.build());
