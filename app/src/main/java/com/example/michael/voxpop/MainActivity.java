@@ -28,7 +28,7 @@ import java.util.List;
 import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import service.AsyncListener;
-import service.HTTPGet;
+import service.GetDetails;
 import service.Location;
 import service.Model;
 
@@ -69,10 +69,10 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
 
-        HTTPGet req = new HTTPGet();
+        GetDetails req = new GetDetails();
         req.setAsyncListener(this);
-        Model model = new Model(req);
-        model.httpGet();
+        Model model = new Model();
+        model.getDetails(req);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
             return true;
         }
         if (id == R.id.favorites) {
-            startActivity(new Intent(this, GPSFenceActivity.class));
+            startActivity(new Intent(this, FavoritesActivity.class));
             return true;
         }
 
