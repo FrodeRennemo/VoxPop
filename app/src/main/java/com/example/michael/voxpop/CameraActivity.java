@@ -1,10 +1,7 @@
 package com.example.michael.voxpop;
 
-import android.content.Intent;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,19 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import activitySupport.CameraPreview;
-import service.HTTPPost;
+import service.PostImageToFS;
 import service.Model;
 
 public class CameraActivity extends AppCompatActivity {
@@ -40,8 +35,7 @@ public class CameraActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        HTTPPost post = new HTTPPost();
-        model = new Model(post);
+        model = new Model();
 
         // Create an instance of Camera
         cameraId = findFrontFacingCamera();
@@ -169,7 +163,7 @@ public class CameraActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
-                model.httpPost(data);
+                model.sendImage(data);
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
