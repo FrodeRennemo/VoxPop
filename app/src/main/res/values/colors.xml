@@ -17,5 +17,7 @@
     <item name="app_base_trans" type="color">#8000B8D4</item>
     <item name="app_accent" type="color">#E64A19</item>
     <item name="app_accent_darker" type="color">#80E64A19</item>
+    <item name="app_accent_lighter" type="color">#FFE64A19</item>
+    <item name="app_ripple" type="color">#FFFFFFFF</item>
 
 </resources>
