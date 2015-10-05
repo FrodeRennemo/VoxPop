@@ -77,8 +77,8 @@ public class DBHandler {
                 null
         );
 
-        ArrayList<String[]> favorites = new ArrayList<>(cursor.getCount());
-        for (int i = 0; i<favorites.size(); i++){
+        ArrayList<String[]> favorites = new ArrayList<>();
+        for (int i = 0; i<cursor.getCount(); i++){
             String favorite[] = new String[8];
             if(i==0){
                 cursor.moveToFirst();
