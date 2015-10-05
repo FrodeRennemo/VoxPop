@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by andreaskalstad on 09/09/15.
  */
-public class HTTPGet extends AsyncTask<String, Void, String> {
+public class GetDetails extends AsyncTask<String, Void, String> {
 
     private final String USER_AGENT = "Mozilla/5.0";
     private Model model;

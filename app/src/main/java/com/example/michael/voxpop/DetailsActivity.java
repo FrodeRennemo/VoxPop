@@ -44,6 +44,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.lang.reflect.Type;
 
 import service.Location;
+import service.Model;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -128,6 +129,12 @@ public class DetailsActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.take_photo) {
             goToCamera();
+            return true;
+        }
+
+        if (id == R.id.add_favorite) {
+            Model model = new Model();
+            model.addFavorite(loc.getId(), this.getApplicationContext());
             return true;
         }
 

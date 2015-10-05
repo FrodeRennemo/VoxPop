@@ -4,7 +4,7 @@
     tools:context="com.example.michael.voxpop.DetailsActivity">
     <item
         android:id="@+id/add_favorite"
-        android:title="Take photo"
+        android:title="Add favorite"
         app:showAsAction="always"
         android:icon="@drawable/ic_star_border_white_24dp"/>
     <item
