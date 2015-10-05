@@ -133,8 +133,8 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (id == R.id.add_favorite) {
-            Model model = new Model();
-            model.addFavorite(loc.getId(), this.getApplicationContext());
+            Model model = new Model(this.getApplicationContext());
+            model.addFavorite(loc);
             return true;
         }
 

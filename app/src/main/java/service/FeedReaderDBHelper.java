@@ -14,7 +14,15 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
                     FeedEntry._ID + " INTEGER PRIMARY KEY," +
-                    FeedEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " )";
+                    FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_NAME + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_TLF + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_ADDRESS + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_META + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_EMAIL + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_LOCATION + TEXT_TYPE + " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
@@ -26,9 +34,15 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
     public FeedReaderDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
     }
+
+    public void deleteTable(SQLiteDatabase db){
+        db.execSQL(SQL_DELETE_ENTRIES);
+    }
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
