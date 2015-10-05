@@ -48,7 +48,7 @@ public class DBHandler {
                 values);
     }
 
-    public ArrayList<String[]> getFavorites() {
+    public ArrayList<Location> getFavorites() {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -77,41 +77,22 @@ public class DBHandler {
                 null
         );
 
-        ArrayList<String[]> favorites = new ArrayList<>();
+        ArrayList<Location> favorites = new ArrayList<>();
         for (int i = 0; i<cursor.getCount(); i++){
-            String favorite[] = new String[8];
             if(i==0){
                 cursor.moveToFirst();
             }
-
-            favorite[0] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_LOC_ID)
-            );
-            favorite[1] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_ADDRESS)
-            );
-            favorite[2] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)
-            );
-            favorite[3] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_LOCATION)
-            );
-            favorite[4] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_NAME)
-            );
-            favorite[5] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT)
-            );
-            favorite[6] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_EMAIL)
-            );
-            favorite[7] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_TLF)
-            );
-            favorite[8] = cursor.getString(
-                    cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS)
-            );
-            favorites.add(favorite);
+            Location loc = new Location(
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_LOC_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_ADDRESS)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_LOCATION)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_EMAIL)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_TLF)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS)));
+            favorites.add(loc);
             cursor.moveToNext();
         }
         return favorites;

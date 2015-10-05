@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import service.Location;
 import service.Model;
 
 public class FavoritesActivity extends AppCompatActivity {
@@ -28,8 +29,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Search");
         model = new Model(this.getApplicationContext());
-        ArrayList<String[]> favorites = model.getFavorites();
-        System.out.println("yolo");
+        ArrayList<Location> favorites = model.getFavorites();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

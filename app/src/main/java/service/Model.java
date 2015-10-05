@@ -42,11 +42,12 @@ public class Model {
         }
     }
 
-    public ArrayList<String[]> getFavorites(){
-        ArrayList<String[]> favorites = new ArrayList<>();
+    public ArrayList<Location> getFavorites(){
+        ArrayList<Location> favorites = new ArrayList<>();
         try {
             favorites = dbHandler.getFavorites();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return favorites;
