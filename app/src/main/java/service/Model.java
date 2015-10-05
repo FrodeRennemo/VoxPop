@@ -2,10 +2,19 @@ package service;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 /**
  * Created by Andreas on 10.09.2015.
  */
 public class Model {
+    private DBHandler dbHandler;
+
+    public Model(Context applicationContext){
+        dbHandler = new DBHandler(applicationContext);
+    }
+
+    public Model(){}
 
     public void getDetails(GetDetails req) {
         try {
@@ -25,23 +34,29 @@ public class Model {
         }
     }
 
-    public void addFavorite(String id, Context applicationContext) {
+    public void addFavorite(Location loc) {
         try {
-            DBHandler dbHandler = new DBHandler(applicationContext);
-            dbHandler.addFavorite(id);
+            dbHandler.addFavorite(loc);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public String getFavorites(Context applicationContext){
-        String favorites = "No favorites";
+    public ArrayList<String[]> getFavorites(){
+        ArrayList<String[]> favorites = new ArrayList<>();
         try {
-            DBHandler dbHandler = new DBHandler(applicationContext);
             favorites = dbHandler.getFavorites();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return favorites;
+    }
+
+    public void deleteFavorite(String id){
+        try {
+            dbHandler.deleteFavorite(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

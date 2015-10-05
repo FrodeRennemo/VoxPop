@@ -12,23 +12,20 @@ public class Location {
     private String email;
     private String opening_hours;
     private String age_limit;
-    private String[] features;
+    private String meta;
 
-    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String features) {
-        this._id = newId;
-        this.address = address;
-        this.location = newLoc;
-        this.name = name;
-        this.age_limit = age_limit;
-        this.email = email;
-        this.tlf = tlf;
-        this.opening_hours = opening_hours;
-        this.features = features.split(",");
-        for(int i = 0; i<this.features.length; i++){
-            this.features[i] = this.features[i].trim();
-        }
-
+    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta) {
+        this._id = newId.trim();
+        this.address = address.trim();
+        this.location = newLoc.trim();
+        this.name = name.trim();
+        this.age_limit = age_limit.trim();
+        this.email = email.trim();
+        this.tlf = tlf.trim();
+        this.opening_hours = opening_hours.trim();
+        this.meta = meta.toLowerCase().trim();
     }
+
     public String getId() {
         return _id;
     }
@@ -83,11 +80,11 @@ public class Location {
         this.age_limit = age_limit;
     }
 
-    public String[] getFeatures() {
-        return features;
+    public String getMeta(){
+        return meta;
     }
 
-    public void setFeatures(String[] features) {
-        this.features = features;
+    public void setFeatures(String features) {
+        this.meta = meta;
     }
 }

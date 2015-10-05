@@ -1,16 +1,21 @@
 package com.example.michael.voxpop;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import service.Model;
 
 public class FavoritesActivity extends AppCompatActivity {
 
-    private TextView favorites;
+    private Model model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +23,7 @@ public class FavoritesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favorites);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Search");
-        Model model = new Model();
-        favorites = (TextView) findViewById(R.id.favorites);
-        favorites.setText(model.getFavorites(this.getApplicationContext()));
+        model = new Model(this.getApplicationContext());
     }
 
     @Override
@@ -50,5 +53,10 @@ public class FavoritesActivity extends AppCompatActivity {
         finish();
         // or call onBackPressed()
         return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 }
