@@ -28,6 +28,8 @@ import java.util.List;
 import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import service.AsyncListener;
+import service.DBHandler;
+import service.FeedReaderDBHelper;
 import service.GetDetails;
 import service.Location;
 import service.Model;
@@ -81,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         // use a linear layout manager
 
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-
     }
 
     @Override
@@ -116,10 +117,11 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     }
 
     public void goToResults(View v){
-        ArrayList<Location> results = new ArrayList<Location>();
+        ArrayList<Location> results = new ArrayList<>();
         String[] selected = filter.split(",");
         for(Location l : locations){
-            String[] feats = l.getFeatures();
+            String meta = l.getMeta();
+            String[] feats = meta.split(",");
             for(int i=0; i<feats.length; i++){
                 feats[i] = feats[i].trim().toLowerCase();
             }
@@ -174,17 +176,18 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     @Override
     public void asyncDone(ArrayList<Location> res) {
         locations = res;
-        moodCount = new ArrayList<Mood>();
-        displayMoods = new ArrayList<String>();
-        allMoods = new ArrayList<String>();
+        moodCount = new ArrayList<>();
+        displayMoods = new ArrayList<>();
+        allMoods = new ArrayList<>();
         for(int i=0; i<res.size(); i++){
-            for(int j=0; j<res.get(i).getFeatures().length; j++){
-                if(!displayMoods.contains(res.get(i).getFeatures()[j].toLowerCase())){
-                    displayMoods.add(res.get(i).getFeatures()[j].toLowerCase());
-                    moodCount.add(new Mood(res.get(i).getFeatures()[j]));
+            String[] resMoodTable = res.get(i).getMeta().split(",");
+            for(int j=0; j<resMoodTable.length; j++){
+                if(!displayMoods.contains(resMoodTable[j].toLowerCase())){
+                    displayMoods.add(resMoodTable[j].toLowerCase());
+                    moodCount.add(new Mood(resMoodTable[j]));
                 } else {
                     for(int k=0; k<moodCount.size(); k++){
-                        if(res.get(i).getFeatures()[j].equalsIgnoreCase(moodCount.get(k).getName())){
+                        if(resMoodTable[j].equalsIgnoreCase(moodCount.get(k).getName())){
                             moodCount.get(k).increaseSize();
                         }
                     }

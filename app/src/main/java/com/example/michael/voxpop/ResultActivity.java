@@ -155,7 +155,7 @@ public class ResultActivity extends AppCompatActivity {
             final ImageView currentImage = holder.img;
             final ProgressBar _progress = holder._progress;
             holder.mTextView.setText(mDataset.get(position).getName());
-            String[] features = mDataset.get(position).getFeatures();
+            String[] features = mDataset.get(position).getMeta().split(",");
             String featDisplay = "";
             for(int i=0; i<features.length; i++){
                 if((i == 0 && features.length == 1) || i == features.length-1){
