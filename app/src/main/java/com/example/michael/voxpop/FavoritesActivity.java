@@ -3,6 +3,7 @@ package com.example.michael.voxpop;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import service.Model;
 
@@ -25,6 +28,8 @@ public class FavoritesActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Search");
         model = new Model(this.getApplicationContext());
+        ArrayList<String[]> favorites = model.getFavorites();
+        System.out.println("yolo");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
