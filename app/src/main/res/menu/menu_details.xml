@@ -8,6 +8,11 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_star_border_white_24dp"/>
     <item
+        android:id="@+id/rem_favorite"
+        android:title="Add favorite"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_star_white_24dp"/>
+    <item
         android:id="@+id/take_photo"
         android:title="Take photo"
         app:showAsAction="always"

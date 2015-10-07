@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Tags");
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         filterView = (TextView) findViewById(R.id.filter);
         _progress = (ProgressBar) findViewById(R.id.progressBar);
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.search) {
+        /*if (id == R.id.search) {
             Intent i = new Intent(this, SearchActivity.class);
             Type type = new TypeToken<ArrayList<Location>>(){}.getType();
             String json = new Gson().toJson(locations, type);
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         if (id == R.id.favorites) {
             startActivity(new Intent(this, FavoritesActivity.class));
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
