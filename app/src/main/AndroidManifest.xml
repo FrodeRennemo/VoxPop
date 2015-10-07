@@ -71,6 +71,10 @@
             android:name=".GPSFenceActivity"
             android:label="@string/title_activity_GPS" >
         </activity>
+        <activity
+            android:name=".MapActivity"
+            android:label="@string/title_activity_maps" >
+        </activity>
     </application>
 
 </manifest>

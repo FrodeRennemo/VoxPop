@@ -85,7 +85,8 @@
             fab:fab_label="Map"
             fab:fab_colorNormal="@color/app_accent"
             fab:fab_colorPressed="@color/app_accent_darker"
-            fab:fab_colorRipple="#99FFFFFF"/>
+            fab:fab_colorRipple="#99FFFFFF"
+            android:onClick="goToMaps"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 </FrameLayout>

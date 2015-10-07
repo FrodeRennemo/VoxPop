@@ -105,12 +105,14 @@ public class FavoritesActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void goToSearch(View v){
-        startActivity(new Intent(this, SearchActivity.class));
-    }
+    public void goToSearch(View v){ startActivity(new Intent(this, SearchActivity.class));}
 
     public void goToTags(View v){
         startActivity(new Intent(this, MainActivity.class));
+    }
+
+    public void goToMaps(View v){
+        startActivity(new Intent(this, MapActivity.class));
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
