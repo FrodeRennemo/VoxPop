@@ -12,12 +12,12 @@
     <item name="darkorange" type="color">#FFFF8800</item>
     <item name="darkred" type="color">#FFCC0000</item>
 
-    <item name="app_base" type="color">#00E5FF</item>
-    <item name="app_darker" type="color">#00B8D4</item>
-    <item name="app_base_trans" type="color">#8000B8D4</item>
-    <item name="app_accent" type="color">#E64A19</item>
-    <item name="app_accent_darker" type="color">#80E64A19</item>
-    <item name="app_accent_lighter" type="color">#FFE64A19</item>
-    <item name="app_ripple" type="color">#FFFFFFFF</item>
+    <item name="app_base" type="color">#246C60</item>
+    <item name="app_darker" type="color">#0D5146</item>
+    <item name="app_base_trans" type="color">#80246C60</item>
+    <item name="app_accent" type="color">#90305A</item>
+    <item name="app_accent_darker" type="color">#8090305A</item>
+    <item name="app_accent_lighter" type="color">#FF90305A</item>
+    <item name="app_ripple" type="color">#80000000</item>
 
 </resources>

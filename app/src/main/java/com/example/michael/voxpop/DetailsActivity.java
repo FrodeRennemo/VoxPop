@@ -48,6 +48,7 @@ import service.Model;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    Model model;
     TextView _address;
     TextView _age_text;
     TextView _open_text;
@@ -55,6 +56,7 @@ public class DetailsActivity extends AppCompatActivity {
     ImageView _img;
     ProgressBar _progress;
     Location loc;
+    Menu menu;
     private GoogleMap mMap;
     double latitude;
     double longitude;
@@ -62,7 +64,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        model = new Model(this.getApplicationContext());
         FadingActionBarHelper helper = new FadingActionBarHelper()
                 .actionBarBackground(R.drawable.ab_background)
                 .headerLayout(R.layout.header)
@@ -108,8 +110,13 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_details, menu);
+    public boolean onCreateOptionsMenu(Menu this_menu) {
+        getMenuInflater().inflate(R.menu.menu_details, this_menu);
+        this.menu = this_menu;
+        if(menu != null){
+            checkFavorite();
+        }
+
         return true;
     }
 
@@ -135,10 +142,30 @@ public class DetailsActivity extends AppCompatActivity {
         if (id == R.id.add_favorite) {
             Model model = new Model(this.getApplicationContext());
             model.addFavorite(loc);
+            if(menu != null) {
+                checkFavorite();
+            }
             return true;
+        }
+        if(id == R.id.rem_favorite){
+            model.deleteFavorite(loc.getId());
+            if(menu != null) {
+                checkFavorite();
+            }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void checkFavorite(){
+        MenuItem add_item = menu.findItem(R.id.add_favorite);
+        MenuItem rem_item = menu.findItem(R.id.rem_favorite);
+        if(model.checkFavoriteExists(loc.getId())){
+            rem_item.setVisible(true);
+            add_item.setVisible(false);
+        }else {
+            rem_item.setVisible(false);
+            add_item.setVisible(true);
+        }
     }
 
     public void goToCamera() {

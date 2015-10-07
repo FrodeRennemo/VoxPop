@@ -60,4 +60,14 @@ public class Model {
             e.printStackTrace();
         }
     }
+
+    public boolean checkFavoriteExists(String id){
+        boolean res = false;
+        try{
+            res = dbHandler.checkFavoriteExists(id);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return res;
+    }
 }

@@ -18,9 +18,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import service.AsyncListener;
+import service.GetDetails;
 import service.Location;
+import service.Model;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements AsyncListener {
 
     public ArrayList<Location> locations;
     public List<String> locationNames;
@@ -35,7 +38,13 @@ public class SearchActivity extends AppCompatActivity {
         _search_results = (TextView) findViewById(R.id.search_results);
         Intent i = getIntent();
         Type type = new TypeToken<ArrayList<Location>>(){}.getType();
-        locations = new Gson().fromJson(i.getStringExtra("results"), type);
+        GetDetails req = new GetDetails();
+        req.setAsyncListener(this);
+        Model model = new Model(this.getApplicationContext());
+        model.getDetails(req);
+    }
+    public void asyncDone(ArrayList<Location> res) {
+        locations = res;
         locationNames = new ArrayList<>();
         for(Location l : locations){
             locationNames.add(l.getName());
