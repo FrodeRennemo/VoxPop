@@ -43,6 +43,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
         Model model = new Model(this.getApplicationContext());
         model.getDetails(req);
     }
+
     public void asyncDone(ArrayList<Location> res) {
         locations = res;
         locationNames = new ArrayList<>();
