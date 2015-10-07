@@ -22,6 +22,7 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
                     FeedEntry.COLUMN_NAME_ENTRY_META + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_EMAIL + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_PICTURE + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_LOCATION + TEXT_TYPE + " )";
 
     private static final String SQL_DELETE_ENTRIES =

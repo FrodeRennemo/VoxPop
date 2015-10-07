@@ -38,6 +38,7 @@ public class DBHandler {
         values.put(FeedEntry.COLUMN_NAME_ENTRY_LOCATION, loc.getLocation());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS, loc.getOpening_hours());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_TLF, loc.getTlf());
+        values.put(FeedEntry.COLUMN_NAME_ENTRY_PICTURE, loc.getPicture());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_META, loc.getMeta());
 
         // Insert the new row, returning the primary key value of the new row
@@ -61,7 +62,8 @@ public class DBHandler {
                 FeedEntry.COLUMN_NAME_ENTRY_META,
                 FeedEntry.COLUMN_NAME_ENTRY_NAME,
                 FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS,
-                FeedEntry.COLUMN_NAME_ENTRY_TLF
+                FeedEntry.COLUMN_NAME_ENTRY_TLF,
+                FeedEntry.COLUMN_NAME_ENTRY_PICTURE
         };
 
         // How you want the results sorted in the resulting Cursor
@@ -92,6 +94,7 @@ public class DBHandler {
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_EMAIL)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_TLF)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS)));
+            loc.setPicture(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE)));
             favorites.add(loc);
             cursor.moveToNext();
         }
