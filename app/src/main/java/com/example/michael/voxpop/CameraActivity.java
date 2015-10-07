@@ -30,6 +30,7 @@ public class CameraActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_VIDEO = 2;
     public static int cameraId;
     private Model model;
+    private FrameLayout preview;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,20 +39,10 @@ public class CameraActivity extends AppCompatActivity {
         model = new Model();
 
         // Create an instance of Camera
-        cameraId = findFrontFacingCamera();
+        cameraId = findBackFacingCamera();
         mCamera = getCameraInstance();
-        Method rotateMethod;
-        try {
-            rotateMethod = Camera.class.getMethod("setDisplayOrientation", int.class);
-            rotateMethod.invoke(mCamera, 90);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        // Create our Preview view and set it as the content of our activity.
-        mPreview = new CameraPreview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
+        setCameraView();
 
         Button captureButton = (Button) findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
@@ -63,9 +54,59 @@ public class CameraActivity extends AppCompatActivity {
                     }
                 }
         );
+        Button changeButton = (Button) findViewById(R.id.camera_change);
+        changeButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(cameraId == 0) {
+                            mCamera.release();
+                            cameraId = findFrontFacingCamera();
+                            mCamera = getCameraInstance();
+                            setCameraView();
+                        } else {
+                            mCamera.release();
+                            cameraId = findBackFacingCamera();
+                            mCamera = getCameraInstance();
+                            setCameraView();
+                        }
+                    }
+                }
+        );
     }
 
-    private int findFrontFacingCamera() {
+    private void setCameraView(){
+        Method rotateMethod;
+        try {
+            rotateMethod = Camera.class.getMethod("setDisplayOrientation", int.class);
+            rotateMethod.invoke(mCamera, 90);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Create our Preview view and set it as the content of our activity.
+        mPreview = new CameraPreview(this, mCamera);
+        preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.removeAllViews();
+        preview.addView(mPreview);
+    }
+
+    private int findFrontFacingCamera(){
+        int cameraId = -1;
+        // Search for the front facing camera
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                cameraId = i;
+                break;
+            }
+        }
+        return cameraId;
+    }
+
+    private int findBackFacingCamera() {
         int cameraId = -1;
         // Search for the front facing camera
         int numberOfCameras = Camera.getNumberOfCameras();
