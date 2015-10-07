@@ -17,9 +17,11 @@ package com.example.michael.voxpop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import service.Location;
@@ -134,6 +137,13 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (id == R.id.add_favorite) {
             Model model = new Model(this.getApplicationContext());
+            if(_img.getDrawable() != null) {
+                BitmapDrawable bitmapDrawable = ((BitmapDrawable) _img.getDrawable());
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+                loc.setPicture(Base64.encodeToString(bytes.toByteArray(), Base64.DEFAULT));
+            }
             model.addFavorite(loc);
             return true;
         }
