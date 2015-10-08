@@ -45,8 +45,6 @@ public class GetDetails extends AsyncTask<String, Void, String> {
             //add request header
             con.setRequestProperty("User-Agent", USER_AGENT);
 
-            int responseCode = con.getResponseCode();
-
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(con.getInputStream()));
             String inputLine;
@@ -65,8 +63,7 @@ public class GetDetails extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String res) {
-        Model model = new Model();
-        jsonArray = new ArrayList<Location>();
+        jsonArray = new ArrayList<>();
         jsonParser = new JSONParser();
         try {
             jsonArray = jsonParser.parse(res);

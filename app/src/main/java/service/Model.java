@@ -18,7 +18,6 @@ public class Model {
 
     public void getDetails(GetDetails req) {
         try {
-            GetDetails getDetails = new GetDetails();
             req.execute();
         } catch (Exception e) {
             e.printStackTrace();

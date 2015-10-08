@@ -1,23 +1,16 @@
 package com.example.michael.voxpop;
 
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
 import service.AsyncListener;
 import service.GetDetails;
 import service.Location;
