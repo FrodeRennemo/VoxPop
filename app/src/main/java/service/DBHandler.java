@@ -23,7 +23,7 @@ public class DBHandler {
     public DBHandler (Context applicationContext){
         mDbHelper = new FeedReaderDBHelper(applicationContext);
         db = mDbHelper.getWritableDatabase();
-        bitmapConverter = new BitmapConverter(); 
+        bitmapConverter = new BitmapConverter();
     }
 
     public void addFavorite(Location loc){
