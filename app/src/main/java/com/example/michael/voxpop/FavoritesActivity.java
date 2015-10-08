@@ -42,6 +42,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ImageView _buttonHint;
     public Bitmap[] bitmaps;
 
     @Override
@@ -52,6 +53,8 @@ public class FavoritesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("VoxPop");
         model = new Model(this.getApplicationContext());
         favorites = model.getFavorites();
+        _buttonHint = (ImageView) findViewById(R.id.buttonHint);
+        checkDisplayArrow();
         mRecyclerView = (RecyclerView) findViewById(R.id.favorites_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         mAdapter = new MyAdapter(favorites, bitmaps, getApplicationContext(), this);
@@ -59,6 +62,8 @@ public class FavoritesActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new LandingAnimator());
+        this.overridePendingTransition(R.anim.slide_left,
+                R.anim.slide_right);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,6 +100,15 @@ public class FavoritesActivity extends AppCompatActivity {
         favorites = model.getFavorites();
         mAdapter = new MyAdapter(favorites, bitmaps, getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
+        checkDisplayArrow();
+    }
+
+    public void checkDisplayArrow(){
+        if(favorites.size() == 0){
+            _buttonHint.setVisibility(View.VISIBLE);
+        }else {
+            _buttonHint.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void goToDetails(int position) {
@@ -105,7 +119,8 @@ public class FavoritesActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void goToSearch(View v){ startActivity(new Intent(this, SearchActivity.class));}
+    public void goToSearch(View v){
+        startActivity(new Intent(this, SearchActivity.class));}
 
     public void goToTags(View v){
         startActivity(new Intent(this, MainActivity.class));
