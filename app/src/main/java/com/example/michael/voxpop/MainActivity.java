@@ -28,8 +28,6 @@ import java.util.List;
 import activitySupport.Mood;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import service.AsyncListener;
-import service.DBHandler;
-import service.FeedReaderDBHelper;
 import service.GetDetails;
 import service.Location;
 import service.Model;

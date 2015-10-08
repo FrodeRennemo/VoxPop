@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import java.util.ArrayList;
 
@@ -15,16 +17,13 @@ import service.FeedReaderContract.FeedEntry;
  */
 public class DBHandler {
     private FeedReaderDBHelper mDbHelper;
-    private String id;
     private SQLiteDatabase db;
+    private BitmapConverter bitmapConverter;
 
     public DBHandler (Context applicationContext){
         mDbHelper = new FeedReaderDBHelper(applicationContext);
         db = mDbHelper.getWritableDatabase();
-    }
-
-    public SQLiteDatabase getDb(){
-        return db;
+        bitmapConverter = new BitmapConverter();
     }
 
     public void addFavorite(Location loc){
@@ -38,34 +37,19 @@ public class DBHandler {
         values.put(FeedEntry.COLUMN_NAME_ENTRY_LOCATION, loc.getLocation());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS, loc.getOpening_hours());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_TLF, loc.getTlf());
-        values.put(FeedEntry.COLUMN_NAME_ENTRY_PICTURE, loc.getPicture());
+        if(loc.getPicture() != null) {
+            values.put(FeedEntry.COLUMN_NAME_ENTRY_PICTURE, bitmapConverter.BitMapToString(loc.getPicture()));
+        }
         values.put(FeedEntry.COLUMN_NAME_ENTRY_META, loc.getMeta());
 
         // Insert the new row, returning the primary key value of the new row
-        long newRowId;
-        newRowId = db.insert(
+        db.insert(
                 FeedEntry.TABLE_NAME,
                 null,
                 values);
     }
 
     public ArrayList<Location> getFavorites() {
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                FeedEntry._ID,
-                FeedEntry.COLUMN_NAME_ENTRY_LOC_ID,
-                FeedEntry.COLUMN_NAME_ENTRY_ADDRESS,
-                FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT,
-                FeedEntry.COLUMN_NAME_ENTRY_EMAIL,
-                FeedEntry.COLUMN_NAME_ENTRY_LOCATION,
-                FeedEntry.COLUMN_NAME_ENTRY_META,
-                FeedEntry.COLUMN_NAME_ENTRY_NAME,
-                FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS,
-                FeedEntry.COLUMN_NAME_ENTRY_TLF,
-                FeedEntry.COLUMN_NAME_ENTRY_PICTURE
-        };
-
         // How you want the results sorted in the resulting Cursor
         //String sortOrder = FeedEntry.COLUMN_NAME_UPDATED + " DESC";
 
@@ -94,7 +78,7 @@ public class DBHandler {
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)));
-            loc.setPicture(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE)));
+            loc.setPicture(bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE))));
 
             favorites.add(loc);
             cursor.moveToNext();

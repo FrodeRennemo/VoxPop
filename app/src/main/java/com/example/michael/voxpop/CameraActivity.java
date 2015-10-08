@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import activitySupport.CameraPreview;
-import service.PostImageToFS;
 import service.Model;
 
 public class CameraActivity extends AppCompatActivity {
