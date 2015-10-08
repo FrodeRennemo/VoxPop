@@ -1,7 +1,6 @@
 package com.example.michael.voxpop;
 
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,23 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.location.Geofence;
-import java.util.ArrayList;
 import activitySupport.GPSTracker;
 
 /**
  * Created by andreaskalstad on 25/09/15.
  */
 public class GPSFenceActivity extends AppCompatActivity {
-    private ArrayList<Geofence> mGeofenceList;
     private TextView locationView;
-    private TextView myLocationView;
     private Location position;
     private Location locationOppdal;
-    private int test;
-    LocationManager locationManager;
     Button btnShowLocation;
     GPSTracker gps;
+    private TextView myLocationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +34,6 @@ public class GPSFenceActivity extends AppCompatActivity {
         locationOppdal = new Location("Oppdal");
         locationOppdal.setLatitude(62.59451130000001);
         locationOppdal.setLongitude(9.673516999999947);
-        test = 0;
-
-        mGeofenceList = new ArrayList<>();
         btnShowLocation = (Button) findViewById(R.id.test);
 
         // show location button click event
@@ -104,18 +95,4 @@ public class GPSFenceActivity extends AppCompatActivity {
         finish();
         return true;
     }
-/*
-    private void createFence(){
-        mGeofenceList.add(new Geofence.Builder()
-            // Set the request ID of the geofence. This is a string to identify this
-            // geofence.
-            .setRequestId("Kalvskinnsgata")
-
-            .setCircularRegion(
-                    63.429437, 10.3854547,
-                    50
-            )
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
-            .build());
-    } */
 }
