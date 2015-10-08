@@ -86,16 +86,23 @@ public class DetailsActivity extends AppCompatActivity {
         Type type = new TypeToken<Location>(){}.getType();
         loc = new Gson().fromJson(i.getStringExtra("selected"), type);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/"+loc.getId()+"/profile_image", new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                _img.setImageBitmap(loadedImage);
-                _progress.setVisibility(View.GONE);
-            }
-        });
+        if(model.checkFavoriteExists(loc.getId())){
+            _img.setImageBitmap(model.getLocationBitmap(loc.getId()));
+            _progress.setVisibility(View.GONE);
+
+        }else {
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+            ImageLoader.getInstance().init(config);
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/"+loc.getId()+"/profile_image", new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    _img.setImageBitmap(loadedImage);
+                    _progress.setVisibility(View.GONE);
+                }
+            });
+        }
+
 
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());

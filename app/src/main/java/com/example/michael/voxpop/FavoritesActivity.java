@@ -39,7 +39,6 @@ public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ImageView _buttonHint;
-    public Bitmap[] bitmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,7 @@ public class FavoritesActivity extends AppCompatActivity {
         checkDisplayArrow();
         mRecyclerView = (RecyclerView) findViewById(R.id.favorites_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        mAdapter = new MyAdapter(favorites, bitmaps, getApplicationContext(), this);
+        mAdapter = new MyAdapter(favorites, this);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -94,7 +93,7 @@ public class FavoritesActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         favorites = model.getFavorites();
-        mAdapter = new MyAdapter(favorites, bitmaps, getApplicationContext(), this);
+        mAdapter = new MyAdapter(favorites, this);
         mRecyclerView.setAdapter(mAdapter);
         checkDisplayArrow();
     }
@@ -110,7 +109,9 @@ public class FavoritesActivity extends AppCompatActivity {
     private void goToDetails(int position) {
         Intent i = new Intent(this, DetailsActivity.class);
         Type type = new TypeToken<Location>(){}.getType();
-        String json = new Gson().toJson(favorites.get(position), type);
+        Location noPic = favorites.get(position);
+        noPic.setPicture(null);
+        String json = new Gson().toJson(noPic, type);
         i.putExtra("selected", json);
         startActivity(i);
     }
@@ -128,7 +129,6 @@ public class FavoritesActivity extends AppCompatActivity {
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<Location> mDataset;
-        private Bitmap[] bitmaps;
         FavoritesActivity activity;
         ImageLoaderConfiguration config;
         ImageLoader imageLoader;
@@ -155,10 +155,9 @@ public class FavoritesActivity extends AppCompatActivity {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<Location> myDataset, Bitmap[] bitmaps, Context context, FavoritesActivity activity) {
+        public MyAdapter(ArrayList<Location> myDataset,  FavoritesActivity activity) {
             mDataset = myDataset;
             this.activity = activity;
-            this.bitmaps = bitmaps;
             config = new ImageLoaderConfiguration.Builder(this.activity).build();
             ImageLoader.getInstance().init(config);
             imageLoader = ImageLoader.getInstance();
@@ -194,17 +193,11 @@ public class FavoritesActivity extends AppCompatActivity {
                 }
             }
             holder.mAddress.setText(featDisplay);
-            //holder.img.setImageBitmap(bitmaps[0]);
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
-            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/" + mDataset.get(position).getId() + "/profile_image", new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    currentImage.setImageBitmap(loadedImage);
-                    _progress.setVisibility(View.GONE);
-                }
-            });
+            currentImage.setImageBitmap(mDataset.get(position).getPicture());
+            _progress.setVisibility(View.GONE);
 
         }
 

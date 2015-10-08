@@ -98,4 +98,5 @@ public class Location {
     }
 
     public Bitmap getPicture(){return picture; }
+
 }
