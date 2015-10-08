@@ -1,6 +1,8 @@
 package service;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 /**
  * Created by andreaskalstad on 10/09/15.
@@ -15,7 +17,7 @@ public class Location {
     private String opening_hours;
     private String age_limit;
     private String meta;
-    private String picture;
+    private Bitmap picture;
 
     public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta) {
         this._id = newId.trim();
@@ -91,9 +93,9 @@ public class Location {
         this.meta = meta;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(Bitmap picture) {
         this.picture = picture;
     }
 
-    public String getPicture(){return picture; }
+    public Bitmap getPicture(){return picture; }
 }

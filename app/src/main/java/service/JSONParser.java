@@ -12,7 +12,7 @@ public class JSONParser {
     private JSONObject obj;
 
     public ArrayList<Location> parse(String json) throws JSONException {
-        ArrayList<Location> array = new ArrayList<Location>();
+        ArrayList<Location> array = new ArrayList<>();
         JSONArray arr = new JSONArray(json);
 
         for (int i = 0; i < arr.length(); i++) {
