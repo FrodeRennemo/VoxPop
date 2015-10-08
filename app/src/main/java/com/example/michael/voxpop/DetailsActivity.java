@@ -104,6 +104,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
 
+
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
         _open_text.setText(loc.getOpening_hours());

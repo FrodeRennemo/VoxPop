@@ -102,7 +102,9 @@ public class DBHandler {
     }
 
     public Bitmap getLocationBitmap(String id) {
-        Cursor cursor = db.rawQuery("SELECT * FROM "+FeedEntry.TABLE_NAME+" WHERE "+FeedEntry.COLUMN_NAME_ENTRY_LOC_ID+"='" + id + "'", null);
+        String[] a = {id};
+        Cursor cursor = db.query(FeedEntry.TABLE_NAME, null, FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "=?", a, null, null, null);
+        cursor.moveToFirst();
         return bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE)));
     }
 }

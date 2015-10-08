@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Tags");
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -202,6 +201,13 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         mAdapter = new MyAdapter(displayMoods, moodCount, getApplicationContext(), this);
         mRecyclerView.setAdapter(mAdapter);
         _progress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        // or call onBackPressed()
+        return true;
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {

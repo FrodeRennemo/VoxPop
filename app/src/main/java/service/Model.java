@@ -52,6 +52,7 @@ public class Model {
         }
         return favorites;
     }
+
     public Bitmap getLocationBitmap(String id){
         Bitmap bitmap = null;
         try {

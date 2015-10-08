@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -35,6 +36,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
     private Model model;
     public ArrayList<Location> favorites;
+    private FloatingActionMenu _fam;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -49,6 +51,7 @@ public class FavoritesActivity extends AppCompatActivity {
         model = new Model(this.getApplicationContext());
         favorites = model.getFavorites();
         _buttonHint = (ImageView) findViewById(R.id.buttonHint);
+        _fam = (FloatingActionMenu) findViewById(R.id.menu);
         checkDisplayArrow();
         mRecyclerView = (RecyclerView) findViewById(R.id.favorites_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
@@ -114,17 +117,23 @@ public class FavoritesActivity extends AppCompatActivity {
         String json = new Gson().toJson(noPic, type);
         i.putExtra("selected", json);
         startActivity(i);
+        _fam.close(false);
     }
 
     public void goToSearch(View v){
-        startActivity(new Intent(this, SearchActivity.class));}
+        startActivity(new Intent(this, SearchActivity.class));
+        _fam.close(false);
+    }
+
 
     public void goToTags(View v){
         startActivity(new Intent(this, MainActivity.class));
+        _fam.close(false);
     }
 
     public void goToMaps(View v){
         startActivity(new Intent(this, MapActivity.class));
+        _fam.close(false);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
