@@ -132,7 +132,17 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     public void goToMaps(View v){
-        startActivity(new Intent(this, MapActivity.class));
+        ArrayList<Location> locsNoPic = new ArrayList<Location>();
+        for(Location l : favorites){
+            Location noPic =  l;
+            noPic.setPicture(null);
+            locsNoPic.add(noPic);
+        }
+        Intent i = new Intent(this, MapActivity.class);
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+        String json = new Gson().toJson(locsNoPic, type);
+        i.putExtra("locations", json);
+        startActivity(i);
         _fam.close(false);
     }
 
