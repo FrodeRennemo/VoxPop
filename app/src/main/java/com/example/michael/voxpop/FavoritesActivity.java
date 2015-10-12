@@ -46,7 +46,6 @@ public class FavoritesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
-
         getSupportActionBar().setTitle("VoxPop");
         model = new Model(this.getApplicationContext());
         favorites = model.getFavorites();
@@ -60,8 +59,6 @@ public class FavoritesActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new LandingAnimator());
-        this.overridePendingTransition(R.anim.slide_left,
-                R.anim.slide_right);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,8 +85,16 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
         // or call onBackPressed()
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 
     @Override
@@ -132,16 +137,16 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     public void goToMaps(View v){
-        ArrayList<Location> locsNoPic = new ArrayList<Location>();
-        for(Location l : favorites){
-            Location noPic =  l;
-            noPic.setPicture(null);
-            locsNoPic.add(noPic);
-        }
+//        ArrayList<Location> locsNoPic = new ArrayList<Location>();
+//        for(Location l : favorites){
+//            Location noPic =  l;
+//            noPic.setPicture(null);
+//            locsNoPic.add(noPic);
+//        }
         Intent i = new Intent(this, MapActivity.class);
-        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
-        String json = new Gson().toJson(locsNoPic, type);
-        i.putExtra("locations", json);
+//        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+//        String json = new Gson().toJson(locsNoPic, type);
+//        i.putExtra("locations", json);
         startActivity(i);
         _fam.close(false);
     }

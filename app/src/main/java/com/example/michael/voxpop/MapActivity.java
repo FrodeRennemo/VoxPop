@@ -29,13 +29,17 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
+import activitySupport.Mood;
+import service.AsyncListener;
+import service.GetDetails;
 import service.Location;
 import service.LocationMarker;
+import service.Model;
 
 /**
  * Created by andreaskalstad on 07/10/15.
  */
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements AsyncListener {
     private GoogleMap mMap;
     private ArrayList<Location> markerLocations;
     private ArrayList<LocationMarker> locationMarkers;
@@ -43,14 +47,19 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         setContentView(R.layout.activity_map);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Intent i = getIntent();
-        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
-        markerLocations = new Gson().fromJson(i.getStringExtra("locations"), type);
         locationMarkers = new ArrayList<>();
+        GetDetails req = new GetDetails();
+        req.setAsyncListener(this);
+        Model model = new Model();
+        model.getDetails(req);
+    }
 
-
+    @Override
+    public void asyncDone(ArrayList<Location> res) {
+        markerLocations =  res;
         setUpMapIfNeeded();
     }
 
@@ -79,8 +88,16 @@ public class MapActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
         // or call onBackPressed()
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 
     private void setUpMapIfNeeded() {
@@ -109,7 +126,7 @@ public class MapActivity extends AppCompatActivity {
         mMap.setOnInfoWindowClickListener(new Myonclicklistener(this));
 
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(camPos, 13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(camPos, 14));
         mMap.setMyLocationEnabled(true);
     }
 
@@ -119,7 +136,7 @@ public class MapActivity extends AppCompatActivity {
         public Myonclicklistener(MapActivity _activity){
             mActivity = _activity;
         }
-        
+
         @Override
         public void onInfoWindowClick(Marker marker) {
             Intent i = new Intent(mActivity, DetailsActivity.class);

@@ -52,7 +52,7 @@
         fab:menu_labels_maxLines="-1"
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
-        fab:menu_backgroundColor="@color/app_ripple">
+        fab:menu_backgroundColor="#99FFFFFF">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_item"
