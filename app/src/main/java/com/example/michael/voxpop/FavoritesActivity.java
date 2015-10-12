@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -35,22 +36,25 @@ public class FavoritesActivity extends AppCompatActivity {
 
     private Model model;
     public ArrayList<Location> favorites;
+    private FloatingActionMenu _fam;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    public Bitmap[] bitmaps;
+    private ImageView _buttonHint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
-
         getSupportActionBar().setTitle("VoxPop");
         model = new Model(this.getApplicationContext());
         favorites = model.getFavorites();
+        _buttonHint = (ImageView) findViewById(R.id.buttonHint);
+        _fam = (FloatingActionMenu) findViewById(R.id.menu);
+        checkDisplayArrow();
         mRecyclerView = (RecyclerView) findViewById(R.id.favorites_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        mAdapter = new MyAdapter(favorites, bitmaps, getApplicationContext(), this);
+        mAdapter = new MyAdapter(favorites, this);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -81,39 +85,74 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
         // or call onBackPressed()
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 
     @Override
     public void onResume(){
         super.onResume();
         favorites = model.getFavorites();
-        mAdapter = new MyAdapter(favorites, bitmaps, getApplicationContext(), this);
+        mAdapter = new MyAdapter(favorites, this);
         mRecyclerView.setAdapter(mAdapter);
+        checkDisplayArrow();
+    }
+
+    public void checkDisplayArrow(){
+        if(favorites.size() == 0){
+            _buttonHint.setVisibility(View.VISIBLE);
+        }else {
+            _buttonHint.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void goToDetails(int position) {
         Intent i = new Intent(this, DetailsActivity.class);
         Type type = new TypeToken<Location>(){}.getType();
-        String json = new Gson().toJson(favorites.get(position), type);
+        Location noPic = favorites.get(position);
+        noPic.setPicture(null);
+        String json = new Gson().toJson(noPic, type);
         i.putExtra("selected", json);
         startActivity(i);
+        _fam.close(false);
     }
 
-    public void goToSearch(View v){ startActivity(new Intent(this, SearchActivity.class));}
+    public void goToSearch(View v){
+        startActivity(new Intent(this, SearchActivity.class));
+        _fam.close(false);
+    }
+
 
     public void goToTags(View v){
         startActivity(new Intent(this, MainActivity.class));
+        _fam.close(false);
     }
 
     public void goToMaps(View v){
-        startActivity(new Intent(this, MapActivity.class));
+//        ArrayList<Location> locsNoPic = new ArrayList<Location>();
+//        for(Location l : favorites){
+//            Location noPic =  l;
+//            noPic.setPicture(null);
+//            locsNoPic.add(noPic);
+//        }
+        Intent i = new Intent(this, MapActivity.class);
+//        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+//        String json = new Gson().toJson(locsNoPic, type);
+//        i.putExtra("locations", json);
+        startActivity(i);
+        _fam.close(false);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private ArrayList<Location> mDataset;
-        private Bitmap[] bitmaps;
         FavoritesActivity activity;
         ImageLoaderConfiguration config;
         ImageLoader imageLoader;
@@ -140,10 +179,9 @@ public class FavoritesActivity extends AppCompatActivity {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<Location> myDataset, Bitmap[] bitmaps, Context context, FavoritesActivity activity) {
+        public MyAdapter(ArrayList<Location> myDataset,  FavoritesActivity activity) {
             mDataset = myDataset;
             this.activity = activity;
-            this.bitmaps = bitmaps;
             config = new ImageLoaderConfiguration.Builder(this.activity).build();
             ImageLoader.getInstance().init(config);
             imageLoader = ImageLoader.getInstance();
@@ -179,17 +217,11 @@ public class FavoritesActivity extends AppCompatActivity {
                 }
             }
             holder.mAddress.setText(featDisplay);
-            //holder.img.setImageBitmap(bitmaps[0]);
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
-            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/" + mDataset.get(position).getId() + "/profile_image", new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    currentImage.setImageBitmap(loadedImage);
-                    _progress.setVisibility(View.GONE);
-                }
-            });
+            currentImage.setImageBitmap(mDataset.get(position).getPicture());
+            _progress.setVisibility(View.GONE);
 
         }
 

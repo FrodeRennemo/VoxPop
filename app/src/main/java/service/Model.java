@@ -1,6 +1,7 @@
 package service;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,17 @@ public class Model {
             e.printStackTrace();
         }
         return favorites;
+    }
+
+    public Bitmap getLocationBitmap(String id){
+        Bitmap bitmap = null;
+        try {
+            bitmap = dbHandler.getLocationBitmap(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     public void deleteFavorite(String id){

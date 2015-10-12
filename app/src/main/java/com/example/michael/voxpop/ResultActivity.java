@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.Location;
+import service.Model;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -37,12 +38,14 @@ public class ResultActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     public Bitmap[] bitmaps;
+    public Model model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         setContentView(R.layout.activity_result);
+        model = new Model(this.getApplicationContext());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent i = getIntent();
         Type type = new TypeToken<ArrayList<Location>>(){}.getType();
@@ -81,8 +84,16 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
         // or call onBackPressed()
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 
     private void goToDetails(int position) {
@@ -165,14 +176,19 @@ public class ResultActivity extends AppCompatActivity {
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
-            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/" + mDataset.get(position).getId() + "/profile_image", new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    currentImage.setImageBitmap(loadedImage);
-                    _progress.setVisibility(View.GONE);
-                }
-            });
+            if(model.checkFavoriteExists(mDataset.get(position).getId())){
+                currentImage.setImageBitmap(model.getLocationBitmap(mDataset.get(position).getId()));
+                _progress.setVisibility(View.GONE);
 
+            }else {
+                imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/" + mDataset.get(position).getId() + "/profile_image", new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        currentImage.setImageBitmap(loadedImage);
+                        _progress.setVisibility(View.GONE);
+                    }
+                });
+            }
         }
 
         // Return the size of your dataset (invoked by the layout manager)

@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
@@ -66,6 +67,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         model = new Model(this.getApplicationContext());
         FadingActionBarHelper helper = new FadingActionBarHelper()
                 .actionBarBackground(R.drawable.ab_background)
@@ -86,16 +88,24 @@ public class DetailsActivity extends AppCompatActivity {
         Type type = new TypeToken<Location>(){}.getType();
         loc = new Gson().fromJson(i.getStringExtra("selected"), type);
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/"+loc.getId()+"/profile_image", new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                _img.setImageBitmap(loadedImage);
-                _progress.setVisibility(View.GONE);
-            }
-        });
+        if(model.checkFavoriteExists(loc.getId())){
+            _img.setImageBitmap(model.getLocationBitmap(loc.getId()));
+            _progress.setVisibility(View.GONE);
+
+        }else {
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+            ImageLoader.getInstance().init(config);
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/"+loc.getId()+"/profile_image", new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    _img.setImageBitmap(loadedImage);
+                    _progress.setVisibility(View.GONE);
+                }
+            });
+        }
+
+
 
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
@@ -109,6 +119,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();
+
     }
 
     @Override
@@ -182,8 +193,16 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
         // or call onBackPressed()
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 
     private void setUpMapIfNeeded() {
@@ -201,7 +220,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void setUpMap() {
         LatLng diskon = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(diskon).title(loc.getName()));
+        mMap.addMarker(new MarkerOptions().position(diskon).title(loc.getName()).snippet(loc.getAddress()).icon(BitmapDescriptorFactory.fromResource(R.drawable.frodemarker)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(diskon, 13));
         mMap.setMyLocationEnabled(true);
     }

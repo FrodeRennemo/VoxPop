@@ -26,6 +26,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         setContentView(R.layout.activity_search);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         _search_results = (TextView) findViewById(R.id.search_results);
@@ -108,7 +109,15 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
     @Override
     public boolean onSupportNavigateUp(){
         finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
         // or call onBackPressed()
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 }

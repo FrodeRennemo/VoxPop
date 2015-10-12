@@ -100,4 +100,11 @@ public class DBHandler {
         cursor.close();
         return true;
     }
+
+    public Bitmap getLocationBitmap(String id) {
+        String[] a = {id};
+        Cursor cursor = db.query(FeedEntry.TABLE_NAME, null, FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "=?", a, null, null, null);
+        cursor.moveToFirst();
+        return bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE)));
+    }
 }
