@@ -46,7 +46,6 @@ public class Model {
         try {
             favorites = dbHandler.getFavorites();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return favorites;

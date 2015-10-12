@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +31,9 @@ public class CameraActivity extends AppCompatActivity {
     public static int cameraId;
     private Model model;
     private FrameLayout preview;
+    private boolean flash;
+    private Camera.Parameters p;
+    private boolean pause;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class CameraActivity extends AppCompatActivity {
         // Create an instance of Camera
         cameraId = findBackFacingCamera();
         mCamera = getCameraInstance();
+        p = mCamera.getParameters();
 
         setCameraView();
 
@@ -53,6 +58,7 @@ public class CameraActivity extends AppCompatActivity {
                     }
                 }
         );
+
         Button changeButton = (Button) findViewById(R.id.camera_change);
         changeButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -68,6 +74,26 @@ public class CameraActivity extends AppCompatActivity {
                             cameraId = findBackFacingCamera();
                             mCamera = getCameraInstance();
                             setCameraView();
+                        }
+                    }
+                }
+        );
+
+        Button flashButton = (Button) findViewById(R.id.button_flash);
+        flashButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(cameraId == 0) {
+                            if (flash) {
+                                p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                                mCamera.setParameters(p);
+                                flash = false;
+                            } else {
+                                p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                                mCamera.setParameters(p);
+                                flash = true;
+                            }
                         }
                     }
                 }
@@ -211,6 +237,23 @@ public class CameraActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mCamera.release();
+        pause = true;
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(pause) {
+            mCamera = getCameraInstance();
+            setCameraView();
+            pause = false;
+        }
+    }
 
     @Override
     protected void onDestroy() {
