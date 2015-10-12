@@ -75,6 +75,10 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_maps" >
         </activity>
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/title_activity_gallery" >
+        </activity>
     </application>
 
 </manifest>
