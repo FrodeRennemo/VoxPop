@@ -25,7 +25,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-
 }
 
 dependencies {
@@ -34,8 +33,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'jp.wasabeef:recyclerview-animators:1.2.2'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
-    compile 'com.google.android.gms:play-services:7.8.0'
-    compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.google.android.gms:play-services-maps:8.1.0'
+    compile 'com.google.code.gson:gson:2.3'
     compile 'org.apache.httpcomponents:httpcore:4.3.2'
     compile('org.apache.httpcomponents:httpmime:4.3.5') {
         exclude module: 'org.apache.httpcomponents:httpclient'
@@ -43,8 +42,8 @@ dependencies {
     compile files('libs/httpclient-4.2.6.jar')
     compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar-abc:3.1.2'
     compile 'com.github.clans:fab:1.6.1'
-    compile 'com.amazonaws:aws-android-sdk-core:2.+'
-    compile 'com.amazonaws:aws-android-sdk-cognito:2.+'
-    compile 'com.amazonaws:aws-android-sdk-s3:2.1.5'
-    compile 'com.amazonaws:aws-android-sdk-ddb:2.+'
+    compile files('aws-android-sdk-core-2.2.7.jar')
+    compile files('aws-android-sdk-ddb-2.2.7.jar')
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.2.7'
+    compile 'com.amazonaws:aws-android-sdk-s3:2.2.7'
 }

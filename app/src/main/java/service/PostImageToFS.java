@@ -5,9 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Base64;
 
-/*import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.cognito.Dataset;
 import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
@@ -18,13 +17,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +26,7 @@ import java.util.List;
  * Created by andreaskalstad on 16/09/15.
  */
 public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
-   /* private CognitoCachingCredentialsProvider credentialsProvider;
+    private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
 
     public PostImageToFS(Context ctx){
@@ -62,11 +54,11 @@ public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
                 //Your handler code here
             }
         });
-    } */
+    }
 
     @Override
     protected byte[] doInBackground(byte[]... params) {
- /*       try {
+        try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
 
@@ -86,14 +78,14 @@ public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
             File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.txt");
 
             TransferObserver observer = transferUtility.upload(
-                    "voxpopupload",     /* The bucket to upload to */
-/*                    "test",    /* The key for the uploaded object */
-/*                    test        /* The file where the data to upload exists */
-/*            );
+                    "voxpoppic",
+                    "test",
+                    test
+            );
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
-        } */
+        }
         return null;
         }
 }
