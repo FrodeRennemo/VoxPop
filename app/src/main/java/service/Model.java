@@ -34,6 +34,15 @@ public class Model {
         }
     }
 
+    public void getImage(String nightclub, Context ctx) {
+        try {
+            GetImageFromFS getImageFromFS = new GetImageFromFS(ctx);
+            getImageFromFS.execute(nightclub);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addFavorite(Location loc) {
         try {
             dbHandler.addFavorite(loc);

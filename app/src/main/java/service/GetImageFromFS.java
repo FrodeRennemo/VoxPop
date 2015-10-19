@@ -3,10 +3,10 @@ package service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Environment;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.cognito.Dataset;
@@ -18,22 +18,24 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 
+import org.jets3t.service.S3Service;
+import org.jets3t.service.impl.rest.httpclient.RestS3Service;
+import org.jets3t.service.model.S3Object;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
 /**
- * Created by andreaskalstad on 16/09/15.
+ * Created by andreaskalstad on 19/10/15.
  */
-public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
+public class GetImageFromFS extends AsyncTask<String, Void, Void>{
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
+    private static int imagecount = 1;
 
-    public PostImageToFS(Context ctx){
+    public GetImageFromFS(Context ctx){
         this.ctx = ctx;
         // Initialize the Amazon Cognito credentials provider
         credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -61,7 +63,7 @@ public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
     }
 
     @Override
-    protected byte[] doInBackground(byte[]... params) {
+    protected Void doInBackground(String... params) {
         try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -71,28 +73,26 @@ public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
 
             TransferUtility transferUtility = new TransferUtility(s3, ctx);
 
-            Bitmap picture = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-            byte[] imageBytes = baos.toByteArray();
-            FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
-            fos.write(imageBytes);
-            fos.close();
-            File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
-            System.out.println(test.length() + "     ØPwdwwjdkqjdwijqewdjefjwefjhewfjhhwfehwefwefwefiwef");
+            File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/downloadtest.txt");
 
-            TransferObserver observer = transferUtility.upload(
-                        "voxpoppic",
-                        "test",
-                        test
-                );
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            TransferObserver observer = transferUtility.download(
+                    "voxpoppic",
+                    params[0],
+                    test
+            );
 
-            }
-            return null;
-            }
+  /*          AWSCredentials awsCredentials = new AWSCredentials(YourAccessKey, YourAwsSecretKey);
+            S3Service s3Service = new RestS3Service(awsCredentials);
+
+            S3Object[] objects = s3Service.listObjects("voxpoppic");
+
+            for(int i = 0; i<objects.length; i++) {
+                S3Object obj = s3Service.getObject("voxpoppic", ""+i);
+                file = obj.getDataInputStream();
+            } */
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
+}
