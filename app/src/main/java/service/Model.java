@@ -34,10 +34,9 @@ public class Model {
         }
     }
 
-    public void getImage(String nightclub, Context ctx) {
+    public void getImage(GetImageFromFS getImageFromFS,Integer position) {
         try {
-            GetImageFromFS getImageFromFS = new GetImageFromFS(ctx);
-            getImageFromFS.execute(nightclub);
+            getImageFromFS.execute(position);
         } catch (Exception e) {
             e.printStackTrace();
         }

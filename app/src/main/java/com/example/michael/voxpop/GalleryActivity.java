@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import activitySupport.ImageAdapter;
+import service.GetImageFromFS;
+import service.Model;
 
 /**
  * Created by andreaskalstad on 12/10/15.
@@ -14,6 +16,7 @@ import activitySupport.ImageAdapter;
 public class GalleryActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ImageAdapter adapter;
+    private Model model;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,9 +24,16 @@ public class GalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gallery);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Gallery");
+        model = new Model();
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         adapter = new ImageAdapter(this);
+        GetImageFromFS getImageFromFs = new GetImageFromFS(getApplicationContext());
+        model.getImage(getImageFromFs,0);
+
+        for(int i = 1; i<4; i++) {
+            adapter.instantiateItem(viewPager,i);
+        }
         viewPager.setAdapter(adapter);
     }
 

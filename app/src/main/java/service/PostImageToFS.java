@@ -17,6 +17,9 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,7 +32,7 @@ import java.util.zip.DeflaterOutputStream;
 /**
  * Created by andreaskalstad on 16/09/15.
  */
-public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
+public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
 
@@ -61,7 +64,7 @@ public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
     }
 
     @Override
-    protected byte[] doInBackground(byte[]... params) {
+    protected Boolean doInBackground(byte[]... params) {
         try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -75,24 +78,35 @@ public class PostImageToFS extends AsyncTask<byte[], Void, byte[]> {
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
             Bitmap rotatedBitmap = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
+            rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 200, 200, false);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
             byte[] imageBytes = baos.toByteArray();
             FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
             fos.write(imageBytes);
             fos.close();
             File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
-            System.out.println(test.length() + "     ØPwdwwjdkqjdwijqewdjefjwefjhewfjhhwfehwefwefwefiwef");
+            ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                    .withBucketName("voxpoppic");
+            ObjectListing objectListing;
+            int i = 0;
+            do {
+                objectListing = s3.listObjects(listObjectsRequest);
+                for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+                    i++;
+                }
+                listObjectsRequest.setMarker(objectListing.getNextMarker());
+            } while (objectListing.isTruncated());
 
             TransferObserver observer = transferUtility.upload(
                         "voxpoppic",
-                        "test",
+                        "test1",
                         test
                 );
             } catch (Exception e) {
                 System.out.println(e.getMessage());
 
             }
-            return null;
-            }
+            return true;
     }
+}

@@ -6,21 +6,21 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
 
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.cognito.Dataset;
 import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-
-import org.jets3t.service.S3Service;
-import org.jets3t.service.impl.rest.httpclient.RestS3Service;
-import org.jets3t.service.model.S3Object;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,10 +30,9 @@ import java.util.List;
 /**
  * Created by andreaskalstad on 19/10/15.
  */
-public class GetImageFromFS extends AsyncTask<String, Void, Void>{
+public class GetImageFromFS extends AsyncTask<Integer, Void, Integer>{
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
-    private static int imagecount = 1;
 
     public GetImageFromFS(Context ctx){
         this.ctx = ctx;
@@ -63,7 +62,7 @@ public class GetImageFromFS extends AsyncTask<String, Void, Void>{
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected Integer doInBackground(Integer... params) {
         try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -71,25 +70,31 @@ public class GetImageFromFS extends AsyncTask<String, Void, Void>{
             // Set the region of your S3 bucket
             s3.setRegion(Region.getRegion(Regions.EU_WEST_1));
 
+            ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                    .withBucketName("voxpoppic");
+            ObjectListing objectListing;
+            int bucketSize = 0;
+            do {
+                objectListing = s3.listObjects(listObjectsRequest);
+                for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+                    bucketSize++;
+                }
+                listObjectsRequest.setMarker(objectListing.getNextMarker());
+            } while (objectListing.isTruncated());
+
             TransferUtility transferUtility = new TransferUtility(s3, ctx);
 
-            File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/downloadtest.txt");
-
-            TransferObserver observer = transferUtility.download(
-                    "voxpoppic",
-                    params[0],
-                    test
-            );
-
-  /*          AWSCredentials awsCredentials = new AWSCredentials(YourAccessKey, YourAwsSecretKey);
-            S3Service s3Service = new RestS3Service(awsCredentials);
-
-            S3Object[] objects = s3Service.listObjects("voxpoppic");
-
-            for(int i = 0; i<objects.length; i++) {
-                S3Object obj = s3Service.getObject("voxpoppic", ""+i);
-                file = obj.getDataInputStream();
-            } */
+            int position = params[0];
+            for(int i = 0; i<bucketSize; i++) {
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test"+position+".txt");
+                int galleryPosition = bucketSize-position;
+                TransferObserver observer = transferUtility.download(
+                        "voxpoppic",
+                        galleryPosition-i+"",
+                        file
+                );
+                position++;
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

@@ -19,21 +19,14 @@ import service.Model;
 
 public class ImageAdapter extends PagerAdapter {
     Context context;
-    Model model;
-
-    private int[] GalImages = new int[] {
-            R.drawable.frodemarker,
-            R.drawable.samfundet,
-    };
 
     public ImageAdapter(Context context){
         this.context=context;
-        model = new Model();
     }
 
     @Override
     public int getCount() {
-        return GalImages.length;
+        return 3;
     }
 
     @Override
@@ -43,14 +36,13 @@ public class ImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        model.getImage("test", context);
         ImageView imageView = new ImageView(context);
         int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath()+"/downloadtest.txt");
+        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/test"+position+".txt");
         imageView.setImageDrawable(d);
-        ((ViewPager) container).addView(imageView, 0);
+        ((ViewPager) container).addView(imageView, position);
         return imageView;
     }
 

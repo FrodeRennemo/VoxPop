@@ -46,5 +46,4 @@ dependencies {
     compile files('aws-android-sdk-ddb-2.2.7.jar')
     compile 'com.amazonaws:aws-android-sdk-cognito:2.2.7'
     compile 'com.amazonaws:aws-android-sdk-s3:2.2.7'
-    compile files('libs/jets3t-0.9.4.jar')
 }
