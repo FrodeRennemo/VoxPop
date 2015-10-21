@@ -56,7 +56,6 @@ public class ResultActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setItemAnimator(new LandingAnimator());
 
     }
 
