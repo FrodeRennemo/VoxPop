@@ -45,6 +45,8 @@ public class CameraActivity extends AppCompatActivity {
         cameraId = findBackFacingCamera();
         mCamera = getCameraInstance();
         p = mCamera.getParameters();
+        getSupportActionBar().setTitle("Take photo");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setCameraView();
 
@@ -206,10 +208,7 @@ public class CameraActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //noinspection SimplifiableIfStatemen
 
         return super.onOptionsItemSelected(item);
     }

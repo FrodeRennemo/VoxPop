@@ -56,6 +56,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Search");
         results = new ArrayList<>();
         mAdapter = new MyAdapter(results, this);
         mRecyclerView.setAdapter(mAdapter);
@@ -117,9 +118,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
