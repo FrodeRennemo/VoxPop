@@ -143,7 +143,7 @@ public class FavoritesActivity extends AppCompatActivity {
 //            noPic.setPicture(null);
 //            locsNoPic.add(noPic);
 //        }
-        Intent i = new Intent(this, MapActivity.class);
+        Intent i = new Intent(this, GalleryActivity.class);
 //        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
 //        String json = new Gson().toJson(locsNoPic, type);
 //        i.putExtra("locations", json);

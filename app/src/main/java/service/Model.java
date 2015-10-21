@@ -25,10 +25,18 @@ public class Model {
         }
     }
 
-    public void sendImage(byte[] data) {
+    public void sendImage(byte[] data, Context ctx) {
         try {
-            PostImageToFS postImageToFS = new PostImageToFS();
+            PostImageToFS postImageToFS = new PostImageToFS(ctx);
             postImageToFS.execute(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getImage(GetImageFromFS getImageFromFS,Integer position) {
+        try {
+            getImageFromFS.execute(position);
         } catch (Exception e) {
             e.printStackTrace();
         }

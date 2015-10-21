@@ -3,7 +3,6 @@ package service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Environment;
 
@@ -11,7 +10,9 @@ import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.cognito.Dataset;
 import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -23,20 +24,17 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
 /**
- * Created by andreaskalstad on 16/09/15.
+ * Created by andreaskalstad on 19/10/15.
  */
-public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
+public class GetImageFromFS extends AsyncTask<Integer, Void, Integer>{
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
 
-    public PostImageToFS(Context ctx){
+    public GetImageFromFS(Context ctx){
         this.ctx = ctx;
         // Initialize the Amazon Cognito credentials provider
         credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -64,7 +62,7 @@ public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(byte[]... params) {
+    protected Integer doInBackground(Integer... params) {
         try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -72,41 +70,34 @@ public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
             // Set the region of your S3 bucket
             s3.setRegion(Region.getRegion(Regions.EU_WEST_1));
 
-            TransferUtility transferUtility = new TransferUtility(s3, ctx);
-
-            Bitmap picture = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
-            rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 200, 200, false);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
-            byte[] imageBytes = baos.toByteArray();
-            FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
-            fos.write(imageBytes);
-            fos.close();
-            File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
             ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
                     .withBucketName("voxpoppic");
             ObjectListing objectListing;
-            int i = 0;
+            int bucketSize = 0;
             do {
                 objectListing = s3.listObjects(listObjectsRequest);
                 for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-                    i++;
+                    bucketSize++;
                 }
                 listObjectsRequest.setMarker(objectListing.getNextMarker());
             } while (objectListing.isTruncated());
 
-            TransferObserver observer = transferUtility.upload(
-                        "voxpoppic",
-                        "test1",
-                        test
-                );
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            TransferUtility transferUtility = new TransferUtility(s3, ctx);
 
+            int position = params[0];
+            for(int i = 0; i<bucketSize; i++) {
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test"+position+".txt");
+                int galleryPosition = bucketSize-position;
+                TransferObserver observer = transferUtility.download(
+                        "voxpoppic",
+                        galleryPosition-i+"",
+                        file
+                );
+                position++;
             }
-            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }
