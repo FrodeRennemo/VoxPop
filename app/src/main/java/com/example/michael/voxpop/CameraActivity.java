@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,9 +18,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import activitySupport.CameraPreview;
 import service.Model;
+import service.PostImageToFS;
 
 public class CameraActivity extends AppCompatActivity {
     private static Camera mCamera;
@@ -64,7 +65,7 @@ public class CameraActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(cameraId == 0) {
+                        if (cameraId == 0) {
                             mCamera.release();
                             cameraId = findFrontFacingCamera();
                             mCamera = getCameraInstance();
@@ -84,7 +85,7 @@ public class CameraActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(cameraId == 0) {
+                        if (cameraId == 0) {
                             if (flash) {
                                 p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                                 mCamera.setParameters(p);
@@ -229,7 +230,8 @@ public class CameraActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
-                model.sendImage(data, getApplicationContext());
+                PostImageToFS postImageToFS = new PostImageToFS(getApplicationContext());
+                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), "Kristiansand", "Andreas");
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {

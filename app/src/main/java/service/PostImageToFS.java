@@ -32,7 +32,7 @@ import java.util.zip.DeflaterOutputStream;
 /**
  * Created by andreaskalstad on 16/09/15.
  */
-public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
+public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
 
@@ -64,7 +64,7 @@ public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(byte[]... params) {
+    protected ModelHelper doInBackground(ModelHelper... params) {
         try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -74,7 +74,7 @@ public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
 
             TransferUtility transferUtility = new TransferUtility(s3, ctx);
 
-            Bitmap picture = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
+            Bitmap picture = BitmapFactory.decodeByteArray(params[0].getData(), 0, params[0].getData().length);
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
             Bitmap rotatedBitmap = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
@@ -86,6 +86,7 @@ public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
             fos.write(imageBytes);
             fos.close();
             File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
+
             ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
                     .withBucketName("voxpoppic");
             ObjectListing objectListing;
@@ -100,13 +101,13 @@ public class PostImageToFS extends AsyncTask<byte[], Void, Boolean> {
 
             TransferObserver observer = transferUtility.upload(
                         "voxpoppic",
-                        "test1",
+                        params[1].getId(),
                         test
                 );
             } catch (Exception e) {
                 System.out.println(e.getMessage());
 
             }
-            return true;
+            return null;
     }
 }

@@ -9,8 +9,6 @@ import java.util.ArrayList;
  */
 public class JSONParser {
 
-    private JSONObject obj;
-
     public ArrayList<Location> parse(String json) throws JSONException {
         ArrayList<Location> array = new ArrayList<>();
         JSONArray arr = new JSONArray(json);
@@ -20,6 +18,17 @@ public class JSONParser {
                     arr.getJSONObject(i).getString("tlf"), arr.getJSONObject(i).getString("email"), arr.getJSONObject(i).getString("opening_hours"),
                     arr.getJSONObject(i).getString("age_limit"), arr.getJSONObject(i).getString("meta"));
             array.add(location);
+        }
+        return array;
+    }
+
+    public ArrayList<String> parseId(String json) throws JSONException {
+        ArrayList<String> array = new ArrayList<>();
+        JSONArray arr = new JSONArray(json);
+
+        for (int i = 0; i < arr.length(); i++) {
+            String id = arr.getJSONObject(i).getString("id");
+            array.add(id);
         }
         return array;
     }

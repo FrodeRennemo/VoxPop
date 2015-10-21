@@ -40,7 +40,8 @@ public class ImageAdapter extends PagerAdapter {
         int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/test"+position+".txt");
+        ImageCollection imageCollection = new ImageCollection();
+        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+imageCollection.getImageCollection().get(position)+".txt");
         imageView.setImageDrawable(d);
         ((ViewPager) container).addView(imageView, position);
         return imageView;

@@ -25,12 +25,15 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+
+import activitySupport.ImageCollection;
 
 /**
  * Created by andreaskalstad on 19/10/15.
  */
-public class GetImageFromFS extends AsyncTask<Integer, Void, Integer>{
+public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList<String>>{
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
 
@@ -62,7 +65,7 @@ public class GetImageFromFS extends AsyncTask<Integer, Void, Integer>{
     }
 
     @Override
-    protected Integer doInBackground(Integer... params) {
+    protected ArrayList<String> doInBackground(ArrayList<String>... params) {
         try {
             // Create an S3 client
             AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -84,20 +87,22 @@ public class GetImageFromFS extends AsyncTask<Integer, Void, Integer>{
 
             TransferUtility transferUtility = new TransferUtility(s3, ctx);
 
-            int position = params[0];
-            for(int i = 0; i<bucketSize; i++) {
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/test"+position+".txt");
-                int galleryPosition = bucketSize-position;
+            for(int i = 0; i<params[0].size(); i++) {
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + params[0].get(i) + ".txt");
                 TransferObserver observer = transferUtility.download(
                         "voxpoppic",
-                        galleryPosition-i+"",
+                        params[0].get(i),
                         file
                 );
-                position++;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return params[0];
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<String> idArray){
+        ImageCollection imageCollection = new ImageCollection(idArray);
     }
 }

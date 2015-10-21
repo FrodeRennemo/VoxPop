@@ -28,8 +28,6 @@ public class GalleryActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         adapter = new ImageAdapter(this);
-        GetImageFromFS getImageFromFs = new GetImageFromFS(getApplicationContext());
-        model.getImage(getImageFromFs,0);
 
         for(int i = 1; i<4; i++) {
             adapter.instantiateItem(viewPager,i);
