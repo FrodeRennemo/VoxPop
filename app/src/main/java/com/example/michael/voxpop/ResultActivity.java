@@ -34,6 +34,7 @@ import service.Model;
 public class ResultActivity extends AppCompatActivity {
 
     public ArrayList<Location> resultLocations;
+    private TextView _error_message;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -51,13 +52,16 @@ public class ResultActivity extends AppCompatActivity {
         Type type = new TypeToken<ArrayList<Location>>(){}.getType();
         resultLocations = new Gson().fromJson(i.getStringExtra("results"), type);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        mAdapter = new MyAdapter(resultLocations, bitmaps, getApplicationContext(), this);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setItemAnimator(new LandingAnimator());
-
+        _error_message = (TextView) findViewById(R.id.error_text);
+        if(resultLocations.isEmpty()){
+            _error_message.setVisibility(View.VISIBLE);
+        }else {
+            mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
+            mAdapter = new MyAdapter(resultLocations, bitmaps, getApplicationContext(), this);
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -75,9 +79,7 @@ public class ResultActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }

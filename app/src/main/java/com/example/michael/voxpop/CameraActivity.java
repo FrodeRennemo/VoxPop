@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,10 +48,12 @@ public class CameraActivity extends AppCompatActivity {
         cameraId = findBackFacingCamera();
         mCamera = getCameraInstance();
         p = mCamera.getParameters();
+        getSupportActionBar().setTitle("Take photo");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setCameraView();
 
-        Button captureButton = (Button) findViewById(R.id.button_capture);
+        ImageView captureButton = (ImageView) findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -60,7 +64,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
-        Button changeButton = (Button) findViewById(R.id.camera_change);
+        ImageView changeButton = (ImageView) findViewById(R.id.camera_change);
         changeButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -80,7 +84,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
-        Button flashButton = (Button) findViewById(R.id.button_flash);
+        ImageView flashButton = (ImageView) findViewById(R.id.button_flash);
         flashButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -207,10 +211,7 @@ public class CameraActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //noinspection SimplifiableIfStatemen
 
         return super.onOptionsItemSelected(item);
     }
@@ -261,5 +262,19 @@ public class CameraActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mCamera.release();
+    }
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
+        // or call onBackPressed()
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 }

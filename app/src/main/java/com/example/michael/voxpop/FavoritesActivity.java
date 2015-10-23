@@ -75,9 +75,7 @@ public class FavoritesActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -126,7 +124,7 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     public void goToSearch(View v){
-        startActivity(new Intent(this, SearchActivity.class));
+        startActivity(new Intent(this, CameraActivity.class));
         _fam.close(false);
     }
 
@@ -137,16 +135,16 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     public void goToMaps(View v){
-//        ArrayList<Location> locsNoPic = new ArrayList<Location>();
-//        for(Location l : favorites){
-//            Location noPic =  l;
-//            noPic.setPicture(null);
-//            locsNoPic.add(noPic);
-//        }
-        Intent i = new Intent(this, GalleryActivity.class);
-//        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
-//        String json = new Gson().toJson(locsNoPic, type);
-//        i.putExtra("locations", json);
+        ArrayList<Location> locsNoPic = new ArrayList<Location>();
+        for(Location l : favorites){
+            Location noPic =  l;
+            noPic.setPicture(null);
+            locsNoPic.add(noPic);
+        }
+        Intent i = new Intent(this, MapActivity.class);
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+        String json = new Gson().toJson(locsNoPic, type);
+        i.putExtra("locations", json);
         startActivity(i);
         _fam.close(false);
     }

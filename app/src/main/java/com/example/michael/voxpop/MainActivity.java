@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private Button _resetButton;
     private Button _submitButton;
     private HorizontalScrollView _filterArea;
+    private TextView _error_message;
 
     private String filter = "";
     private Model model;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         _submitButton = (Button) findViewById(R.id.submit_button);
         _resetButton = (Button) findViewById(R.id.delete);
         _filterArea = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
+        _error_message = (TextView) findViewById(R.id.error_text);
 
         _resetButton.setVisibility(View.GONE);
         _submitButton.setVisibility(View.GONE);
@@ -177,30 +179,35 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     @Override
     public void asyncDone(ArrayList<Location> res) {
         locations = res;
-        moodCount = new ArrayList<>();
-        displayMoods = new ArrayList<>();
-        allMoods = new ArrayList<>();
-        for(int i=0; i<res.size(); i++){
-            String[] resMoodTable = res.get(i).getMeta().split(",");
-            for(int j=0; j<resMoodTable.length; j++){
-                if(!displayMoods.contains(resMoodTable[j].toLowerCase())){
-                    displayMoods.add(resMoodTable[j].toLowerCase());
-                    moodCount.add(new Mood(resMoodTable[j]));
-                } else {
-                    for(int k=0; k<moodCount.size(); k++){
-                        if(resMoodTable[j].equalsIgnoreCase(moodCount.get(k).getName())){
-                            moodCount.get(k).increaseSize();
+        if(locations.isEmpty()){
+            _error_message.setVisibility(View.VISIBLE);
+        }else {
+            moodCount = new ArrayList<>();
+            displayMoods = new ArrayList<>();
+            allMoods = new ArrayList<>();
+            for(int i=0; i<res.size(); i++){
+                String[] resMoodTable = res.get(i).getMeta().split(",");
+                for(int j=0; j<resMoodTable.length; j++){
+                    if(!displayMoods.contains(resMoodTable[j].toLowerCase())){
+                        displayMoods.add(resMoodTable[j].toLowerCase());
+                        moodCount.add(new Mood(resMoodTable[j]));
+                    } else {
+                        for(int k=0; k<moodCount.size(); k++){
+                            if(resMoodTable[j].equalsIgnoreCase(moodCount.get(k).getName())){
+                                moodCount.get(k).increaseSize();
+                            }
                         }
                     }
                 }
             }
+            for(String s : displayMoods){
+                allMoods.add(s);
+            }
+            // specify an adapter (see also next example)
+            mAdapter = new MyAdapter(displayMoods, moodCount, getApplicationContext(), this);
+            mRecyclerView.setAdapter(mAdapter);
         }
-        for(String s : displayMoods){
-            allMoods.add(s);
-        }
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(displayMoods, moodCount, getApplicationContext(), this);
-        mRecyclerView.setAdapter(mAdapter);
+
         _progress.setVisibility(View.GONE);
     }
 
