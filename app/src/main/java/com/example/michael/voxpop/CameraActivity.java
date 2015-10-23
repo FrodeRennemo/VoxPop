@@ -231,7 +231,7 @@ public class CameraActivity extends AppCompatActivity {
                 fos.write(data);
                 fos.close();
                 PostImageToFS postImageToFS = new PostImageToFS(getApplicationContext());
-                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), "Kristiansand", "Andreas");
+                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), "5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43");
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {

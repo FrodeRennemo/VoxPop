@@ -25,10 +25,10 @@ public class Model {
         }
     }
 
-    public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String city, String username) {
+    public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String city, String nightclub) {
         try {
             HerokuImagePost herokuImagePost = new HerokuImagePost();
-            herokuImagePost.execute(id, city, username);
+            herokuImagePost.execute(id, city, nightclub);
             ModelHelper modelHelper = new ModelHelper(data, id);
             postImageToFS.execute(modelHelper);
         } catch (Exception e) {

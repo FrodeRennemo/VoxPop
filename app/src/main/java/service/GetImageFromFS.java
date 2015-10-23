@@ -103,6 +103,7 @@ public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList
 
     @Override
     protected void onPostExecute(ArrayList<String> idArray){
-        ImageCollection imageCollection = new ImageCollection(idArray);
+        ImageCollection imageCollection = new ImageCollection();
+        imageCollection.setCollection(idArray);
     }
 }

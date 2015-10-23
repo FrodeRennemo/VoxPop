@@ -9,7 +9,7 @@ public class ImageCollection{
 
     private static ArrayList<String> imageCollection;
 
-    public ImageCollection(ArrayList<String>  imageCollection){
+    public void setCollection(ArrayList<String>  imageCollection){
         this.imageCollection = imageCollection;
     }
 

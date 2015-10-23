@@ -16,13 +16,11 @@ public class HerokuImagePost extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            String url = "http://voxpop-app.herokuapp.com/nightclubs";
+            String url = "http://voxpop-app.herokuapp.com/cities/"+params[1]+"/nightclubs/"+params[2]+"/pics";
             HttpClient httpclient = new DefaultHttpClient();
 
             HttpPost post = new HttpPost(url);
             post.setEntity(new StringEntity(params[0]));
-            post.setEntity(new StringEntity(params[1]));
-            post.setEntity(new StringEntity(params[2]));
 
             HttpResponse response = httpclient.execute(post);
             int statusCode = response.getStatusLine().getStatusCode();

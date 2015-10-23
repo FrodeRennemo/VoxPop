@@ -87,21 +87,9 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
             fos.close();
             File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
 
-            ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-                    .withBucketName("voxpoppic");
-            ObjectListing objectListing;
-            int i = 0;
-            do {
-                objectListing = s3.listObjects(listObjectsRequest);
-                for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-                    i++;
-                }
-                listObjectsRequest.setMarker(objectListing.getNextMarker());
-            } while (objectListing.isTruncated());
-
             TransferObserver observer = transferUtility.upload(
                         "voxpoppic",
-                        params[1].getId(),
+                        params[0].getId(),
                         test
                 );
             } catch (Exception e) {
