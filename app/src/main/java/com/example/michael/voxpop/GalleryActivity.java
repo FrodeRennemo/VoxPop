@@ -1,12 +1,16 @@
 package com.example.michael.voxpop;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+
 import activitySupport.ImageAdapter;
+import activitySupport.ImageCollection;
 import service.GetImageFromFS;
 import service.Model;
 
@@ -25,14 +29,18 @@ public class GalleryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Gallery");
         model = new Model();
+        model.getImageId("5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43", getApplicationContext());
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         adapter = new ImageAdapter(this);
 
-        for(int i = 1; i<4; i++) {
-            adapter.instantiateItem(viewPager,i);
+        /*ImageCollection imageCollection = new ImageCollection();
+        if (imageCollection.getImageCollection().size() > 0) {
+            for (int i = 0; i < 1; i++) {
+                adapter.instantiateItem(viewPager, i);
+            }
         }
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(adapter); */
     }
 
     @Override

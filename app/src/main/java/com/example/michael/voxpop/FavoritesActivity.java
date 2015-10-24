@@ -124,7 +124,7 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     public void goToSearch(View v){
-        startActivity(new Intent(this, CameraActivity.class));
+        startActivity(new Intent(this, GalleryActivity.class));
         _fam.close(false);
     }
 

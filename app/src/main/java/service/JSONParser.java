@@ -27,7 +27,7 @@ public class JSONParser {
         JSONArray arr = new JSONArray(json);
 
         for (int i = 0; i < arr.length(); i++) {
-            String id = arr.getJSONObject(i).getString("id");
+            String id = arr.getJSONObject(i).getString("_id");
             array.add(id);
         }
         return array;

@@ -12,6 +12,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -21,21 +25,31 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
     private Context ctx;
     private ArrayList<String> jsonArray;
     private JSONParser jsonParser;
+    private final String USER_AGENT = "Mozilla/5.0";
 
     @Override
     protected String doInBackground(ModelHelper... params) {
-        HttpResponse response = null;
+        StringBuffer response = new StringBuffer();
         ctx = params[0].getCtx();
         try {
-            String url = "http://voxpop-app.herokuapp.com/"+params[0].getCity()+"/"+params[0].getNightclub();
-            HttpClient httpclient = new DefaultHttpClient();
+            String url = "http://voxpop-app.herokuapp.com/cities/"+params[0].getCity()+"/nightclubs/"+params[0].getNightclub()+"/pics";
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-            HttpGet get = new HttpGet(url);
+            // optional default is GET
+            con.setRequestMethod("GET");
 
-            response = httpclient.execute(get);
-            int statusCode = response.getStatusLine().getStatusCode();
+            //add request header
+            con.setRequestProperty("User-Agent", USER_AGENT);
 
-            System.out.println(statusCode);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
