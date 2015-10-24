@@ -5,6 +5,7 @@ import android.os.Environment;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -20,7 +21,9 @@ public class HerokuImagePost extends AsyncTask<String, Void, String> {
             HttpClient httpclient = new DefaultHttpClient();
 
             HttpPost post = new HttpPost(url);
-            post.setEntity(new StringEntity(params[0]));
+            StringEntity se = new StringEntity("pic_id="+params[0]);
+            se.setContentType("application/x-www-form-urlencoded");
+            post.setEntity(se);
 
             HttpResponse response = httpclient.execute(post);
             int statusCode = response.getStatusLine().getStatusCode();

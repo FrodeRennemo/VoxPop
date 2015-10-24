@@ -78,9 +78,9 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
             Bitmap rotatedBitmap = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
-            rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 200, 200, false);
+            //rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 2000, 2000, false);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
             byte[] imageBytes = baos.toByteArray();
             FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
             fos.write(imageBytes);

@@ -26,11 +26,13 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
     private ArrayList<String> jsonArray;
     private JSONParser jsonParser;
     private final String USER_AGENT = "Mozilla/5.0";
+    private GetImageFromFS getImageFromFs;
 
     @Override
     protected String doInBackground(ModelHelper... params) {
         StringBuffer response = new StringBuffer();
         ctx = params[0].getCtx();
+        getImageFromFs = params[0].getImageFromFS();
         try {
             String url = "http://voxpop-app.herokuapp.com/cities/"+params[0].getCity()+"/nightclubs/"+params[0].getNightclub()+"/pics";
             URL obj = new URL(url);
@@ -59,6 +61,7 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
     @Override
     protected void onPostExecute(String res){
         Model model = new Model();
+
         jsonArray = new ArrayList<String>();
         jsonParser = new JSONParser();
         try {
@@ -66,6 +69,6 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        model.getImage(jsonArray, ctx);
+        model.getImage(getImageFromFs, jsonArray, ctx);
     }
 }

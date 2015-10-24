@@ -11,6 +11,9 @@ import android.widget.ImageView;
 
 import com.example.michael.voxpop.R;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import service.Model;
 
 /**
@@ -19,14 +22,19 @@ import service.Model;
 
 public class ImageAdapter extends PagerAdapter {
     Context context;
+    ArrayList<String> idArray;
 
     public ImageAdapter(Context context){
         this.context=context;
     }
 
+    public void setIdArray(ArrayList<String> idArray){
+        this.idArray = idArray;
+    }
+
     @Override
     public int getCount() {
-        return 3;
+        return idArray.size();
     }
 
     @Override
@@ -40,10 +48,9 @@ public class ImageAdapter extends PagerAdapter {
         int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        ImageCollection imageCollection = new ImageCollection();
-        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+imageCollection.getImageCollection().get(position)+".txt");
+        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+idArray.get(position)+".txt");
         imageView.setImageDrawable(d);
-        ((ViewPager) container).addView(imageView, position);
+        container.addView(imageView, 0);
         return imageView;
     }
 

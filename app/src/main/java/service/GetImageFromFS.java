@@ -36,6 +36,7 @@ import activitySupport.ImageCollection;
 public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList<String>>{
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
+    private AmazonS3Listener asyncListener;
 
     public GetImageFromFS(Context ctx){
         this.ctx = ctx;
@@ -62,6 +63,10 @@ public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList
                 //Your handler code here
             }
         });
+    }
+
+    public void setAsyncListener(AmazonS3Listener asyncListener){
+        this.asyncListener = asyncListener;
     }
 
     @Override
@@ -103,7 +108,6 @@ public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList
 
     @Override
     protected void onPostExecute(ArrayList<String> idArray){
-        ImageCollection imageCollection = new ImageCollection();
-        imageCollection.setCollection(idArray);
+        asyncListener.asyncDone(idArray);
     }
 }

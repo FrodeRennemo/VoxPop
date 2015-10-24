@@ -36,19 +36,18 @@ public class Model {
         }
     }
 
-    public void getImageId(String city, String nightclub, Context ctx) {
+    public void getImageId(String city, String nightclub, Context ctx, GetImageFromFS getImageFromFS) {
         try {
             HerokuImageGet herokuImageGet = new HerokuImageGet();
-            ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx);
+            ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx, getImageFromFS);
             herokuImageGet.execute(modelHelper);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getImage(ArrayList<String> idArray, Context ctx) {
+    public void getImage(GetImageFromFS getImageFromFS, ArrayList<String> idArray, Context ctx) {
         try {
-            GetImageFromFS getImageFromFS = new GetImageFromFS(ctx);
             getImageFromFS.execute(idArray);
         } catch (Exception e) {
             e.printStackTrace();
