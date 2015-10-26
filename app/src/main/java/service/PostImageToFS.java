@@ -82,6 +82,7 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
             byte[] imageBytes = baos.toByteArray();
+            baos.close();
             FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
             fos.write(imageBytes);
             fos.close();
@@ -92,7 +93,8 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
                         params[0].getId(),
                         test
                 );
-
+            picture.recycle();
+            rotatedBitmap.recycle();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
 
