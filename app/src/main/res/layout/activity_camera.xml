@@ -15,26 +15,28 @@
         android:layout_alignParentEnd="true">
     </FrameLayout>
 
-    <Button
+    <ImageView
         android:id="@+id/camera_change"
-        android:text="Change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:src="@drawable/switch_camera_256" />
 
-    <Button
+    <ImageView
         android:id="@+id/button_flash"
-        android:text="flash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
-    <Button
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/camera_flash_on"/>
+    <ImageView
         android:id="@+id/button_capture"
-        android:text="capture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/play_button" />
 </RelativeLayout>

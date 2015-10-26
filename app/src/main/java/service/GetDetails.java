@@ -34,7 +34,7 @@ public class GetDetails extends AsyncTask<String, Void, String> {
         try {
 
             // HTTP GET request
-            String url = "\n" + "http://voxpop-app.herokuapp.com/nightclubs";
+            String url = "\n" + "http://voxpop-app.herokuapp.com/cities/562a2ee9dfa0a7f011f305eb/nightclubs";
 
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();

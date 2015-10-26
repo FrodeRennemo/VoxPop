@@ -25,18 +25,30 @@ public class Model {
         }
     }
 
-    public void sendImage(byte[] data, Context ctx) {
+    public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String city, String nightclub) {
         try {
-            PostImageToFS postImageToFS = new PostImageToFS(ctx);
-            postImageToFS.execute(data);
+            HerokuImagePost herokuImagePost = new HerokuImagePost();
+            herokuImagePost.execute(id, city, nightclub);
+            ModelHelper modelHelper = new ModelHelper(data, id);
+            postImageToFS.execute(modelHelper);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getImage(GetImageFromFS getImageFromFS,Integer position) {
+    public void getImageId(String city, String nightclub, Context ctx, GetImageFromFS getImageFromFS) {
         try {
-            getImageFromFS.execute(position);
+            HerokuImageGet herokuImageGet = new HerokuImageGet();
+            ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx, getImageFromFS);
+            herokuImageGet.execute(modelHelper);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getImage(GetImageFromFS getImageFromFS, ArrayList<String> idArray, Context ctx) {
+        try {
+            getImageFromFS.execute(idArray);
         } catch (Exception e) {
             e.printStackTrace();
         }

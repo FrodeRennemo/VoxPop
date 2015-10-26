@@ -28,6 +28,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import activitySupport.Mood;
 import service.AsyncListener;
@@ -109,18 +111,29 @@ public class MapActivity extends AppCompatActivity implements AsyncListener {
     }
 
     private void setUpMap() {
-        String [] camString = markerLocations.get(0).getLocation().split(",");
-        LatLng camPos = new LatLng(Double.parseDouble(camString[0]), Double.parseDouble(camString[1]));
+        LatLng camPos = new LatLng(0.000000, 0.000000);
+        boolean camPosSet = false;
         for(Location l : markerLocations){
-            String [] locString = l.getLocation().split(",");
-            LatLng pos = new LatLng(Double.parseDouble(locString[0]), Double.parseDouble(locString[1]));
-            MarkerOptions m = new MarkerOptions().position(pos).title(l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.frodemarker)).snippet(l.getAddress());
-            Marker marker = mMap.addMarker(m);
-            locationMarkers.add(new LocationMarker(marker, l));
+            if(!l.getLocation().equals("")){
+                String regex_coords = "([+-]?\\d+\\.?\\d+)\\s*,\\s*([+-]?\\d+\\.?\\d+)";
+                Pattern compiledPattern2 = Pattern.compile(regex_coords, Pattern.CASE_INSENSITIVE);
+                Matcher matcher2 = compiledPattern2.matcher(l.getLocation());
+               if(matcher2.matches()){
+                   String [] locString = l.getLocation().split(",");
+                   LatLng pos = new LatLng(Double.parseDouble(locString[0]), Double.parseDouble(locString[1]));
+                   MarkerOptions m = new MarkerOptions().position(pos).title(l.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.frodemarker)).snippet(l.getAddress());
+                   Marker marker = mMap.addMarker(m);
+                   locationMarkers.add(new LocationMarker(marker, l));
+                   if(!camPosSet){
+                       String [] camString = l.getLocation().split(",");
+                       camPos = new LatLng(Double.parseDouble(camString[0]), Double.parseDouble(camString[1]));
+                       camPosSet = true;
+                   }
+               }
+            }
         }
+
         mMap.setOnInfoWindowClickListener(new Myonclicklistener(this));
-
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(camPos, 14));
         mMap.setMyLocationEnabled(true);
     }

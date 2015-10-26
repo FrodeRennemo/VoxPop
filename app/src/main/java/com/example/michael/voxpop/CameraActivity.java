@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,9 +20,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import activitySupport.CameraPreview;
 import service.Model;
+import service.PostImageToFS;
 
 public class CameraActivity extends AppCompatActivity {
     private static Camera mCamera;
@@ -50,7 +53,7 @@ public class CameraActivity extends AppCompatActivity {
 
         setCameraView();
 
-        Button captureButton = (Button) findViewById(R.id.button_capture);
+        ImageView captureButton = (ImageView) findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -61,12 +64,12 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
-        Button changeButton = (Button) findViewById(R.id.camera_change);
+        ImageView changeButton = (ImageView) findViewById(R.id.camera_change);
         changeButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(cameraId == 0) {
+                        if (cameraId == 0) {
                             mCamera.release();
                             cameraId = findFrontFacingCamera();
                             mCamera = getCameraInstance();
@@ -81,12 +84,12 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
-        Button flashButton = (Button) findViewById(R.id.button_flash);
+        ImageView flashButton = (ImageView) findViewById(R.id.button_flash);
         flashButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(cameraId == 0) {
+                        if (cameraId == 0) {
                             if (flash) {
                                 p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                                 mCamera.setParameters(p);
@@ -228,7 +231,8 @@ public class CameraActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
-                model.sendImage(data, getApplicationContext());
+                PostImageToFS postImageToFS = new PostImageToFS(getApplicationContext());
+                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), "5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43");
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -258,5 +262,19 @@ public class CameraActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mCamera.release();
+    }
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
+        // or call onBackPressed()
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        // finish() is called in super: we only override this method to be able to override the transition
+        super.onBackPressed();
+
+        overridePendingTransition(R.anim.slide_right_exit, R.anim.slide_left_exit);
     }
 }

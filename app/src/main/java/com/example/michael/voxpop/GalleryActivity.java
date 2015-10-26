@@ -1,19 +1,25 @@
 package com.example.michael.voxpop;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import activitySupport.ImageAdapter;
+import activitySupport.ImageCollection;
+import service.AmazonS3Listener;
 import service.GetImageFromFS;
 import service.Model;
 
 /**
  * Created by andreaskalstad on 12/10/15.
  */
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends AppCompatActivity implements AmazonS3Listener{
     private ViewPager viewPager;
     private ImageAdapter adapter;
     private Model model;
@@ -25,15 +31,17 @@ public class GalleryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Gallery");
         model = new Model();
+        GetImageFromFS getImageFromFS = new GetImageFromFS(getApplicationContext());
+        getImageFromFS.setAsyncListener(this);
 
+        model.getImageId("5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43", getApplicationContext(), getImageFromFS);
+    }
+
+    @Override
+    public void asyncDone(ArrayList<String> idArray) {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         adapter = new ImageAdapter(this);
-        GetImageFromFS getImageFromFs = new GetImageFromFS(getApplicationContext());
-        model.getImage(getImageFromFs,0);
-
-        for(int i = 1; i<4; i++) {
-            adapter.instantiateItem(viewPager,i);
-        }
+        adapter.setIdArray(idArray);
         viewPager.setAdapter(adapter);
     }
 
