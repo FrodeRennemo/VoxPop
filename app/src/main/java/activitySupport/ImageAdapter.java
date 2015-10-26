@@ -1,6 +1,10 @@
 package activitySupport;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
@@ -48,8 +52,10 @@ public class ImageAdapter extends PagerAdapter {
         int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+idArray.get(position)+".txt");
-        imageView.setImageDrawable(d);
+        BitmapResizer bitmapResizer = new BitmapResizer(Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+idArray.get(position)+".txt");
+        //Drawable d = Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+idArray.get(position)+".txt");
+        //imageView.setImageDrawable(d);
+        imageView.setImageBitmap(bitmapResizer.decodeSampledBitmapFromFile(100,100));
         container.addView(imageView, 0);
         return imageView;
     }

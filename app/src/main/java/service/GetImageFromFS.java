@@ -37,6 +37,8 @@ public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList
     private CognitoCachingCredentialsProvider credentialsProvider;
     private Context ctx;
     private AmazonS3Listener asyncListener;
+    private DownloadListener downloadListener;
+    private ArrayList<Boolean> completed;
 
     public GetImageFromFS(Context ctx){
         this.ctx = ctx;
@@ -67,6 +69,10 @@ public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList
 
     public void setAsyncListener(AmazonS3Listener asyncListener){
         this.asyncListener = asyncListener;
+    }
+    
+    public void setDownloadsListener(DownloadListener downloadsListener){
+        this.downloadListener = downloadsListener;
     }
 
     @Override
@@ -99,6 +105,23 @@ public class GetImageFromFS extends AsyncTask<ArrayList<String>, Void, ArrayList
                         params[0].get(i),
                         file
                 );
+                observer.setTransferListener(new TransferListener() {
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if(state == state.COMPLETED){
+                            completed.add(Boolean.TRUE);
+                            downloadListener.completed(completed);
+                        }
+                    }
+
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        // Do something in the callback.
+                    }
+
+                    public void onError(int id, Exception e) {
+                        // Do something in the callback.
+                    }
+                });
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

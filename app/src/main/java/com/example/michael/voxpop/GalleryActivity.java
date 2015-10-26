@@ -1,15 +1,24 @@
 package com.example.michael.voxpop;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import activitySupport.BitmapResizer;
 import activitySupport.ImageAdapter;
 import activitySupport.ImageCollection;
 import service.AmazonS3Listener;
@@ -23,32 +32,32 @@ public class GalleryActivity extends AppCompatActivity implements AmazonS3Listen
     private ViewPager viewPager;
     private ImageAdapter adapter;
     private Model model;
+    private int position = 0;
+    private ImageView img;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Gallery");
         model = new Model();
-        GetImageFromFS getImageFromFS = new GetImageFromFS(getApplicationContext());
-        getImageFromFS.setAsyncListener(this);
-
-        model.getImageId("5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43", getApplicationContext(), getImageFromFS);
+        model.getImageId("5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43", getApplicationContext(), this);
+        img= (ImageView) findViewById(R.id.image);
     }
 
     @Override
-    public void asyncDone(ArrayList<String> idArray) {
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
-        adapter = new ImageAdapter(this);
-        adapter.setIdArray(idArray);
-        viewPager.setAdapter(adapter);
-    }
+    public void asyncDone(final ArrayList<String> idArray) {
+        final ArrayList<String> id = idArray;
+        Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/"+id.get(0)).noFade().into(img);
+        img.setOnClickListener(new View.OnClickListener() {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_gallery, menu);
-        return true;
+            @Override
+            public void onClick(View v) {
+                position++;
+                if (idArray.size() > position) {
+                    Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/" + id.get(position)).into(img);
+                }
+            }
+        });
     }
 
     @Override
@@ -57,13 +66,6 @@ public class GalleryActivity extends AppCompatActivity implements AmazonS3Listen
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.refresh) {
-            adapter.startUpdate(viewPager);
-            viewPager.setAdapter(adapter);
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

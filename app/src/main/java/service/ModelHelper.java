@@ -6,7 +6,6 @@ import android.content.Context;
  * Created by Andreas on 21.10.2015.
  */
 public class ModelHelper {
-    GetImageFromFS getImageFromFS;
     String city;
     byte[] data;
     String id;
@@ -18,8 +17,7 @@ public class ModelHelper {
         this.id = id;
     }
 
-    public ModelHelper(String city, String nightclub, Context ctx, GetImageFromFS getImageFromFS) {
-        this.getImageFromFS = getImageFromFS;
+    public ModelHelper(String city, String nightclub, Context ctx) {
         this.city = city;
         this.nightclub = nightclub;
         this.ctx = ctx;
@@ -43,9 +41,5 @@ public class ModelHelper {
 
     public String getId() {
         return id;
-    }
-
-    public GetImageFromFS getImageFromFS() {
-        return getImageFromFS;
     }
 }

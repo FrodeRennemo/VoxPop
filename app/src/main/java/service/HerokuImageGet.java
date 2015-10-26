@@ -26,13 +26,12 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
     private ArrayList<String> jsonArray;
     private JSONParser jsonParser;
     private final String USER_AGENT = "Mozilla/5.0";
-    private GetImageFromFS getImageFromFs;
+    private AmazonS3Listener amazonS3Listener;
 
     @Override
     protected String doInBackground(ModelHelper... params) {
         StringBuffer response = new StringBuffer();
         ctx = params[0].getCtx();
-        getImageFromFs = params[0].getImageFromFS();
         try {
             String url = "http://voxpop-app.herokuapp.com/cities/"+params[0].getCity()+"/nightclubs/"+params[0].getNightclub()+"/pics";
             URL obj = new URL(url);
@@ -58,17 +57,19 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
         return response.toString();
     }
 
+    public void setAmazonS3Listener(AmazonS3Listener amazonS3Listener){
+        this.amazonS3Listener = amazonS3Listener;
+    }
+
     @Override
     protected void onPostExecute(String res){
-        Model model = new Model();
-
-        jsonArray = new ArrayList<String>();
+        jsonArray = new ArrayList<>();
         jsonParser = new JSONParser();
         try {
             jsonArray = jsonParser.parseId(res);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        model.getImage(getImageFromFs, jsonArray, ctx);
+        amazonS3Listener.asyncDone(jsonArray);
     }
 }

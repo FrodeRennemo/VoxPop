@@ -36,10 +36,11 @@ public class Model {
         }
     }
 
-    public void getImageId(String city, String nightclub, Context ctx, GetImageFromFS getImageFromFS) {
+    public void getImageId(String city, String nightclub, Context ctx, AmazonS3Listener amazonS3Listener) {
         try {
             HerokuImageGet herokuImageGet = new HerokuImageGet();
-            ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx, getImageFromFS);
+            herokuImageGet.setAmazonS3Listener(amazonS3Listener);
+            ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx);
             herokuImageGet.execute(modelHelper);
         } catch (Exception e) {
             e.printStackTrace();

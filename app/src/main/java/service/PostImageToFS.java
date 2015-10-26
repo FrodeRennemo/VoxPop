@@ -92,6 +92,7 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
                         params[0].getId(),
                         test
                 );
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
 
