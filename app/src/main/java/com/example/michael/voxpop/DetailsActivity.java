@@ -189,6 +189,10 @@ public class DetailsActivity extends AppCompatActivity {
         Intent i = new Intent(this, CameraActivity.class);
         startActivity(i);
     }
+    public void goToMoments(View v) {
+        Intent i = new Intent(this, GalleryActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public boolean onSupportNavigateUp(){

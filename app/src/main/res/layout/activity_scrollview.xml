@@ -12,6 +12,13 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View moments"
+                android:id="@+id/goToMoments"
+                android:onClick="goToMoments"
+                style="@style/Button"/>
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

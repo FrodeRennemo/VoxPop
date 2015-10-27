@@ -3,6 +3,7 @@ package com.example.michael.voxpop;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -13,9 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
@@ -41,12 +46,18 @@ public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ImageView _buttonHint;
+    private ArrayList<String> cities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
         getSupportActionBar().setTitle("VoxPop");
+        String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
+        cities = new ArrayList<>();
+        for(String s : cityarray){
+            cities.add(s);
+        }
         model = new Model(this.getApplicationContext());
         favorites = model.getFavorites();
         _buttonHint = (ImageView) findViewById(R.id.buttonHint);
@@ -64,6 +75,28 @@ public class FavoritesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
+        MenuItem item = menu.findItem(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cities);
+        View view1 = MenuItemCompat.getActionView(item);
+        if (view1 instanceof Spinner)
+        {
+            Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+            spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                    Toast.makeText(getApplicationContext(), "Item "+arg2+" selected", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                    // TODO Auto-generated method stub
+                    Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
         return true;
     }
 
@@ -124,7 +157,7 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
     public void goToSearch(View v){
-        startActivity(new Intent(this, GalleryActivity.class));
+        startActivity(new Intent(this, SearchActivity.class));
         _fam.close(false);
     }
 
