@@ -1,32 +1,19 @@
 package com.example.michael.voxpop;
 
-import android.app.ActionBar;
-import android.content.res.Resources;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import activitySupport.BitmapResizer;
 import activitySupport.ImageAdapter;
-import activitySupport.ImageCollection;
 import service.AmazonS3Listener;
-import service.GetImageFromFS;
 import service.Model;
 
 /**
@@ -44,7 +31,7 @@ public class GalleryActivity extends AppCompatActivity implements AmazonS3Listen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         model = new Model();
-        model.getImageId("5628ceed64e18c1020f122be", "562a842336c16c0b00a44d43", getApplicationContext(), this);
+        model.getImageId("562a842336c16c0b00a44d43", getApplicationContext(), this);
         img= (ImageView) findViewById(R.id.image);
     }
 

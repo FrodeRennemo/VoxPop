@@ -84,8 +84,9 @@ public class FavoritesActivity extends AppCompatActivity {
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                    Toast.makeText(getApplicationContext(), "Item "+arg2+" selected", Toast.LENGTH_SHORT).show();
+                public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                    model.setCity("5628ceed64e18c1020f122be");
                 }
 
                 @Override
