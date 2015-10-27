@@ -1,12 +1,16 @@
 package com.example.michael.voxpop;
 
+import android.app.ActionBar;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,15 +50,19 @@ public class GalleryActivity extends AppCompatActivity implements AmazonS3Listen
 
     @Override
     public void asyncDone(final ArrayList<String> idArray) {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        final int height = displaymetrics.heightPixels;
+        final int width = displaymetrics.widthPixels;
         final ArrayList<String> id = idArray;
-        Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/"+id.get(0)).noFade().into(img);
+        Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/"+id.get(0)).resize(width, height).noFade().into(img);
         img.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 position++;
                 if (idArray.size() > position) {
-                    Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/" + id.get(position)).into(img);
+                    Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/" + id.get(position)).resize(width, height).into(img);
                 }
             }
         });

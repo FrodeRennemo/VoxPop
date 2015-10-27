@@ -11,10 +11,12 @@ public class ModelHelper {
     String id;
     String nightclub;
     Context ctx;
+    int cameraId;
 
-    public ModelHelper(byte[] data, String id) {
+    public ModelHelper(byte[] data, String id, int cameraId) {
         this.data = data;
         this.id = id;
+        this.cameraId = cameraId;
     }
 
     public ModelHelper(String city, String nightclub, Context ctx) {
@@ -41,5 +43,9 @@ public class ModelHelper {
 
     public String getId() {
         return id;
+    }
+
+    public int getCameraId() {
+        return cameraId;
     }
 }

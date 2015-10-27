@@ -57,7 +57,8 @@
         <activity
             android:name=".CameraActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_camera" >
+            android:label="@string/title_activity_camera"
+            android:theme="@style/AppTheme.NoActionbar">
         </activity>
         <activity
             android:name=".SearchActivity"
@@ -78,7 +79,8 @@
         <activity
             android:name=".GalleryActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_gallery" >
+            android:label="@string/title_activity_gallery"
+            android:theme="@style/AppTheme.NoActionbar">
         </activity>
     </application>
 

@@ -76,7 +76,11 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
 
             Bitmap picture = BitmapFactory.decodeByteArray(params[0].getData(), 0, params[0].getData().length);
             Matrix matrix = new Matrix();
-            matrix.postRotate(90);
+            if(params[0].getCameraId() == 0) {
+                matrix.postRotate(90);
+            } else {
+                matrix.postRotate(-90);
+            }
             Bitmap rotatedBitmap = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, true);
             //rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 2000, 2000, false);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
