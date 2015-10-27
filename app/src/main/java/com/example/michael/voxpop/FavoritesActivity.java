@@ -86,6 +86,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
+                    model.setCity("5628ceed64e18c1020f122be");
                     Toast.makeText(getApplicationContext(), "Item "+arg2+" selected", Toast.LENGTH_SHORT).show();
                 }
 

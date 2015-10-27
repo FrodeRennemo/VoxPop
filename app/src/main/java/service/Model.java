@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class Model {
     private DBHandler dbHandler;
+    private static String city = "5628ceed64e18c1020f122be";
 
     public Model(Context applicationContext){
         dbHandler = new DBHandler(applicationContext);
@@ -25,7 +26,11 @@ public class Model {
         }
     }
 
-    public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String city, String nightclub, int cameraId) {
+    public void setCity(String city){
+        this.city = city;
+    }
+
+    public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String nightclub, int cameraId) {
         try {
             HerokuImagePost herokuImagePost = new HerokuImagePost();
             herokuImagePost.execute(id, city, nightclub);
@@ -36,20 +41,12 @@ public class Model {
         }
     }
 
-    public void getImageId(String city, String nightclub, Context ctx, AmazonS3Listener amazonS3Listener) {
+    public void getImageId(String nightclub, Context ctx, AmazonS3Listener amazonS3Listener) {
         try {
             HerokuImageGet herokuImageGet = new HerokuImageGet();
             herokuImageGet.setAmazonS3Listener(amazonS3Listener);
             ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx);
             herokuImageGet.execute(modelHelper);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getImage(GetImageFromFS getImageFromFS, ArrayList<String> idArray, Context ctx) {
-        try {
-            getImageFromFS.execute(idArray);
         } catch (Exception e) {
             e.printStackTrace();
         }
