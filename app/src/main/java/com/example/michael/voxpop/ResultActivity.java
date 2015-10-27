@@ -183,7 +183,7 @@ public class ResultActivity extends AppCompatActivity {
                 _progress.setVisibility(View.GONE);
 
             }else {
-                imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/" + mDataset.get(position).getId() + "/profile_image", new SimpleImageLoadingListener() {
+                imageLoader.loadImage("https://s3-eu-west-1.amazonaws.com/voxpopprofileimages/" + mDataset.get(position).getId() + ".jpg", new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         currentImage.setImageBitmap(loadedImage);

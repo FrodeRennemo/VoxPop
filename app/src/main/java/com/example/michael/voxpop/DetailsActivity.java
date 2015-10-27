@@ -96,7 +96,7 @@ public class DetailsActivity extends AppCompatActivity {
             ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
             ImageLoader.getInstance().init(config);
             ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.loadImage("http://voxpop-app.herokuapp.com/nightclubs/"+loc.getId()+"/profile_image", new SimpleImageLoadingListener() {
+            imageLoader.loadImage("https://s3-eu-west-1.amazonaws.com/voxpopprofileimages/"+loc.getId()+".jpg", new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     _img.setImageBitmap(loadedImage);
