@@ -76,7 +76,7 @@ public class FavoritesActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
         MenuItem item = menu.findItem(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, cities);
         View view1 = MenuItemCompat.getActionView(item);
         if (view1 instanceof Spinner)
         {
@@ -84,18 +84,15 @@ public class FavoritesActivity extends AppCompatActivity {
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
+                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                     Toast.makeText(getApplicationContext(), "Item "+arg2+" selected", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> arg0) {
-                    // TODO Auto-generated method stub
                     Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
         return true;
     }
