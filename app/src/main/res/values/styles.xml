@@ -12,14 +12,24 @@
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
-    <style name="Button">
-        <item name="android:background">@color/app_accent</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="AppTheme.NoActionBarShadow" parent="@style/AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="AppTheme.NoActionbar" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="SlidingTab">
+        <item name="android:background">@color/app_base</item>
+        <item name="android:color">@color/white</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:background">@color/app_accent</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>
