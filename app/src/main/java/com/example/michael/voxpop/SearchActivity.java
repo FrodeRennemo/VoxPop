@@ -78,6 +78,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setIconified(false);
+        searchView.setQueryHint("Search...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override

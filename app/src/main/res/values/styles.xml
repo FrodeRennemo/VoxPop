@@ -10,6 +10,7 @@
         <item name="colorAccent">@color/app_accent</item>
 
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBarShadow" parent="@style/AppTheme">
