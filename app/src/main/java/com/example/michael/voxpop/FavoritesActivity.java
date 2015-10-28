@@ -4,11 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.content.Intent;
-<<<<<<< HEAD
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-=======
->>>>>>> 0696143d5b20507cbf1ade7cfff59aa77cedde89
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +34,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Properties;
 
+import activitySupport.AssetsPropertyReader;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.Location;
@@ -106,10 +105,9 @@ public class FavoritesActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
-                    SharedPreferences settings = getSharedPreferences("Prefs", 0);
-                    model.setCity(settings.getString(spinner.getSelectedItem().toString(), "Fail"));
-                    model.setCity("5628ceed64e18c1020f122be");
-                    Toast.makeText(getApplicationContext(), cities.get(arg2), Toast.LENGTH_SHORT).show();
+                    AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
+                    Properties p = assetsPropertyReader.getProperties("Cities.properties");
+                    model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
                 }
 
                 @Override

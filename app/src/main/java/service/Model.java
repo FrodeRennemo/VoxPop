@@ -27,7 +27,7 @@ public class Model {
     }
 
     public void setCity(String city){
-        if(!city.equals("Fail")) {
+        if(!(city == null)) {
             this.city = city;
         } else {
             this.city = "Trondheim";
