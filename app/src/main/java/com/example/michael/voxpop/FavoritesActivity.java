@@ -26,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,6 +59,7 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_favorites);
         getSupportActionBar().setTitle("VoxPop");
         getSupportActionBar().setElevation(0);
@@ -103,8 +106,7 @@ public class FavoritesActivity extends AppCompatActivity {
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
+                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                     AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
                     Properties p = assetsPropertyReader.getProperties("Cities.properties");
                     model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
@@ -181,4 +183,20 @@ public class FavoritesActivity extends AppCompatActivity {
             return NumbOfTabs;
         }
     }
+
+  /*  @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    } */
 }
