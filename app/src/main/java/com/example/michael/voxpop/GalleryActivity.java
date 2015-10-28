@@ -42,17 +42,19 @@ public class GalleryActivity extends AppCompatActivity implements AmazonS3Listen
         final int height = displaymetrics.heightPixels;
         final int width = displaymetrics.widthPixels;
         final ArrayList<String> id = idArray;
-        Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/"+id.get(0)).resize(width, height).noFade().into(img);
-        img.setOnClickListener(new View.OnClickListener() {
+        if(idArray.size() > 0) {
+            Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/" + id.get(0)).resize(width, height).noFade().into(img);
+            img.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                position++;
-                if (idArray.size() > position) {
-                    Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/" + id.get(position)).resize(width, height).into(img);
+                @Override
+                public void onClick(View v) {
+                    position++;
+                    if (idArray.size() > position) {
+                        Picasso.with(getApplicationContext()).load("https://s3-eu-west-1.amazonaws.com/voxpoppic/" + id.get(position)).resize(width, height).into(img);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

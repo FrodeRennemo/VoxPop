@@ -2,6 +2,7 @@ package com.example.michael.voxpop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private ImageView _buttonHint;
     private ArrayList<String> cities;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class FavoritesActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new LandingAnimator());
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -80,14 +83,14 @@ public class FavoritesActivity extends AppCompatActivity {
         View view1 = MenuItemCompat.getActionView(item);
         if (view1 instanceof Spinner)
         {
-            Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+            spinner = (Spinner) MenuItemCompat.getActionView(item);
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
-                    model.setCity("5628ceed64e18c1020f122be");
-                    Toast.makeText(getApplicationContext(), "Item "+arg2+" selected", Toast.LENGTH_SHORT).show();
+                    SharedPreferences settings = getSharedPreferences("Prefs", 0);
+                    model.setCity(settings.getString(spinner.getSelectedItem().toString(), "Fail"));
                 }
 
                 @Override

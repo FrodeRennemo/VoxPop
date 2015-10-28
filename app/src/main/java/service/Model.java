@@ -27,7 +27,11 @@ public class Model {
     }
 
     public void setCity(String city){
-        this.city = city;
+        if(!city.equals("Fail")) {
+            this.city = city;
+        } else {
+            this.city = "Trondheim";
+        }
     }
 
     public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String nightclub, int cameraId) {
