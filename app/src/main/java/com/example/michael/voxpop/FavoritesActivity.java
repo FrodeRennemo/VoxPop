@@ -111,13 +111,9 @@ public class FavoritesActivity extends AppCompatActivity {
             spinner.setPopupBackgroundResource(R.color.app_darker);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-<<<<<<< HEAD
-                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-=======
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
 
->>>>>>> b6f73540ed16f29874d5fc631ddb897a8a545ab8
                     AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
                     Properties p = assetsPropertyReader.getProperties("Cities.properties");
                     model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
