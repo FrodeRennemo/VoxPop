@@ -3,19 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <com.example.michael.voxpop.SlidingTabLayout
-        android:id="@+id/tabs"
+    tools:context=".MainActivity"
+    android:background="@drawable/bgclub">
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="5dp"
-        style="@style/SlidingTab" />
+        android:id="@+id/scroll">
+        <com.example.michael.voxpop.SlidingTabLayout
+            android:id="@+id/tabs"
+            android:paddingTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="5dp"
+            style="@style/SlidingTab" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            ></android.support.v4.view.ViewPager>
+    </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        ></android.support.v4.view.ViewPager>
+
 </LinearLayout> 

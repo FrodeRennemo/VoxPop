@@ -10,11 +10,14 @@
         <item name="colorAccent">@color/app_accent</item>
 
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBarShadow" parent="@style/AppTheme">
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+
 
     <style name="AppTheme.NoActionbar" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
@@ -24,7 +27,7 @@
     </style>
 
     <style name="SlidingTab">
-        <item name="android:background">@color/app_base</item>
+        <item name="android:background">@color/app_base_trans</item>
         <item name="android:color">@color/white</item>
     </style>
 

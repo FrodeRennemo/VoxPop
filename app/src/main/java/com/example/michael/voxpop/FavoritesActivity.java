@@ -1,5 +1,7 @@
 package com.example.michael.voxpop;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -18,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -60,9 +63,11 @@ public class FavoritesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_favorites);
         getSupportActionBar().setTitle("VoxPop");
-        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        getSupportActionBar().setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
         String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
         cities = new ArrayList<>();
         for(String s : cityarray){
@@ -75,7 +80,6 @@ public class FavoritesActivity extends AppCompatActivity {
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
@@ -104,9 +108,16 @@ public class FavoritesActivity extends AppCompatActivity {
         {
             spinner = (Spinner) MenuItemCompat.getActionView(item);
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
+            spinner.setPopupBackgroundResource(R.color.app_darker);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
+<<<<<<< HEAD
                 public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+=======
+                public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+
+>>>>>>> b6f73540ed16f29874d5fc631ddb897a8a545ab8
                     AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
                     Properties p = assetsPropertyReader.getProperties("Cities.properties");
                     model.setCity(p.getProperty(spinner.getSelectedItem().toString()));

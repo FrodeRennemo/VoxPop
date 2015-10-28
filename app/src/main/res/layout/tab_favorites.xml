@@ -14,7 +14,7 @@
         android:layout_width="189dp"
         android:layout_height="250dp"
         android:id="@+id/buttonHint"
-        android:src="@drawable/addfavorite"
+        android:src="@drawable/buttonhelp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -62,7 +62,7 @@
         fab:menu_labels_maxLines="-1"
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
-        fab:menu_backgroundColor="#99FFFFFF">
+        fab:menu_backgroundColor="@color/app_base_trans">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_item"

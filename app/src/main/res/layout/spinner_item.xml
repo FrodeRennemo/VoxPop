@@ -8,5 +8,5 @@
     android:gravity="left"
     android:textColor="@android:color/white"
     android:padding="10dp"
-    android:background="@color/app_base"
+    android:background="#00000000"
     />
