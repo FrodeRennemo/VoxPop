@@ -47,5 +47,4 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-cognito:2.2.7'
     compile 'com.amazonaws:aws-android-sdk-s3:2.2.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.andraskindler.parallaxviewpager:parallaxviewpager:0.3.1'
 }
