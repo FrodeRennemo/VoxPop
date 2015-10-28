@@ -1,14 +1,14 @@
 package com.example.michael.voxpop;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.content.Intent;
-<<<<<<< HEAD
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-=======
->>>>>>> 0696143d5b20507cbf1ade7cfff59aa77cedde89
+
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -58,9 +59,11 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_favorites);
         getSupportActionBar().setTitle("VoxPop");
-        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        getSupportActionBar().setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
         String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
         cities = new ArrayList<>();
         for(String s : cityarray){
@@ -73,7 +76,6 @@ public class FavoritesActivity extends AppCompatActivity {
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
-
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
@@ -102,13 +104,13 @@ public class FavoritesActivity extends AppCompatActivity {
         {
             spinner = (Spinner) MenuItemCompat.getActionView(item);
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
+            spinner.setPopupBackgroundResource(R.color.app_darker);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
                     SharedPreferences settings = getSharedPreferences("Prefs", 0);
                     model.setCity(settings.getString(spinner.getSelectedItem().toString(), "Fail"));
-                    model.setCity("5628ceed64e18c1020f122be");
                     Toast.makeText(getApplicationContext(), cities.get(arg2), Toast.LENGTH_SHORT).show();
                 }
 
