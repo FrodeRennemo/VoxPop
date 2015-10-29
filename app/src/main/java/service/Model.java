@@ -20,7 +20,7 @@ public class Model {
 
     public void getDetails(GetDetails req) {
         try {
-            req.execute();
+            req.execute(city);
         } catch (Exception e) {
             e.printStackTrace();
         }

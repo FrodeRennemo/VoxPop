@@ -32,4 +32,18 @@ public class JSONParser {
         }
         return array;
     }
+
+    public ArrayList<String> parseFeed(JSONArray json)  {
+        ArrayList<String> array = new ArrayList<>();
+
+        for (int i = 0; i < json.length(); i++) {
+            try {
+                String id = json.getJSONObject(i).getString("message");
+                array.add(id);
+            } catch (JSONException e) {
+
+            }
+        }
+        return array;
+    }
 }
