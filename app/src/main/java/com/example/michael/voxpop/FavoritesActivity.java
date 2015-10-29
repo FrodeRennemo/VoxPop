@@ -2,6 +2,7 @@ package com.example.michael.voxpop;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -29,8 +30,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -57,6 +63,8 @@ public class FavoritesActivity extends AppCompatActivity {
     int Numboftabs =2;
     private ArrayList<String> cities;
     private Spinner spinner;
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
 
 
     @Override
@@ -68,6 +76,27 @@ public class FavoritesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("VoxPop");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
         getSupportActionBar().setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("user_friends");
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                System.out.println("1");
+            }
+
+            @Override
+            public void onCancel() {
+                System.out.println("2");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                System.out.println("3");
+            }
+        });
         String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
         cities = new ArrayList<>();
         for(String s : cityarray){

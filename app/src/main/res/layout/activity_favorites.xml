@@ -12,7 +12,7 @@
         android:id="@+id/scroll">
         <com.example.michael.voxpop.SlidingTabLayout
             android:id="@+id/tabs"
-            android:paddingTop="55dp"
+            android:paddingTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="5dp"
@@ -24,6 +24,11 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             ></android.support.v4.view.ViewPager>
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
     </LinearLayout>
 
 
