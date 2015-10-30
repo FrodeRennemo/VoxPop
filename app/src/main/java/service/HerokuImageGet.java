@@ -33,7 +33,7 @@ public class HerokuImageGet extends AsyncTask<ModelHelper, Void, String> {
         StringBuffer response = new StringBuffer();
         ctx = params[0].getCtx();
         try {
-            String url = "http://voxpop-app.herokuapp.com/cities/"+params[0].getCity()+"/nightclubs/"+params[0].getNightclub()+"/pics";
+            String url = "http://voxpop-app.herokuapp.com/cities/"+params[0].getCity()+"/nightclubs/"+params[0].getId()+"/pics";
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 

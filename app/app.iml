@@ -117,8 +117,8 @@
     <orderEntry type="library" exported="" name="play-services-basement-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="httpclient-4.2.6" level="project" />
-    <orderEntry type="library" exported="" name="aws-android-sdk-cognito-2.2.7" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.4" level="project" />
+    <orderEntry type="library" exported="" name="aws-android-sdk-cognito-2.2.7" level="project" />
     <orderEntry type="library" exported="" name="aws-android-sdk-ddb-2.2.7" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.0.1" level="project" />

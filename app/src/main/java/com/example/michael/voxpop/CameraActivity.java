@@ -1,5 +1,6 @@
 package com.example.michael.voxpop;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -230,7 +231,8 @@ public class CameraActivity extends AppCompatActivity {
                 fos.write(data);
                 fos.close();
                 PostImageToFS postImageToFS = new PostImageToFS(getApplicationContext());
-                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), "562a842336c16c0b00a44d43", cameraId);
+                Intent i = getIntent();
+                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), i.getStringExtra("nightclubId"), cameraId);
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
