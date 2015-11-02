@@ -105,8 +105,6 @@ public class DetailsActivity extends AppCompatActivity {
             });
         }
 
-
-
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
         _open_text.setText(loc.getOpening_hours());
@@ -187,10 +185,12 @@ public class DetailsActivity extends AppCompatActivity {
 
     public void goToCamera() {
         Intent i = new Intent(this, CameraActivity.class);
+        i.putExtra("nightclubId",loc.getId());
         startActivity(i);
     }
     public void goToMoments(View v) {
         Intent i = new Intent(this, GalleryActivity.class);
+        i.putExtra("nightclubId",loc.getId());
         startActivity(i);
     }
 

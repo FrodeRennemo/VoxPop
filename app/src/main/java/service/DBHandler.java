@@ -17,16 +17,15 @@ import service.FeedReaderContract.FeedEntry;
  */
 public class DBHandler {
     private FeedReaderDBHelper mDbHelper;
-    private SQLiteDatabase db;
     private BitmapConverter bitmapConverter;
 
     public DBHandler (Context applicationContext){
         mDbHelper = new FeedReaderDBHelper(applicationContext);
-        db = mDbHelper.getWritableDatabase();
         bitmapConverter = new BitmapConverter();
     }
 
-    public void addFavorite(Location loc){
+    public boolean addFavorite(Location loc){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(FeedEntry.COLUMN_NAME_ENTRY_LOC_ID, loc.getId());
@@ -43,13 +42,19 @@ public class DBHandler {
         values.put(FeedEntry.COLUMN_NAME_ENTRY_META, loc.getMeta());
 
         // Insert the new row, returning the primary key value of the new row
-        db.insert(
+        long res = db.insert(
                 FeedEntry.TABLE_NAME,
                 null,
                 values);
+        db.close();
+        if(res == -1){
+            return false;
+        }
+        return true;
     }
 
     public ArrayList<Location> getFavorites() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // How you want the results sorted in the resulting Cursor
         //String sortOrder = FeedEntry.COLUMN_NAME_UPDATED + " DESC";
 
@@ -83,28 +88,40 @@ public class DBHandler {
             favorites.add(loc);
             cursor.moveToNext();
         }
+        db.close();
         return favorites;
     }
 
-    public void deleteFavorite(String id){
+    public boolean deleteFavorite(String id){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         String[] a = {id};
-        db.delete(FeedEntry.TABLE_NAME, FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "=?", a);
+        int res = db.delete(FeedEntry.TABLE_NAME, FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "=?", a);
+        db.close();
+        if(res == 0){
+            return false;
+        }
+        return true;
     }
 
     public boolean checkFavoriteExists(String id){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM "+FeedEntry.TABLE_NAME+" WHERE "+FeedEntry.COLUMN_NAME_ENTRY_LOC_ID+"='" + id + "'", null);
         if(cursor.getCount() <= 0){
             cursor.close();
             return false;
         }
         cursor.close();
+        db.close();
         return true;
     }
 
     public Bitmap getLocationBitmap(String id) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         String[] a = {id};
         Cursor cursor = db.query(FeedEntry.TABLE_NAME, null, FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "=?", a, null, null, null);
         cursor.moveToFirst();
-        return bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE)));
+        Bitmap b = bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE)));
+        db.close();
+        return b;
     }
 }

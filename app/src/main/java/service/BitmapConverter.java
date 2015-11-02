@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created by andreaskalstad on 08/10/15.
@@ -15,6 +16,11 @@ public class BitmapConverter {
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
         byte [] b=baos.toByteArray();
         String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        try {
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return temp;
     }
 

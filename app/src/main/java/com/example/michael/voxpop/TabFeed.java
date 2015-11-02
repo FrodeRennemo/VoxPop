@@ -53,6 +53,7 @@ public class TabFeed extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView _tv;
+    ArrayList<String> news;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class TabFeed extends Fragment {
         loginButton.setPublishPermissions("manage_pages");
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        ArrayList<String> news = new ArrayList<>();
+        news = new ArrayList<>();
         news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
         news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
         news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
@@ -74,17 +75,7 @@ public class TabFeed extends Fragment {
         news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
         news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
         news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
-        if(news.size() == 0){
-            mRecyclerView.setVisibility(View.GONE);
-        } else {
-            _tv.setVisibility(View.GONE);
-            loginButton.setVisibility(View.GONE);
-            mAdapter = new MyAdapter(news, this);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.setItemAnimator(new LandingAnimator());
-        }
+
 
 
         loginButton.setFragment(this);
@@ -110,6 +101,17 @@ public class TabFeed extends Fragment {
         });
         if(loggedIn) {
             initiateFeed();
+        }
+
+        if(news.size() == 0){
+            mRecyclerView.setVisibility(View.GONE);
+        } else {
+            _tv.setVisibility(View.GONE);
+            mAdapter = new MyAdapter(news);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setItemAnimator(new LandingAnimator());
+            mRecyclerView.setAdapter(mAdapter);
         }
         return v;
     }
@@ -137,6 +139,10 @@ public class TabFeed extends Fragment {
 
                         }
                         String data =  jsonParser.parseFeed(jArray).get(0);
+//                        news.add(data);
+//                        if(news.size() != 0){
+//                            mRecyclerView.setAdapter(mAdapter);
+//                        }
                     }
                 }
         ).executeAsync();
@@ -164,9 +170,8 @@ public class TabFeed extends Fragment {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset,  TabFeed activity) {
+        public MyAdapter(ArrayList<String> myDataset) {
             mDataset = myDataset;
-            this.activity = activity;
         }
 
         // Create new views (invoked by the layout manager)
@@ -198,22 +203,22 @@ public class TabFeed extends Fragment {
             return mDataset.size();
         }
 
-
-        public class CustomClickListener implements View.OnClickListener {
-            public int position;
-            TabFeed activity;
-
-            public CustomClickListener(TabFeed activity){
-                this.activity = activity;
-
-            }
-            public void setPos(int pos){
-                position = pos;
-            }
-            @Override
-            public void onClick(View v) {
-                //activity.goToDetails(position);
-            }
-        }
+//
+//        public class CustomClickListener implements View.OnClickListener {
+//            public int position;
+//            TabFeed activity;
+//
+//            public CustomClickListener(TabFeed activity){
+//                this.activity = activity;
+//
+//            }
+//            public void setPos(int pos){
+//                position = pos;
+//            }
+//            @Override
+//            public void onClick(View v) {
+//                //activity.goToDetails(position);
+//            }
+//        }
     }
 }

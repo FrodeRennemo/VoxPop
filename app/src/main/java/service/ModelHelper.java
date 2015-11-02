@@ -9,7 +9,6 @@ public class ModelHelper {
     String city;
     byte[] data;
     String id;
-    String nightclub;
     Context ctx;
     int cameraId;
 
@@ -19,18 +18,14 @@ public class ModelHelper {
         this.cameraId = cameraId;
     }
 
-    public ModelHelper(String city, String nightclub, Context ctx) {
+    public ModelHelper(String city, String id, Context ctx) {
+        this.id = id;
         this.city = city;
-        this.nightclub = nightclub;
         this.ctx = ctx;
     }
 
     public String getCity() {
         return city;
-    }
-
-    public String getNightclub() {
-        return nightclub;
     }
 
     public Context getCtx() {

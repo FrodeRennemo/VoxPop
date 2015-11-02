@@ -1,5 +1,6 @@
 package com.example.michael.voxpop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,8 @@ public class GalleryActivity extends AppCompatActivity implements AmazonS3Listen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         model = new Model();
-        model.getImageId("562a842336c16c0b00a44d43", getApplicationContext(), this);
+        Intent i = getIntent();
+        model.getImageId(i.getStringExtra("nightclubId"), getApplicationContext(), this);
         img= (ImageView) findViewById(R.id.image);
     }
 
