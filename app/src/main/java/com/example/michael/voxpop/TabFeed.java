@@ -65,18 +65,7 @@ public class TabFeed extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         news = new ArrayList<>();
-/*        news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
-        news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
-        news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
-        news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
-        news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
-        news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
-        news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
-        news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
-        news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da."); */
-
-
-
+        
         loginButton.setFragment(this);
 
         // Callback registration
