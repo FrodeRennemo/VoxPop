@@ -48,7 +48,6 @@ public class TabFeed extends Fragment {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private AccessToken accessToken;
-    private boolean loggedIn;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -66,18 +65,7 @@ public class TabFeed extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         news = new ArrayList<>();
-        news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
-        news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
-        news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
-        news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
-        news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
-        news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
-        news.add("We got some news over here. This awesome place is having the party of a lifetime. Good stuff! Click here to view more!");
-        news.add("Ja dette er også noen veldig gode nyheter for dere som liker å dra ut og drikke alkohol og kose dere med skaka rumpa og masse god viin!");
-        news.add("Nå har det kommet noen andre nyheter her gutter. Dette er ikke like langt da.");
-
-
-
+        
         loginButton.setFragment(this);
 
         // Callback registration
@@ -86,7 +74,7 @@ public class TabFeed extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 accessToken = loginResult.getAccessToken();
                 Profile profile = Profile.getCurrentProfile();
-                boolean loggedIn = true;
+                loginButton.setVisibility(View.GONE);
             }
 
             @Override
@@ -99,9 +87,6 @@ public class TabFeed extends Fragment {
 
             }
         });
-        if(loggedIn) {
-            initiateFeed();
-        }
 
         if(news.size() == 0){
             mRecyclerView.setVisibility(View.GONE);
@@ -120,6 +105,9 @@ public class TabFeed extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == -1) {
+            initiateFeed();
+        }
     }
 
     public void initiateFeed(){
@@ -139,10 +127,20 @@ public class TabFeed extends Fragment {
 
                         }
                         String data =  jsonParser.parseFeed(jArray).get(0);
-//                        news.add(data);
-//                        if(news.size() != 0){
-//                            mRecyclerView.setAdapter(mAdapter);
-//                        }
+                        String data1 =  jsonParser.parseFeed(jArray).get(1);
+                        String data2 =  jsonParser.parseFeed(jArray).get(2);
+                        news.add(data);
+                        news.add(data1);
+                        news.add(data2);
+                        if(news.size() != 0){
+                            _tv.setVisibility(View.GONE);
+                            mAdapter = new MyAdapter(news);
+                            mLayoutManager = new LinearLayoutManager(getActivity());
+                            mRecyclerView.setLayoutManager(mLayoutManager);
+                            mRecyclerView.setItemAnimator(new LandingAnimator());
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            mRecyclerView.setAdapter(mAdapter);
+                        }
                     }
                 }
         ).executeAsync();
