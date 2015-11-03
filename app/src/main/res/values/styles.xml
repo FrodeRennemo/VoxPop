@@ -17,9 +17,17 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-
-
     <style name="AppTheme.NoActionbar" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/app_base</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/app_darker</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/app_accent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionbar.Fullscreen" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>

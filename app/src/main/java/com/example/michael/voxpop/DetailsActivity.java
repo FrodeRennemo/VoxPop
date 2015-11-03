@@ -19,7 +19,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,13 +71,12 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         model = new Model(this.getApplicationContext());
-        FadingActionBarHelper helper = new FadingActionBarHelper()
-                .actionBarBackground(R.drawable.ab_background)
-                .headerLayout(R.layout.header)
-                .contentLayout(R.layout.activity_scrollview);
-        supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        setContentView(helper.createView(this));
-        helper.initActionBar(this);
+
+        setContentView(R.layout.activity_details);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         _img = (ImageView) findViewById(R.id.image_header);
         _address = (TextView) findViewById(R.id.address_text);
@@ -104,7 +105,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             });
         }
-
+        collapsingToolbar.setTitle(loc.getName());
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
         _open_text.setText(loc.getOpening_hours());
