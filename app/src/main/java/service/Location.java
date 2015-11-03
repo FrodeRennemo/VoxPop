@@ -8,6 +8,7 @@ import android.util.Base64;
  * Created by andreaskalstad on 10/09/15.
  */
 public class Location {
+    private String page_id;
     private String _id;
     private String name;
     private String address;
@@ -19,7 +20,7 @@ public class Location {
     private String meta;
     private Bitmap picture;
 
-    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta) {
+    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String page_id) {
         this._id = newId.trim();
         this.address = address.trim();
         this.location = newLoc.trim();
@@ -29,6 +30,7 @@ public class Location {
         this.tlf = tlf.trim();
         this.opening_hours = opening_hours.trim();
         this.meta = meta.toLowerCase().trim();
+        this.page_id = page_id.trim();
     }
 
     public String getId() {
@@ -98,4 +100,10 @@ public class Location {
     }
 
     public Bitmap getPicture(){return picture; }
+
+    public void setPageId(String page_id) {
+        this.page_id = page_id;
+    }
+
+    public String getPageId(){return page_id; }
 }
