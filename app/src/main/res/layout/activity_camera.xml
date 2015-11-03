@@ -39,4 +39,19 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/play_button" />
+    <ImageView
+        android:id="@+id/button_reset"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:src="@drawable/frodemarker" />
+    <ImageView
+        android:id="@+id/button_send"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/frodemarker" />
 </RelativeLayout>

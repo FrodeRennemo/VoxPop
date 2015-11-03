@@ -26,7 +26,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="992079267509240"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id"/>
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
@@ -51,7 +53,8 @@
         </activity>
         <activity
             android:name=".DetailsActivity"
-            android:label="@string/title_activity_details" >
+            android:label="@string/title_activity_details"
+            android:theme="@style/AppTheme.NoActionbar">
         </activity>
 
         <meta-data
@@ -65,7 +68,7 @@
             android:name=".CameraActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_camera"
-            android:theme="@style/AppTheme.NoActionbar">
+            android:theme="@style/AppTheme.NoActionbar.Fullscreen">
         </activity>
         <activity
             android:name=".SearchActivity"

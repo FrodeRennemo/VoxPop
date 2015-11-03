@@ -1,5 +1,6 @@
 package com.example.michael.voxpop;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,11 @@ public class CameraActivity extends AppCompatActivity {
     private boolean flash;
     private Camera.Parameters p;
     private boolean pause;
+    private ImageView captureButton;
+    private ImageView changeButton;
+    private ImageView flashButton;
+    private ImageView resetButton;
+    private ImageView sendButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,7 @@ public class CameraActivity extends AppCompatActivity {
 
         setCameraView();
 
-        ImageView captureButton = (ImageView) findViewById(R.id.button_capture);
+        captureButton = (ImageView) findViewById(R.id.button_capture);
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -62,7 +68,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
-        ImageView changeButton = (ImageView) findViewById(R.id.camera_change);
+        changeButton = (ImageView) findViewById(R.id.camera_change);
         changeButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -82,7 +88,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
-        ImageView flashButton = (ImageView) findViewById(R.id.button_flash);
+        flashButton = (ImageView) findViewById(R.id.button_flash);
         flashButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -219,23 +225,36 @@ public class CameraActivity extends AppCompatActivity {
 
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
-                Log.d(TAG, "Error creating media file, check storage permissions");
-                return;
-            }
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-                PostImageToFS postImageToFS = new PostImageToFS(getApplicationContext());
-                model.sendImage(postImageToFS, data, UUID.randomUUID().toString(), "562a842336c16c0b00a44d43", cameraId);
-            } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
-            }
+            captureButton.setVisibility(View.GONE);
+            changeButton.setVisibility(View.GONE);
+            flashButton.setVisibility(View.GONE);
+            resetButton = (ImageView) findViewById(R.id.button_reset);
+            sendButton = (ImageView) findViewById(R.id.button_send);
+            resetButton.setVisibility(View.VISIBLE);
+            sendButton.setVisibility(View.VISIBLE);
+            final byte[] pic = data;
+            sendButton.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        /*File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+                        if (pictureFile == null) {
+                            Log.d(TAG, "Error creating media file, check storage permissions");
+                            return;
+                        } */
+                            PostImageToFS postImageToFS = new PostImageToFS(getApplicationContext());
+                            Intent i = getIntent();
+                            model.sendImage(postImageToFS, pic, UUID.randomUUID().toString(), i.getStringExtra("nightclubId"), cameraId);
+                            finish();
+                        }
+                    });
+            resetButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
         }
     };
 

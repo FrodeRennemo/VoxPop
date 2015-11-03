@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">VoxPop</string>
-
+    <string name="app_id">992079267509240</string>
     <string name="hello_world">Hello world!</string>
     <string name="frontpage_text">Select a mood</string>
     <string name="action_settings">Settings</string>

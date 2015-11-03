@@ -20,7 +20,7 @@ public class Model {
 
     public void getDetails(GetDetails req) {
         try {
-            req.execute();
+            req.execute(city);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,11 +45,11 @@ public class Model {
         }
     }
 
-    public void getImageId(String nightclub, Context ctx, AmazonS3Listener amazonS3Listener) {
+    public void getImageId(String id, Context ctx, AmazonS3Listener amazonS3Listener) {
         try {
             HerokuImageGet herokuImageGet = new HerokuImageGet();
             herokuImageGet.setAmazonS3Listener(amazonS3Listener);
-            ModelHelper modelHelper = new ModelHelper(city, nightclub, ctx);
+            ModelHelper modelHelper = new ModelHelper(city, id, ctx);
             herokuImageGet.execute(modelHelper);
         } catch (Exception e) {
             e.printStackTrace();
