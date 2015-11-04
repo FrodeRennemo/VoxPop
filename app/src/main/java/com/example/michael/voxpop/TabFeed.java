@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import activitySupport.FeedListItem;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.JSONParser;
@@ -50,7 +51,7 @@ public class TabFeed extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView _tv;
-    private ArrayList<String> news;
+    private ArrayList<FeedListItem> news;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class TabFeed extends Fragment {
         loginButton.setPublishPermissions("manage_pages");
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        news = new ArrayList<>();
+        news = new ArrayList<FeedListItem>();
         
         loginButton.setFragment(this);
 
@@ -88,14 +89,13 @@ public class TabFeed extends Fragment {
 
         if(news.size() == 0){
             mRecyclerView.setVisibility(View.GONE);
-        } else {
-            _tv.setVisibility(View.GONE);
-            mAdapter = new MyAdapter(news);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setItemAnimator(new LandingAnimator());
-            mRecyclerView.setAdapter(mAdapter);
         }
+        mAdapter = new MyAdapter(news);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new LandingAnimator());
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mRecyclerView.setAdapter(mAdapter);
         return v;
     }
 
@@ -111,15 +111,9 @@ public class TabFeed extends Fragment {
     public void initiateFeed(){
         Type type = new TypeToken<ArrayList<Location>>(){}.getType();
         String a = getArguments().getString("favorites");
-        ArrayList<Location> page_ids = new Gson().fromJson(a, type);
-        if (page_ids.size() != 0) {
+        final ArrayList<Location> page_ids = new Gson().fromJson(a, type);
+        if(page_ids.size() != 0){
             _tv.setVisibility(View.GONE);
-            mAdapter = new MyAdapter(news);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setItemAnimator(new LandingAnimator());
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mRecyclerView.setAdapter(mAdapter);
         }
         for(int i = 0; i<page_ids.size(); i++) {
             new GraphRequest(
@@ -137,8 +131,9 @@ public class TabFeed extends Fragment {
                             } catch (JSONException e) {
 
                             }
-                            String data = jsonParser.parseFeed(jArray).get(0);
-                            news.add(data);
+                            FeedListItem feedListItem = jsonParser.parseFeed(jArray).get(news.size());
+                            feedListItem.setNightclub(page_ids.get(news.size()).getName());
+                            news.add(feedListItem);
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -147,7 +142,7 @@ public class TabFeed extends Fragment {
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private ArrayList<String> mDataset;
+        private ArrayList<FeedListItem> mDataset;
         TabFeed activity;
 
         // Provide a reference to the views for each data item
@@ -168,7 +163,7 @@ public class TabFeed extends Fragment {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset) {
+        public MyAdapter(ArrayList<FeedListItem> myDataset) {
             mDataset = myDataset;
         }
 
@@ -189,9 +184,9 @@ public class TabFeed extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.mTextView.setText(mDataset.get(position));
-            holder.timestamp.setText("31.10.15");
-            holder.club_name.setText("Diskoteket");
+            holder.mTextView.setText(mDataset.get(position).getMessage());
+            holder.timestamp.setText(mDataset.get(position).getDateMessage());
+            holder.club_name.setText(mDataset.get(position).getNightclub());
 
         }
 
