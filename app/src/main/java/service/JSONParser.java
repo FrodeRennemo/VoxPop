@@ -41,12 +41,12 @@ public class JSONParser {
     public ArrayList<FeedListItem> parseFeed(JSONArray json)  {
         ArrayList<FeedListItem> array = new ArrayList<>();
 
-        for (int i = 0; i < json.length(); i++) {
+        for (int i = 0; i < 5; i++) {
             try {
                 String id = json.getJSONObject(i).getString("message");
                 String created = json.getJSONObject(i).getString("created_time");
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH);
-                FeedListItem feedListItem = new FeedListItem(id, null, dateFormat.parse(created).toString());
+                FeedListItem feedListItem = new FeedListItem(id, null, dateFormat.parse(created));
                 array.add(feedListItem);
             } catch (JSONException e) {
 

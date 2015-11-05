@@ -1,6 +1,7 @@
 package com.example.michael.voxpop;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -19,6 +20,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
@@ -34,6 +37,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import activitySupport.FeedListItem;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
@@ -102,6 +107,7 @@ public class TabFeed extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                news.clear();
                 initiateFeed();
             }
         });
@@ -124,11 +130,11 @@ public class TabFeed extends Fragment {
         if(page_ids.size() != 0){
             _tv.setVisibility(View.GONE);
         }
+        GraphRequestBatch batch = new GraphRequestBatch();
         for(int i = 0; i<page_ids.size(); i++) {
-            new GraphRequest(
-                    AccessToken.getCurrentAccessToken(),
-                    "/"+page_ids.get(i).getPageId()+"/feed",
-                    null,
+            Bundle bundle = new Bundle();
+            bundle.putString("Nightclub", page_ids.get(i).getName());
+            batch.add(new GraphRequest(AccessToken.getCurrentAccessToken(), "/" + page_ids.get(i).getPageId() + "/feed", bundle,
                     HttpMethod.GET,
                     new GraphRequest.Callback() {
                         public void onCompleted(GraphResponse response) {
@@ -140,15 +146,19 @@ public class TabFeed extends Fragment {
                             } catch (JSONException e) {
 
                             }
-                            FeedListItem feedListItem = jsonParser.parseFeed(jArray).get(news.size());
-                            feedListItem.setNightclub(page_ids.get(news.size()).getName());
-                            news.add(feedListItem);
-                            mAdapter.notifyDataSetChanged();
+                            ArrayList<FeedListItem> messageList = jsonParser.parseFeed(jArray);
+                            for(int i = 0; i<messageList.size(); i++) {
+                                FeedListItem feedListItem = messageList.get(i);
+                                feedListItem.setNightclub(response.getRequest().getParameters().getString("Nightclub"));
+                                news.add(feedListItem);
+                            }
                             swipeLayout.setRefreshing(false);
+                            mAdapter.notifyDataSetChanged();
                         }
-                    }
-            ).executeAsync();
+                    })
+            );
         }
+        batch.executeAsync();
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -194,10 +204,11 @@ public class TabFeed extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
+            Collections.sort(news);
+            Collections.reverse(news);
             holder.mTextView.setText(mDataset.get(position).getMessage());
-            holder.timestamp.setText(mDataset.get(position).getDateMessage());
+            holder.timestamp.setText(mDataset.get(position).getDateMessage().toString());
             holder.club_name.setText(mDataset.get(position).getNightclub());
-
         }
 
         // Return the size of your dataset (invoked by the layout manager)
