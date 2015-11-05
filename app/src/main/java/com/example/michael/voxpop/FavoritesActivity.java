@@ -60,7 +60,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.Location;
 import service.Model;
 
-public class FavoritesActivity extends AppCompatActivity {
+public class FavoritesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Model model;
     ViewPager pager;
@@ -109,6 +109,24 @@ public class FavoritesActivity extends AppCompatActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo("com.example.michael.voxpop", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.e("hash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
     }
 
     @Override
@@ -123,23 +141,23 @@ public class FavoritesActivity extends AppCompatActivity {
             spinner = (Spinner) MenuItemCompat.getActionView(item);
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
             spinner.setPopupBackgroundResource(R.color.app_darker);
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
-
-                    AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
-                    Properties p = assetsPropertyReader.getProperties("Cities.properties");
-                    model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> arg0) {
-                    Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
-                }
-            });
+            spinner.setOnItemSelectedListener(this);
         }
         return true;
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1,
+                               int arg2, long arg3) {
+        AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
+        Properties p = assetsPropertyReader.getProperties("Cities.properties");
+        model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
+        TabFavorites tab2 = (TabFavorites) adapter.getItem(1);
+        tab2.changeCity(spinner.getSelectedItem().toString());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        Toast.makeText(getApplicationContext(), "Nothing selected", Toast.LENGTH_SHORT).show();
     }
 
     @Override

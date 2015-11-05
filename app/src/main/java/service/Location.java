@@ -18,8 +18,10 @@ public class Location {
     private String age_limit;
     private String meta;
     private Bitmap picture;
+    private String city_id;
+    private String city_name;
 
-    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta) {
+    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String city_id, String city_name) {
         this._id = newId.trim();
         this.address = address.trim();
         this.location = newLoc.trim();
@@ -29,6 +31,8 @@ public class Location {
         this.tlf = tlf.trim();
         this.opening_hours = opening_hours.trim();
         this.meta = meta.toLowerCase().trim();
+        this.city_id = city_id;
+        this.city_name = city_name;
     }
 
     public String getId() {
@@ -98,4 +102,8 @@ public class Location {
     }
 
     public Bitmap getPicture(){return picture; }
+
+    public String getCity_id() { return city_id; }
+
+    public String getCity_name() { return city_name; }
 }

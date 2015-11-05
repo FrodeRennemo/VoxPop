@@ -36,6 +36,8 @@ public class DBHandler {
         values.put(FeedEntry.COLUMN_NAME_ENTRY_LOCATION, loc.getLocation());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS, loc.getOpening_hours());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_TLF, loc.getTlf());
+        values.put(FeedEntry.COLUMN_NAME_ENTRY_CITY_ID, loc.getCity_id());
+        values.put(FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME, loc.getCity_name());
         if(loc.getPicture() != null) {
             values.put(FeedEntry.COLUMN_NAME_ENTRY_PICTURE, bitmapConverter.BitMapToString(loc.getPicture()));
         }
@@ -82,7 +84,9 @@ public class DBHandler {
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_EMAIL)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)));
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME)));
             loc.setPicture(bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE))));
 
             favorites.add(loc);

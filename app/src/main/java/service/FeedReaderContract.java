@@ -23,6 +23,8 @@ public final class FeedReaderContract {
         public static final String COLUMN_NAME_ENTRY_OPENING_HOURS = "opening_hours";
         public static final String COLUMN_NAME_ENTRY_META = "meta";
         public static final String COLUMN_NAME_ENTRY_PICTURE = "picture";
+        public static final String COLUMN_NAME_ENTRY_CITY_ID = "city_id";
+        public static final String COLUMN_NAME_ENTRY_CITY_NAME = "city_name";
     }
 
 }

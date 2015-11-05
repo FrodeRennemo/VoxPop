@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
@@ -44,17 +45,10 @@ public class TabFavorites extends Fragment {
     private FloatingActionButton _go_to_search;
     private FloatingActionButton _go_to_tags;
     private FloatingActionButton _go_to_map;
-    private ArrayList<String> cities;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_favorites,container,false);
-        String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
-        cities = new ArrayList<>();
-        for(String s : cityarray){
-            cities.add(s);
-        }
 
         model = new Model(getActivity().getApplicationContext());
         favorites = model.getFavorites();
@@ -130,6 +124,19 @@ public class TabFavorites extends Fragment {
         i.putExtra("selected", json);
         startActivity(i);
         _fam.close(false);
+    }
+
+    public void changeCity(String city) {
+        /*List<Location> locs = favorites
+        for(Location l : locs ){
+            if(l.getCity_name().equals(city)){
+                ArrayList<Location> newLocs = model.getFavoritesCity(l.getCity_id());
+                favorites = newLocs;
+                mAdapter.notifyDataSetChanged();
+                break;
+            }
+        }*/
+
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
