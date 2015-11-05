@@ -2,8 +2,10 @@ package com.example.michael.voxpop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,6 +53,8 @@ public class TabFeed extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView _tv;
     private ArrayList<String> news;
+    SwipeRefreshLayout swipeLayout;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,16 +89,27 @@ public class TabFeed extends Fragment {
 
             }
         });
-
+        news.add("asd");
+        news.add("asd");
+        news.add("asd");
         if(news.size() == 0){
             mRecyclerView.setVisibility(View.GONE);
         } else {
             _tv.setVisibility(View.GONE);
+
             mAdapter = new MyAdapter(news);
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setItemAnimator(new LandingAnimator());
             mRecyclerView.setAdapter(mAdapter);
+            swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_container);
+            swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    // Refresh items
+                    //swipeLayout.setRefreshing(false);
+                }
+            });
         }
         return v;
     }
