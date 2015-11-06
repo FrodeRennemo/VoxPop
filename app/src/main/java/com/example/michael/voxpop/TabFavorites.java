@@ -46,7 +46,6 @@ public class TabFavorites extends Fragment {
     private FloatingActionButton _go_to_map;
     private ArrayList<String> cities;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_favorites,container,false);

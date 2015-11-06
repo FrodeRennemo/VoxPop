@@ -1,17 +1,17 @@
 package com.example.michael.voxpop;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -20,21 +20,27 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import activitySupport.FeedListItem;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.JSONParser;
@@ -52,7 +58,8 @@ public class TabFeed extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView _tv;
-    ArrayList<String> news;
+    SwipeRefreshLayout swipeLayout;
+    private ArrayList<FeedListItem> news;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,8 +71,7 @@ public class TabFeed extends Fragment {
         loginButton.setPublishPermissions("manage_pages");
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
-        news = new ArrayList<>();
-
+        news = new ArrayList<FeedListItem>();
         loginButton.setFragment(this);
 
         // Callback registration
@@ -87,17 +93,23 @@ public class TabFeed extends Fragment {
 
             }
         });
-
         if(news.size() == 0){
             mRecyclerView.setVisibility(View.GONE);
-        } else {
-            _tv.setVisibility(View.GONE);
-            mAdapter = new MyAdapter(news);
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setItemAnimator(new LandingAnimator());
-            mRecyclerView.setAdapter(mAdapter);
         }
+        mAdapter = new MyAdapter(news);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new LandingAnimator());
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mRecyclerView.setAdapter(mAdapter);
+        swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                news.clear();
+                initiateFeed();
+            }
+        });
         return v;
     }
 
@@ -111,43 +123,45 @@ public class TabFeed extends Fragment {
     }
 
     public void initiateFeed(){
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/294677020558377/feed",
-                null,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-                        JSONParser jsonParser = new JSONParser();
-                        JSONArray jArray = new JSONArray();
-                        try {
-                            JSONObject json = response.getJSONObject();
-                            jArray = json.getJSONArray("data");
-                        } catch (JSONException e) {
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+        String a = getArguments().getString("favorites");
+        final ArrayList<Location> page_ids = new Gson().fromJson(a, type);
+        if(page_ids.size() != 0){
+            _tv.setVisibility(View.GONE);
+        }
+        GraphRequestBatch batch = new GraphRequestBatch();
+        for(int i = 0; i<page_ids.size(); i++) {
+            Bundle bundle = new Bundle();
+            bundle.putString("Nightclub", page_ids.get(i).getName());
+            batch.add(new GraphRequest(AccessToken.getCurrentAccessToken(), "/" + page_ids.get(i).getPageId() + "/feed", bundle,
+                    HttpMethod.GET,
+                    new GraphRequest.Callback() {
+                        public void onCompleted(GraphResponse response) {
+                            JSONParser jsonParser = new JSONParser();
+                            JSONArray jArray = new JSONArray();
+                            try {
+                                JSONObject json = response.getJSONObject();
+                                jArray = json.getJSONArray("data");
+                            } catch (JSONException e) {
 
+                            }
+                            ArrayList<FeedListItem> messageList = jsonParser.parseFeed(jArray);
+                            for(int i = 0; i<messageList.size(); i++) {
+                                FeedListItem feedListItem = messageList.get(i);
+                                feedListItem.setNightclub(response.getRequest().getParameters().getString("Nightclub"));
+                                news.add(feedListItem);
+                            }
+                            swipeLayout.setRefreshing(false);
+                            mAdapter.notifyDataSetChanged();
                         }
-                        String data =  jsonParser.parseFeed(jArray).get(0);
-                        String data1 =  jsonParser.parseFeed(jArray).get(1);
-                        String data2 =  jsonParser.parseFeed(jArray).get(2);
-                        news.add(data);
-                        news.add(data1);
-                        news.add(data2);
-                        if(news.size() != 0){
-                            _tv.setVisibility(View.GONE);
-                            mAdapter = new MyAdapter(news);
-                            mLayoutManager = new LinearLayoutManager(getActivity());
-                            mRecyclerView.setLayoutManager(mLayoutManager);
-                            mRecyclerView.setItemAnimator(new LandingAnimator());
-                            mRecyclerView.setVisibility(View.VISIBLE);
-                            mRecyclerView.setAdapter(mAdapter);
-                        }
-                    }
-                }
-        ).executeAsync();
+                    })
+            );
+        }
+        batch.executeAsync();
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private ArrayList<String> mDataset;
+        private ArrayList<FeedListItem> mDataset;
         TabFeed activity;
 
         // Provide a reference to the views for each data item
@@ -168,7 +182,7 @@ public class TabFeed extends Fragment {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset) {
+        public MyAdapter(ArrayList<FeedListItem> myDataset) {
             mDataset = myDataset;
         }
 
@@ -189,10 +203,11 @@ public class TabFeed extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.mTextView.setText(mDataset.get(position));
-            holder.timestamp.setText("31.10.15");
-            holder.club_name.setText("Diskoteket");
-
+            Collections.sort(news);
+            Collections.reverse(news);
+            holder.mTextView.setText(mDataset.get(position).getMessage());
+            holder.timestamp.setText(mDataset.get(position).getDateMessage().toString());
+            holder.club_name.setText(mDataset.get(position).getNightclub());
         }
 
         // Return the size of your dataset (invoked by the layout manager)

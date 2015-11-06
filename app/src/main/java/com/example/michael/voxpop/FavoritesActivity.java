@@ -1,62 +1,33 @@
 package com.example.michael.voxpop;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.lang.reflect.Type;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
 
 import activitySupport.AssetsPropertyReader;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.Location;
 import service.Model;
 
@@ -72,6 +43,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private Spinner spinner;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+    private ArrayList<Location> favoritesFeed;
 
 
     @Override
@@ -88,6 +60,7 @@ public class FavoritesActivity extends AppCompatActivity {
             cities.add(s);
         }
         model = new Model(getApplicationContext());
+        favoritesFeed = model.getFavorites();
 
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
 
@@ -178,7 +151,15 @@ public class FavoritesActivity extends AppCompatActivity {
 
             if(position == 0) // if the position is 0 we are returning the First tab
             {
+                for(int i = 0; i<favoritesFeed.size(); i++){
+                    favoritesFeed.get(i).setPicture(null);
+                }
+                Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+                String json = new Gson().toJson(favoritesFeed, type);
+                Bundle bundle = new Bundle();
+                bundle.putString("favorites",json);
                 TabFeed tab1 = new TabFeed();
+                tab1.setArguments(bundle);
                 return tab1;
             }
             else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab

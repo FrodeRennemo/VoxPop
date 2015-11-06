@@ -35,7 +35,8 @@
         <activity
             android:name=".FavoritesActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBarShadow">
+            android:theme="@style/AppTheme.NoActionBarShadow"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,14 +47,18 @@
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ResultActivity"
-            android:label="@string/title_activity_result" >
+            android:label="@string/title_activity_result"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".DetailsActivity"
-            android:label="@string/title_activity_details" >
+            android:label="@string/title_activity_details"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:screenOrientation="portrait">
         </activity>
 
         <meta-data
@@ -67,23 +72,27 @@
             android:name=".CameraActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_camera"
-            android:theme="@style/AppTheme.NoActionbar">
+            android:theme="@style/AppTheme.NoActionbar.Fullscreen">
         </activity>
         <activity
             android:name=".SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_search"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_favorites" >
+            android:label="@string/title_activity_favorites"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".GPSFenceActivity"
-            android:label="@string/title_activity_GPS" >
+            android:label="@string/title_activity_GPS"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_maps" >
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".GalleryActivity"
