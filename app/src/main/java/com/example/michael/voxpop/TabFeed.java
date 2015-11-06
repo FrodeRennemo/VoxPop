@@ -65,7 +65,7 @@ public class TabFeed extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         news = new ArrayList<>();
-        
+
         loginButton.setFragment(this);
 
         // Callback registration
