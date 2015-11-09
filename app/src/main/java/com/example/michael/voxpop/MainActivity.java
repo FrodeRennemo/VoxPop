@@ -33,11 +33,6 @@ import service.Location;
 import service.Model;
 
 public class MainActivity extends AppCompatActivity implements AsyncListener {
-
-    public static ArrayList<String> displayMoods;
-    public static ArrayList<String> allMoods;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private TextView filterView;
@@ -48,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     private TextView _error_message;
 
     private String filter = "";
-    private Model model;
     private ArrayList<Location> locations;
     private ArrayList<Mood> moodCount;
+    private ArrayList<Mood> resMoodCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,31 +143,31 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
 
     public void selectMood(int position){
         if(filter.equals("")){
-            filter += displayMoods.get(position);
+            filter += moodCount.get(position).getName();
         }
         else {
-            filter += ", " + displayMoods.get(position);
+            filter += ", " + moodCount.get(position).getName();
         }
         _filterArea.setVisibility(View.VISIBLE);
         _resetButton.setVisibility(View.VISIBLE);
         _submitButton.setVisibility(View.VISIBLE);
         filterView.setText(filter);
-        displayMoods.remove(position);
+        moodCount.remove(position);
         mAdapter.notifyDataSetChanged();
     }
 
     public void resetFilter(View v){
-
         filter = "";
         filterView.setText(filter);
         _filterArea.setVisibility(View.GONE);
         _resetButton.setVisibility(View.GONE);
         _submitButton.setVisibility(View.GONE);
-        displayMoods.clear();
-        for(String s : allMoods){
-            displayMoods.add(s);
+        moodCount.clear();
+        for(Mood s : resMoodCount){
+            moodCount.add(s);
         }
         mAdapter.notifyDataSetChanged();
+        //mRecyclerView.setAdapter(mAdapter);
         _resetButton.setVisibility(View.GONE);
     }
 
@@ -183,28 +178,29 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
             _error_message.setVisibility(View.VISIBLE);
         }else {
             moodCount = new ArrayList<>();
-            displayMoods = new ArrayList<>();
-            allMoods = new ArrayList<>();
             for(int i=0; i<res.size(); i++){
                 String[] resMoodTable = res.get(i).getMeta().split(",");
                 for(int j=0; j<resMoodTable.length; j++){
-                    if(!displayMoods.contains(resMoodTable[j].toLowerCase())){
-                        displayMoods.add(resMoodTable[j].toLowerCase());
-                        moodCount.add(new Mood(resMoodTable[j]));
-                    } else {
-                        for(int k=0; k<moodCount.size(); k++){
-                            if(resMoodTable[j].equalsIgnoreCase(moodCount.get(k).getName())){
-                                moodCount.get(k).increaseSize();
-                            }
-                        }
+                    moodCount.add(new Mood(resMoodTable[j].toLowerCase().trim()));
+                }
+            }
+            int size = moodCount.size();
+            for(int i=0; i<size; i++) {
+                for (int k = i+1; k < size; k++) {
+                    if (moodCount.get(i).getName().equalsIgnoreCase(moodCount.get(k).getName())) {
+                        moodCount.get(i).increaseSize();
+                        moodCount.remove(k);
+                        k--;
+                        size--;
                     }
                 }
             }
-            for(String s : displayMoods){
-                allMoods.add(s);
+            resMoodCount = new ArrayList<>();
+            for(Mood s : moodCount){
+                resMoodCount.add(s);
             }
             // specify an adapter (see also next example)
-            mAdapter = new MyAdapter(displayMoods, moodCount, getApplicationContext(), this);
+            mAdapter = new MyAdapter(moodCount, this);
             mRecyclerView.setAdapter(mAdapter);
         }
 
@@ -227,7 +223,6 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private ArrayList<String> mDataset;
         private ArrayList<Mood> moodCount;
         MainActivity activity;
 
@@ -247,8 +242,7 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(ArrayList<String> myDataset, ArrayList<Mood> moodCount, Context context, MainActivity activity) {
-            mDataset = myDataset;
+        public MyAdapter(ArrayList<Mood> moodCount, MainActivity activity) {
             this.moodCount = moodCount;
             this.activity = activity;
         }
@@ -270,18 +264,17 @@ public class MainActivity extends AppCompatActivity implements AsyncListener {
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.mTextView.setText(mDataset.get(position));
+            holder.mTextView.setText(moodCount.get(position).getName());
             holder.mTextView.setTextSize(moodCount.get(position).getSize());
             CustomClickListener ccl = new CustomClickListener(activity);
             ccl.setPos(position);
             holder.container.setOnClickListener(ccl);
-
         }
 
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return mDataset.size();
+            return moodCount.size();
         }
 
 
