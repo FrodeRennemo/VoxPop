@@ -6,6 +6,7 @@ package activitySupport;
 public class Mood {
     private String name;
     private int size;
+    private int MAX_SIZE = 60;
 
     public Mood(String name){
         this.name = name;
@@ -25,6 +26,8 @@ public class Mood {
     }
 
     public void increaseSize() {
-        size = size*2;
+        if(size <= MAX_SIZE){
+            size = size+10;
+        }
     }
 }
