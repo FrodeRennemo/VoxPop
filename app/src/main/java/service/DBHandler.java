@@ -18,10 +18,18 @@ import service.FeedReaderContract.FeedEntry;
 public class DBHandler {
     private FeedReaderDBHelper mDbHelper;
     private BitmapConverter bitmapConverter;
+    private static boolean favoritesUpdated = true;
 
     public DBHandler (Context applicationContext){
         mDbHelper = new FeedReaderDBHelper(applicationContext);
         bitmapConverter = new BitmapConverter();
+    }
+    public boolean getFavoritesUpdated(){
+        return favoritesUpdated;
+    }
+
+    public void setFavoritesUpdated(boolean b){
+        favoritesUpdated = b;
     }
 
     public boolean addFavorite(Location loc){
@@ -50,9 +58,11 @@ public class DBHandler {
                 null,
                 values);
         db.close();
+
         if(res == -1){
             return false;
         }
+        favoritesUpdated = true;
         return true;
     }
 
@@ -103,6 +113,7 @@ public class DBHandler {
         if(res == 0){
             return false;
         }
+        favoritesUpdated = true;
         return true;
     }
 

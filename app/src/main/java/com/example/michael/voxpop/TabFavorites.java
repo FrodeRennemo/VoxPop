@@ -53,10 +53,6 @@ public class TabFavorites extends Fragment {
 
         model = new Model(getActivity().getApplicationContext());
         Type type = new TypeToken<ArrayList<Location>>(){}.getType();
-        String a = getArguments().getString("favorites");
-        final ArrayList<Location> bundledFavorites = new Gson().fromJson(a, type);
-        favorites = bundledFavorites;
-
         _buttonHint = (ImageView) v.findViewById(R.id.buttonHint);
         _fam = (FloatingActionMenu) v.findViewById(R.id.menu);
         _go_to_search = (FloatingActionButton) v.findViewById(R.id.menu_item);
@@ -103,7 +99,7 @@ public class TabFavorites extends Fragment {
         return v;
     }
 
-    @Override
+/*    @Override
     public void onResume(){
         super.onResume();
         String city = model.getCity();
@@ -117,6 +113,14 @@ public class TabFavorites extends Fragment {
         mAdapter = new MyAdapter(favorites, this);
         mRecyclerView.setAdapter(mAdapter);
         checkDisplayArrow();
+    }*/
+
+    public void refreshFavorites(ArrayList<Location> p){
+        favorites = p;
+        if(mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+            checkDisplayArrow();
+        }
     }
 
     public void checkDisplayArrow(){

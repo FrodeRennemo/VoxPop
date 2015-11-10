@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import activitySupport.AssetsPropertyReader;
+import service.DBHandler;
 import service.Location;
 import service.Model;
 
@@ -45,14 +46,14 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Feed","Favorites"};
-    int Numboftabs =2;
+    CharSequence Titles[] = {"Feed", "Favorites"};
+    int Numboftabs = 2;
     private ArrayList<String> cities;
     private Spinner spinner;
-    private CallbackManager callbackManager;
-    private LoginButton loginButton;
     private ArrayList<Location> favoritesFeed;
-    public ArrayList<Location> displayFavorites;
+    TabFeed tab1;
+    TabFavorites tab2;
+    private DBHandler dbHandler;
 
 
     @Override
@@ -65,18 +66,21 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         getSupportActionBar().setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
         String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
         cities = new ArrayList<>();
-        for(String s : cityarray){
+        for (String s : cityarray) {
             cities.add(s);
         }
         model = new Model(getApplicationContext());
         favoritesFeed = model.getFavorites();
-        displayFavorites = new ArrayList<Location>();
+        tab1 = new TabFeed();
+        tab2 = new TabFavorites();
+        dbHandler = new DBHandler(getApplicationContext());
 
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs, displayFavorites);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
+
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
@@ -92,24 +96,6 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-        PackageInfo info;
-        try {
-            info = getPackageManager().getPackageInfo("com.example.michael.voxpop", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String something = new String(Base64.encode(md.digest(), 0));
-                //String something = new String(Base64.encodeBytes(md.digest()));
-                Log.e("hash key", something);
-            }
-        } catch (PackageManager.NameNotFoundException e1) {
-            Log.e("name not found", e1.toString());
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("no such an algorithm", e.toString());
-        } catch (Exception e) {
-            Log.e("exception", e.toString());
-        }
 
     }
 
@@ -120,8 +106,7 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         MenuItem item = menu.findItem(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, cities);
         View view1 = MenuItemCompat.getActionView(item);
-        if (view1 instanceof Spinner)
-        {
+        if (view1 instanceof Spinner) {
             spinner = (Spinner) MenuItemCompat.getActionView(item);
             spinner.setAdapter(adapter); // set the adapter to provide layout of rows and conten
             spinner.setPopupBackgroundResource(R.color.app_darker);
@@ -136,7 +121,7 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
         Properties p = assetsPropertyReader.getProperties("Cities.properties");
         model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
-        changeCity(spinner.getSelectedItem().toString());
+        refreshFavorites();
     }
 
     @Override
@@ -157,60 +142,35 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         return super.onOptionsItemSelected(item);
     }
 
-    public void changeCity(String city) {
-        try {
-            displayFavorites.clear();
-            for(Location l : favoritesFeed){
-                if(l.getCity_name().equals(city)){
-                    displayFavorites.add(l);
-                }
-            }
-
-            adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs, displayFavorites);
-            pager.setAdapter(adapter);
-        } catch(Exception e) {
-            Log.d("err", e.getMessage());
-        }
-
-    }
-
-
     public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
         int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
-        ArrayList<Location> mDataset;
 
         // Build a Constructor and assign the passed Values to appropriate values in the class
-        public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb, ArrayList<Location> mDataset) {
+        public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
             super(fm);
 
             this.Titles = mTitles;
             this.NumbOfTabs = mNumbOfTabsumb;
-            this.mDataset = mDataset;
-
         }
 
         //This method return the fragment for the every position in the View Pager
         @Override
         public Fragment getItem(int position) {
-            for(int i = 0; i<mDataset.size(); i++){
+            /*for (int i = 0; i < mDataset.size(); i++) {
                 mDataset.get(i).setPicture(null);
             }
-            Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+            Type type = new TypeToken<ArrayList<Location>>() {
+            }.getType();
             String json = new Gson().toJson(mDataset, type);
             Bundle bundle = new Bundle();
-            bundle.putString("favorites",json);
-            if(position == 0) // if the position is 0 we are returning the First tab
+            bundle.putString("favorites", json);*/
+            if (position == 0) // if the position is 0 we are returning the First tab
             {
-                TabFeed tab1 = new TabFeed();
-                tab1.setArguments(bundle);
                 return tab1;
-            }
-            else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
+            } else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
             {
-                TabFavorites tab2 = new TabFavorites();
-                tab2.setArguments(bundle);
                 return tab2;
             }
 
@@ -232,19 +192,22 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
-   @Override
+    @Override
     protected void onResume() {
         super.onResume();
-       adapter.getItem(1);
-        // Logs 'install' and 'app activate' App Events.
-        //AppEventsLogger.activateApp(this);
+        refreshFavorites();
     }
-/*
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-    } */
+    public void refreshFavorites(){
+        ArrayList<Location> fav = model.getFavorites();
+        String city = model.getCity();
+        favoritesFeed.clear();
+        for(Location l : fav){
+            if(l.getCity_id().equals(city)){
+                favoritesFeed.add(l);
+            }
+        }
+        tab1.refreshFavorites(favoritesFeed);
+        tab2.refreshFavorites(favoritesFeed);
+        dbHandler.setFavoritesUpdated(false);
+    }
 }
