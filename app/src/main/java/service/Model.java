@@ -34,6 +34,10 @@ public class Model {
         }
     }
 
+    public static String getCity() {
+        return city;
+    }
+
     public void sendImage(PostImageToFS postImageToFS, byte[] data, String id, String nightclub, int cameraId) {
         try {
             HerokuImagePost herokuImagePost = new HerokuImagePost();
@@ -102,4 +106,5 @@ public class Model {
         }
         return res;
     }
+
 }

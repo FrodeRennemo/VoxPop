@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,11 @@ public class TabFavorites extends Fragment {
         View v = inflater.inflate(R.layout.tab_favorites,container,false);
 
         model = new Model(getActivity().getApplicationContext());
-        favorites = model.getFavorites();
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+        String a = getArguments().getString("favorites");
+        final ArrayList<Location> bundledFavorites = new Gson().fromJson(a, type);
+        favorites = bundledFavorites;
+
         _buttonHint = (ImageView) v.findViewById(R.id.buttonHint);
         _fam = (FloatingActionMenu) v.findViewById(R.id.menu);
         _go_to_search = (FloatingActionButton) v.findViewById(R.id.menu_item);
@@ -101,7 +106,14 @@ public class TabFavorites extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        favorites = model.getFavorites();
+        String city = model.getCity();
+        ArrayList<Location> fav = model.getFavorites();
+        favorites.clear();
+        for(Location l : fav){
+            if(l.getCity_id().equals(city)){
+                favorites.add(l);
+            }
+        }
         mAdapter = new MyAdapter(favorites, this);
         mRecyclerView.setAdapter(mAdapter);
         checkDisplayArrow();
@@ -124,19 +136,6 @@ public class TabFavorites extends Fragment {
         i.putExtra("selected", json);
         startActivity(i);
         _fam.close(false);
-    }
-
-    public void changeCity(String city) {
-        /*List<Location> locs = favorites
-        for(Location l : locs ){
-            if(l.getCity_name().equals(city)){
-                ArrayList<Location> newLocs = model.getFavoritesCity(l.getCity_id());
-                favorites = newLocs;
-                mAdapter.notifyDataSetChanged();
-                break;
-            }
-        }*/
-
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {

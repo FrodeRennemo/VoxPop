@@ -25,6 +25,7 @@ public final class FeedReaderContract {
         public static final String COLUMN_NAME_ENTRY_PICTURE = "picture";
         public static final String COLUMN_NAME_ENTRY_CITY_ID = "city_id";
         public static final String COLUMN_NAME_ENTRY_CITY_NAME = "city_name";
+        public static final String COLUMN_NAME_ENTRY_PAGE_ID = "page_id";
     }
 
 }

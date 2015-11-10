@@ -42,6 +42,7 @@ public class DBHandler {
             values.put(FeedEntry.COLUMN_NAME_ENTRY_PICTURE, bitmapConverter.BitMapToString(loc.getPicture()));
         }
         values.put(FeedEntry.COLUMN_NAME_ENTRY_META, loc.getMeta());
+        values.put(FeedEntry.COLUMN_NAME_ENTRY_PAGE_ID, loc.getPageId());
 
         // Insert the new row, returning the primary key value of the new row
         long res = db.insert(
@@ -69,12 +70,9 @@ public class DBHandler {
                 null,                                     // don't filter by row groups
                 null
         );
-
+        cursor.moveToFirst();
         ArrayList<Location> favorites = new ArrayList<>();
         for (int i = 0; i<cursor.getCount(); i++){
-            if(i==0){
-                cursor.moveToFirst();
-            }
             Location loc = new Location(
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_LOC_ID)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_ADDRESS)),
@@ -86,7 +84,8 @@ public class DBHandler {
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME)));
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PAGE_ID)));
             loc.setPicture(bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE))));
 
             favorites.add(loc);
@@ -109,7 +108,7 @@ public class DBHandler {
 
     public boolean checkFavoriteExists(String id){
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+FeedEntry.TABLE_NAME+" WHERE "+FeedEntry.COLUMN_NAME_ENTRY_LOC_ID+"='" + id + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + FeedEntry.TABLE_NAME + " WHERE " + FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "='" + id + "'", null);
         if(cursor.getCount() <= 0){
             cursor.close();
             return false;

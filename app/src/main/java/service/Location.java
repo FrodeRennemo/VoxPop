@@ -8,6 +8,7 @@ import android.util.Base64;
  * Created by andreaskalstad on 10/09/15.
  */
 public class Location {
+    private String page_id;
     private String _id;
     private String name;
     private String address;
@@ -21,7 +22,8 @@ public class Location {
     private String city_id;
     private String city_name;
 
-    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String city_id, String city_name) {
+    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String city_id, String city_name, String page_id) {
+
         this._id = newId.trim();
         this.address = address.trim();
         this.location = newLoc.trim();
@@ -33,6 +35,7 @@ public class Location {
         this.meta = meta.toLowerCase().trim();
         this.city_id = city_id;
         this.city_name = city_name;
+        this.page_id = page_id.trim();
     }
 
     public String getId() {
@@ -106,4 +109,9 @@ public class Location {
     public String getCity_id() { return city_id; }
 
     public String getCity_name() { return city_name; }
+    public void setPageId(String page_id) {
+        this.page_id = page_id;
+    }
+
+    public String getPageId(){return page_id; }
 }

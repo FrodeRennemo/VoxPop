@@ -5,58 +5,37 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
 import activitySupport.AssetsPropertyReader;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import service.Location;
 import service.Model;
 
@@ -72,6 +51,8 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
     private Spinner spinner;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+    private ArrayList<Location> favoritesFeed;
+    public ArrayList<Location> displayFavorites;
 
 
     @Override
@@ -88,8 +69,10 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
             cities.add(s);
         }
         model = new Model(getApplicationContext());
+        favoritesFeed = model.getFavorites();
+        displayFavorites = new ArrayList<Location>();
 
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs, displayFavorites);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
@@ -127,6 +110,7 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         } catch (Exception e) {
             Log.e("exception", e.toString());
         }
+
     }
 
     @Override
@@ -145,14 +129,14 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         }
         return true;
     }
+
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1,
                                int arg2, long arg3) {
         AssetsPropertyReader assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
         Properties p = assetsPropertyReader.getProperties("Cities.properties");
         model.setCity(p.getProperty(spinner.getSelectedItem().toString()));
-        TabFavorites tab2 = (TabFavorites) adapter.getItem(1);
-        tab2.changeCity(spinner.getSelectedItem().toString());
+        changeCity(spinner.getSelectedItem().toString());
     }
 
     @Override
@@ -165,43 +149,68 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
+        //int id = item.getItemId();
+        adapter.notifyDataSetChanged();
         //noinspection SimplifiableIfStatement
 
 
         return super.onOptionsItemSelected(item);
     }
 
+    public void changeCity(String city) {
+        try {
+            displayFavorites.clear();
+            for(Location l : favoritesFeed){
+                if(l.getCity_name().equals(city)){
+                    displayFavorites.add(l);
+                }
+            }
+
+            adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs, displayFavorites);
+            pager.setAdapter(adapter);
+        } catch(Exception e) {
+            Log.d("err", e.getMessage());
+        }
+
+    }
 
 
     public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
         int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
-
+        ArrayList<Location> mDataset;
 
         // Build a Constructor and assign the passed Values to appropriate values in the class
-        public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
+        public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb, ArrayList<Location> mDataset) {
             super(fm);
 
             this.Titles = mTitles;
             this.NumbOfTabs = mNumbOfTabsumb;
+            this.mDataset = mDataset;
 
         }
 
         //This method return the fragment for the every position in the View Pager
         @Override
         public Fragment getItem(int position) {
-
+            for(int i = 0; i<mDataset.size(); i++){
+                mDataset.get(i).setPicture(null);
+            }
+            Type type = new TypeToken<ArrayList<Location>>(){}.getType();
+            String json = new Gson().toJson(mDataset, type);
+            Bundle bundle = new Bundle();
+            bundle.putString("favorites",json);
             if(position == 0) // if the position is 0 we are returning the First tab
             {
                 TabFeed tab1 = new TabFeed();
+                tab1.setArguments(bundle);
                 return tab1;
             }
             else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
             {
                 TabFavorites tab2 = new TabFavorites();
+                tab2.setArguments(bundle);
                 return tab2;
             }
 
@@ -223,14 +232,14 @@ public class FavoritesActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
-  /*  @Override
+   @Override
     protected void onResume() {
         super.onResume();
-
+       adapter.getItem(1);
         // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
+        //AppEventsLogger.activateApp(this);
     }
-
+/*
     @Override
     protected void onPause() {
         super.onPause();
