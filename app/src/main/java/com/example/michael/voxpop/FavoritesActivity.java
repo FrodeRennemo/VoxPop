@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import activitySupport.AssetsPropertyReader;
+import service.DBHandler;
 import service.Location;
 import service.Model;
 
@@ -41,9 +42,9 @@ public class FavoritesActivity extends AppCompatActivity {
     int Numboftabs =2;
     private ArrayList<String> cities;
     private Spinner spinner;
-    private CallbackManager callbackManager;
-    private LoginButton loginButton;
     private ArrayList<Location> favoritesFeed;
+    TabFeed tab1;
+    private DBHandler dbHandler;
 
 
     @Override
@@ -61,12 +62,15 @@ public class FavoritesActivity extends AppCompatActivity {
         }
         model = new Model(getApplicationContext());
         favoritesFeed = model.getFavorites();
+        tab1 = new TabFeed();
+        dbHandler = new DBHandler(getApplicationContext());
 
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
+
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
@@ -82,6 +86,8 @@ public class FavoritesActivity extends AppCompatActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
+
     }
 
     @Override
@@ -129,7 +135,6 @@ public class FavoritesActivity extends AppCompatActivity {
     }
 
 
-
     public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
@@ -151,15 +156,14 @@ public class FavoritesActivity extends AppCompatActivity {
 
             if(position == 0) // if the position is 0 we are returning the First tab
             {
-                for(int i = 0; i<favoritesFeed.size(); i++){
+                /*for(int i = 0; i<favoritesFeed.size(); i++){
                     favoritesFeed.get(i).setPicture(null);
                 }
                 Type type = new TypeToken<ArrayList<Location>>(){}.getType();
                 String json = new Gson().toJson(favoritesFeed, type);
                 Bundle bundle = new Bundle();
-                bundle.putString("favorites",json);
-                TabFeed tab1 = new TabFeed();
-                tab1.setArguments(bundle);
+                bundle.putString("favorites",json); */
+                //tab1.setArguments(bundle);
                 return tab1;
             }
             else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
@@ -186,19 +190,21 @@ public class FavoritesActivity extends AppCompatActivity {
         }
     }
 
-  /*  @Override
+    @Override
     protected void onResume() {
         super.onResume();
-
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
+        if(dbHandler.getFavoritesUpdated()) {
+            favoritesFeed = model.getFavorites();
+            for (int i = 0; i < favoritesFeed.size(); i++) {
+                favoritesFeed.get(i).setPicture(null);
+            }
+            tab1.refreshFavorites(favoritesFeed);
+            dbHandler.setFavoritesUpdated(false);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-    } */
+    }
 }

@@ -102,5 +102,4 @@ public class Model {
         }
         return res;
     }
-
 }

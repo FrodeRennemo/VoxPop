@@ -48,6 +48,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
+import service.DBHandler;
 import service.Location;
 import service.Model;
 
@@ -65,12 +66,14 @@ public class DetailsActivity extends AppCompatActivity {
     private GoogleMap mMap;
     double latitude;
     double longitude;
+    private DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         model = new Model(this.getApplicationContext());
+        dbHandler = new DBHandler(getApplicationContext());
 
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -152,6 +155,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (id == R.id.add_favorite) {
+            dbHandler.setFavoritesUpdated(true);
             Model model = new Model(this.getApplicationContext());
             if(_img.getDrawable() != null) {
                 BitmapDrawable bitmapDrawable = ((BitmapDrawable) _img.getDrawable());
@@ -164,6 +168,7 @@ public class DetailsActivity extends AppCompatActivity {
             return true;
         }
         if(id == R.id.rem_favorite){
+            dbHandler.setFavoritesUpdated(true);
             model.deleteFavorite(loc.getId());
             if(menu != null) {
                 checkFavorite();
