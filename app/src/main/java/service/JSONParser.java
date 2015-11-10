@@ -23,6 +23,7 @@ public class JSONParser {
             Location location = new Location(arr.getJSONObject(i).getString("_id"), arr.getJSONObject(i).getString("address"), arr.getJSONObject(i).getString("location"), arr.getJSONObject(i).getString("name"),
                     arr.getJSONObject(i).getString("tlf"), arr.getJSONObject(i).getString("email"), arr.getJSONObject(i).getString("opening_hours"),
                     arr.getJSONObject(i).getString("age_limit"), arr.getJSONObject(i).getString("meta"), city.getString("_id"), city.getString("name"),arr.getJSONObject(i).getString("page_id"));
+            location.setProfile_image(arr.getJSONObject(i).getString("profile_image"));
             array.add(location);
         }
         return array;

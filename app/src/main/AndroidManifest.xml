@@ -80,7 +80,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".TagsActivity"
             android:label="@string/title_activity_favorites"
             android:screenOrientation="portrait">
         </activity>

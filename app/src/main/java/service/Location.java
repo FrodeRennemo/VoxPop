@@ -21,6 +21,7 @@ public class Location {
     private Bitmap picture;
     private String city_id;
     private String city_name;
+    private String profile_image;
 
     public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String city_id, String city_name, String page_id) {
 
@@ -114,4 +115,12 @@ public class Location {
     }
 
     public String getPageId(){return page_id; }
+
+    public String getProfile_image() {
+        return profile_image;
+    }
+
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
+    }
 }

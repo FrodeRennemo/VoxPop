@@ -100,7 +100,7 @@ public class DetailsActivity extends AppCompatActivity {
             ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
             ImageLoader.getInstance().init(config);
             ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.loadImage("https://s3-eu-west-1.amazonaws.com/voxpopprofileimages/"+loc.getId()+".jpg", new SimpleImageLoadingListener() {
+            imageLoader.loadImage(loc.getProfile_image(), new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     _img.setImageBitmap(loadedImage);

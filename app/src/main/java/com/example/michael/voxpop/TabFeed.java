@@ -128,6 +128,10 @@ public class TabFeed extends Fragment {
 
     public void refreshFavorites(ArrayList<Location> p){
         page_ids = p;
+        if(mAdapter != null) {
+            news.clear();
+            initiateFeed();
+        }
     }
 
     public void initiateFeed(){
