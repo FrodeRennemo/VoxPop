@@ -122,6 +122,7 @@ public class DBHandler {
         Cursor cursor = db.rawQuery("SELECT * FROM " + FeedEntry.TABLE_NAME + " WHERE " + FeedEntry.COLUMN_NAME_ENTRY_LOC_ID + "='" + id + "'", null);
         if(cursor.getCount() <= 0){
             cursor.close();
+            db.close();
             return false;
         }
         cursor.close();

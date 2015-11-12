@@ -62,7 +62,7 @@ public class TabFeed extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.feed_view);
         mRecyclerView.setItemAnimator(new SlideInLeftAnimator());
         news = new ArrayList<>();
-        ArrayList<Location> page_ids = new ArrayList<>();
+        page_ids = new ArrayList<>();
 
         loginButton = (LoginButton) v.findViewById(R.id.login_button);
         loginButton.setPublishPermissions("manage_pages");
@@ -128,7 +128,7 @@ public class TabFeed extends Fragment {
 
     public void refreshFavorites(ArrayList<Location> p){
         page_ids = p;
-        if(mAdapter != null) {
+        if(mAdapter != null && AccessToken.getCurrentAccessToken() != null) {
             news.clear();
             initiateFeed();
         }
