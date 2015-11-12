@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,9 +53,15 @@ public class CameraActivity extends AppCompatActivity {
 
         // Create an instance of Camera
         cameraId = findBackFacingCamera();
-        mCamera = getCameraInstance();
-        p = mCamera.getParameters();
+        try {
+            getCameraInstance();
+        } catch(RuntimeException e){
+            Toast.makeText(getApplicationContext(), "Camera not found", Toast.LENGTH_LONG).show();
+            Log.d("err", e.getMessage());
+            finish();
+        }
 
+        p = mCamera.getParameters();
         setCameraView();
 
         captureButton = (ImageView) findViewById(R.id.button_capture);
@@ -68,6 +75,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
         );
 
+
         changeButton = (ImageView) findViewById(R.id.camera_change);
         changeButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -76,12 +84,12 @@ public class CameraActivity extends AppCompatActivity {
                         if (cameraId == 0) {
                             mCamera.release();
                             cameraId = findFrontFacingCamera();
-                            mCamera = getCameraInstance();
+                            getCameraInstance();
                             setCameraView();
                         } else {
                             mCamera.release();
                             cameraId = findBackFacingCamera();
-                            mCamera = getCameraInstance();
+                            getCameraInstance();
                             setCameraView();
                         }
                     }
@@ -155,7 +163,20 @@ public class CameraActivity extends AppCompatActivity {
         return cameraId;
     }
 
-    public static Camera getCameraInstance() {
+    public void getCameraInstance() {
+        try {
+            releaseCameraAndPreview();
+            if (cameraId == 0) {
+                mCamera = Camera.open();
+            }
+            else {
+                mCamera = Camera.open();
+            }
+        } catch (Exception e) {
+            Log.e("Error", "failed to open Camera");
+            e.printStackTrace();
+        }
+        /*
         Camera c = null;
         try {
             c = Camera.open(cameraId); // attempt to get a Camera instance
@@ -164,7 +185,15 @@ public class CameraActivity extends AppCompatActivity {
             System.out.println(e.getMessage());
             // Camera is not available (in use or does not exist)
         }
-        return c; // returns null if camera is unavailable
+        */
+    }
+
+    private void releaseCameraAndPreview() {
+        //mPreview.setCamera(null);
+        if (mCamera != null) {
+            mCamera.release();
+            mCamera = null;
+        }
     }
 
     /** Create a File for saving an image or video */
@@ -274,7 +303,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         if(pause) {
-            mCamera = getCameraInstance();
+            getCameraInstance();
             setCameraView();
             pause = false;
         }

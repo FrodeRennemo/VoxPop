@@ -2,9 +2,6 @@ package service;
 
 import android.os.AsyncTask;
 
-import com.example.michael.voxpop.MainActivity;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;

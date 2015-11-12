@@ -18,10 +18,18 @@ import service.FeedReaderContract.FeedEntry;
 public class DBHandler {
     private FeedReaderDBHelper mDbHelper;
     private BitmapConverter bitmapConverter;
+    private static boolean favoritesUpdated = true;
 
     public DBHandler (Context applicationContext){
         mDbHelper = new FeedReaderDBHelper(applicationContext);
         bitmapConverter = new BitmapConverter();
+    }
+    public boolean getFavoritesUpdated(){
+        return favoritesUpdated;
+    }
+
+    public void setFavoritesUpdated(boolean b){
+        favoritesUpdated = b;
     }
 
     public boolean addFavorite(Location loc){
@@ -36,6 +44,8 @@ public class DBHandler {
         values.put(FeedEntry.COLUMN_NAME_ENTRY_LOCATION, loc.getLocation());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS, loc.getOpening_hours());
         values.put(FeedEntry.COLUMN_NAME_ENTRY_TLF, loc.getTlf());
+        values.put(FeedEntry.COLUMN_NAME_ENTRY_CITY_ID, loc.getCity_id());
+        values.put(FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME, loc.getCity_name());
         if(loc.getPicture() != null) {
             values.put(FeedEntry.COLUMN_NAME_ENTRY_PICTURE, bitmapConverter.BitMapToString(loc.getPicture()));
         }
@@ -48,9 +58,11 @@ public class DBHandler {
                 null,
                 values);
         db.close();
+
         if(res == -1){
             return false;
         }
+        favoritesUpdated = true;
         return true;
     }
 
@@ -81,6 +93,8 @@ public class DBHandler {
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_OPENING_HOURS)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_META)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PAGE_ID)));
             loc.setPicture(bitmapConverter.StringToBitMap(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_ENTRY_PICTURE))));
 
@@ -99,6 +113,7 @@ public class DBHandler {
         if(res == 0){
             return false;
         }
+        favoritesUpdated = true;
         return true;
     }
 

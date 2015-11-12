@@ -19,8 +19,12 @@ public class Location {
     private String age_limit;
     private String meta;
     private Bitmap picture;
+    private String city_id;
+    private String city_name;
+    private String profile_image;
 
-    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String page_id) {
+    public Location(String newId, String address, String newLoc, String name, String tlf, String email, String opening_hours, String age_limit, String meta, String city_id, String city_name, String page_id) {
+
         this._id = newId.trim();
         this.address = address.trim();
         this.location = newLoc.trim();
@@ -30,6 +34,8 @@ public class Location {
         this.tlf = tlf.trim();
         this.opening_hours = opening_hours.trim();
         this.meta = meta.toLowerCase().trim();
+        this.city_id = city_id;
+        this.city_name = city_name;
         this.page_id = page_id.trim();
     }
 
@@ -101,9 +107,20 @@ public class Location {
 
     public Bitmap getPicture(){return picture; }
 
+    public String getCity_id() { return city_id; }
+
+    public String getCity_name() { return city_name; }
     public void setPageId(String page_id) {
         this.page_id = page_id;
     }
 
     public String getPageId(){return page_id; }
+
+    public String getProfile_image() {
+        return profile_image;
+    }
+
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
+    }
 }

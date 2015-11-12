@@ -44,19 +44,13 @@ public class TabFavorites extends Fragment {
     private FloatingActionButton _go_to_search;
     private FloatingActionButton _go_to_tags;
     private FloatingActionButton _go_to_map;
-    private ArrayList<String> cities;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_favorites,container,false);
-        String[] cityarray = {"Trondheim", "Kristiansand", "Oslo"};
-        cities = new ArrayList<>();
-        for(String s : cityarray){
-            cities.add(s);
-        }
 
         model = new Model(getActivity().getApplicationContext());
-        favorites = model.getFavorites();
+        Type type = new TypeToken<ArrayList<Location>>(){}.getType();
         _buttonHint = (ImageView) v.findViewById(R.id.buttonHint);
         _fam = (FloatingActionMenu) v.findViewById(R.id.menu);
         _go_to_search = (FloatingActionButton) v.findViewById(R.id.menu_item);
@@ -80,7 +74,7 @@ public class TabFavorites extends Fragment {
         });
         _go_to_tags.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                startActivity(new Intent(getActivity(), TagsActivity.class));
                 _fam.close(false);
             }
         });
@@ -103,13 +97,28 @@ public class TabFavorites extends Fragment {
         return v;
     }
 
-    @Override
+/*    @Override
     public void onResume(){
         super.onResume();
-        favorites = model.getFavorites();
+        String city = model.getCity();
+        ArrayList<Location> fav = model.getFavorites();
+        favorites.clear();
+        for(Location l : fav){
+            if(l.getCity_id().equals(city)){
+                favorites.add(l);
+            }
+        }
         mAdapter = new MyAdapter(favorites, this);
         mRecyclerView.setAdapter(mAdapter);
         checkDisplayArrow();
+    }*/
+
+    public void refreshFavorites(ArrayList<Location> p){
+        favorites = p;
+        if(mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+            checkDisplayArrow();
+        }
     }
 
     public void checkDisplayArrow(){

@@ -183,7 +183,7 @@ public class ResultActivity extends AppCompatActivity {
                 _progress.setVisibility(View.GONE);
 
             }else {
-                imageLoader.loadImage("https://s3-eu-west-1.amazonaws.com/voxpopprofileimages/" + mDataset.get(position).getId() + ".jpg", new SimpleImageLoadingListener() {
+                imageLoader.loadImage(mDataset.get(position).getProfile_image(), new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         currentImage.setImageBitmap(loadedImage);

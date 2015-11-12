@@ -23,6 +23,8 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
                     FeedEntry.COLUMN_NAME_ENTRY_EMAIL + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_AGE_LIMIT + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_PICTURE + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_CITY_ID + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ENTRY_CITY_NAME + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_LOCATION + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_ENTRY_PAGE_ID + TEXT_TYPE + " )";
 
