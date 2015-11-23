@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="You have no favorites!"
+        android:text="Go add some favorites and the latest news will show up here!"
         android:id="@+id/no_news_message"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
@@ -36,5 +36,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

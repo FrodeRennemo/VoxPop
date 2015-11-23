@@ -22,15 +22,13 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,12 +38,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.manuelpeinado.fadingactionbar.extras.actionbarcompat.FadingActionBarHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
 import service.DBHandler;
@@ -55,17 +51,22 @@ import service.Model;
 public class DetailsActivity extends AppCompatActivity {
 
     Model model;
-    TextView _address;
-    TextView _age_text;
-    TextView _open_text;
-    TextView _contact_text;
     ImageView _img;
     ProgressBar _progress;
     Location loc;
     Menu menu;
+
+
+    TextView _address;
+    TextView _age_text;
+    TextView _open_text;
+    TextView _contact_text;
+
     private GoogleMap mMap;
     double latitude;
     double longitude;
+
+
     private DBHandler dbHandler;
 
     @Override
@@ -74,23 +75,25 @@ public class DetailsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
         model = new Model(this.getApplicationContext());
         dbHandler = new DBHandler(getApplicationContext());
-
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         _img = (ImageView) findViewById(R.id.image_header);
-        _address = (TextView) findViewById(R.id.address_text);
-        _age_text = (TextView) findViewById(R.id.age_text);
-        _open_text = (TextView) findViewById(R.id.open_text);
-        _contact_text = (TextView) findViewById(R.id.contact_text);
+
         _progress = (ProgressBar) findViewById(R.id.progressBar);
 
         Intent i = getIntent();
         Type type = new TypeToken<Location>(){}.getType();
         loc = new Gson().fromJson(i.getStringExtra("selected"), type);
+
+        String[] latlong = loc.getLocation().split(",");
+        latitude = Double.parseDouble(latlong[0].trim());
+        longitude = Double.parseDouble(latlong[1].trim());
+
+
+        setUpMapIfNeeded();
 
         if(model.checkFavoriteExists(loc.getId())){
             _img.setImageBitmap(model.getLocationBitmap(loc.getId()));
@@ -109,18 +112,21 @@ public class DetailsActivity extends AppCompatActivity {
             });
         }
         collapsingToolbar.setTitle(loc.getName());
+
+        getSupportActionBar().setTitle(loc.getName());
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        _address = (TextView) findViewById(R.id.address_text);
+        _age_text = (TextView) findViewById(R.id.age_text);
+        _open_text = (TextView) findViewById(R.id.open_text);
+        _contact_text = (TextView) findViewById(R.id.contact_text);
+
         _address.setText(loc.getAddress());
         _age_text.setText(loc.getAge_limit());
         _open_text.setText(loc.getOpening_hours());
         _contact_text.setText(loc.getTlf() + "\n" + loc.getEmail());
 
-        String[] latlong = loc.getLocation().split(",");
-        latitude = Double.parseDouble(latlong[0].trim());
-        longitude = Double.parseDouble(latlong[1].trim());
-        getSupportActionBar().setTitle(loc.getName());
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setUpMapIfNeeded();
 
     }
 
@@ -135,11 +141,7 @@ public class DetailsActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -191,13 +193,17 @@ public class DetailsActivity extends AppCompatActivity {
 
     public void goToCamera() {
         Intent i = new Intent(this, CameraActivity.class);
-        i.putExtra("nightclubId",loc.getId());
+        i.putExtra("nightclubId", loc.getId());
         startActivity(i);
     }
     public void goToMoments(View v) {
         Intent i = new Intent(this, GalleryActivity.class);
-        i.putExtra("nightclubId",loc.getId());
+        i.putExtra("nightclubId", loc.getId());
         startActivity(i);
+    }
+
+    public void takePhoto(View v){
+        Toast.makeText(getApplicationContext(), "You are not at "+loc.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

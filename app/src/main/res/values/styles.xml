@@ -43,4 +43,12 @@
         <item name="android:background">@color/app_accent</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+    <style name="ButtonDark">
+        <item name="android:background">@color/app_base</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="ButtonGreen">
+        <item name="android:background">@color/green</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>
