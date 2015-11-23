@@ -281,7 +281,12 @@ public class CameraActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
+                        setCameraView();
+                        captureButton.setVisibility(View.VISIBLE);
+                        changeButton.setVisibility(View.VISIBLE);
+                        flashButton.setVisibility(View.VISIBLE);
+                        resetButton.setVisibility(View.GONE);
+                        sendButton.setVisibility(View.GONE);
                     }
                 });
         }
