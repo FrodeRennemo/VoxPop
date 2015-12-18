@@ -100,7 +100,8 @@
                         android:focusable="true"
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:layout_weight="50">
+                        android:layout_weight="50"
+                        android:onClick="goToMoments">
                         <ImageView
                             android:id="@+id/img2"
                             android:layout_width="wrap_content"
