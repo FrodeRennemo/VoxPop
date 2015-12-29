@@ -16,8 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -38,12 +38,13 @@ import service.Model;
 
 public class SearchActivity extends AppCompatActivity implements AsyncListener {
 
-    public ArrayList<Location> locations;
-    public ArrayList<Location> results;
+    public ArrayList<Location> locations = new ArrayList<Location>();
+    public ArrayList<Location> results = new ArrayList<Location>();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar _progressbar;
+    private TextView _noResults;
 
     SearchView searchView;
     @Override
@@ -53,11 +54,11 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
         setContentView(R.layout.activity_search);
         mRecyclerView = (RecyclerView) findViewById(R.id.search_view);
         _progressbar = (ProgressBar) findViewById(R.id.progressBar2);
+        _noResults = (TextView) findViewById(R.id.empty_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Search");
-        results = new ArrayList<>();
         mAdapter = new MyAdapter(results, this);
         mRecyclerView.setAdapter(mAdapter);
         GetDetails req = new GetDetails();
@@ -69,6 +70,9 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
     public void asyncDone(ArrayList<Location> res) {
         locations = res;
         _progressbar.setVisibility(View.GONE);
+        //show all locations
+        results.addAll(locations);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -79,10 +83,13 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
         searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setIconified(false);
         searchView.setQueryHint("Search...");
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+
+
                 if(!locations.isEmpty()){
                     callSearch(query);
                 }
@@ -91,6 +98,7 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 if(!locations.isEmpty()){
                     callSearch(newText);
                 }
@@ -98,11 +106,18 @@ public class SearchActivity extends AppCompatActivity implements AsyncListener {
             }
 
             public void callSearch(String query) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                _noResults.setVisibility(View.GONE);
                 results.clear();
                 for (Location l : locations) {
                     if (l.getName().matches("(?i)(" + query + ").*")) {
                         results.add(l);
                     }
+                }
+                //No results found
+                if(results.isEmpty() && !locations.isEmpty()){
+                    mRecyclerView.setVisibility(View.GONE);
+                    _noResults.setVisibility(View.VISIBLE);
                 }
                 mAdapter.notifyDataSetChanged();
             }
