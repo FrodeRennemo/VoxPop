@@ -90,6 +90,7 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
             FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
             fos.write(imageBytes);
             fos.close();
+
             File test = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/1.txt");
 
             TransferObserver observer = transferUtility.upload(
