@@ -167,13 +167,11 @@ public class PostImageToFS extends AsyncTask<ModelHelper, Void, ModelHelper> {
         canvas.setMatrix(scaleMatrix);
         canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
 
-//      check the rotation of the image and display it properly
-        Exif exif = new Exif();
-        //Currently not working
-        //int degrees = exif.getOrientation(imageData);
-        int degrees = 90;
+//      rotation of the image and display it properly
+
         Matrix matrix = new Matrix();
-        matrix.postRotate(degrees);
+        //Rotate 90 degrees
+        matrix.postRotate(90);
         scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
                 scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
                 true);
